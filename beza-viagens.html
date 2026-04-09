@@ -330,12 +330,15 @@ function importBackup(input){
 function calcAutoScore(dId){
   const vals=dest.map(d=>({id:d.id,t:calcTotal(getBudget(d.id))})).filter(x=>x.t>0);
   if(!vals.length)return 0;
-  if(vals.length===1)return 10;
   const myT=calcTotal(getBudget(dId));
   if(!myT)return 0;
+  if(vals.length===1)return 10; // único com orçamento → 10/10
   const mn=Math.min(...vals.map(x=>x.t)),mx=Math.max(...vals.map(x=>x.t));
   if(mx===mn)return 10;
   return Math.round((10-((myT-mn)/(mx-mn))*9)*10)/10;
+}
+function allDestsHaveBudget(){
+  return dest.length>0&&dest.every(d=>calcTotal(getBudget(d.id))>0);
 }
 function calcScore(dId){
   if(!crit.length)return 0;
@@ -451,10 +454,13 @@ function renderComparador(){
         <div class="score-bar"><div class="score-fill" style="width:${d.score*10}%;background:${scoreBg(d.score)}"></div></div>
         <div style="margin-top:12px;display:flex;flex-direction:column;gap:4px">
           ${crit.slice(0,4).map(c=>{
-            const v=scores[d.id+'_'+c.id]||0;
-            return`<div style="display:flex;justify-content:space-between;font-size:11px">
+            const isCusto=c.name.toLowerCase().includes('custo');
+            const b=getBudget(d.id);
+            const v=(isCusto&&b.costMode==='auto'&&calcTotal(b)>0)?calcAutoScore(d.id):(scores[d.id+'_'+c.id]||0);
+            const isAuto=isCusto&&b.costMode==='auto'&&calcTotal(b)>0;
+            return`<div style="display:flex;justify-content:space-between;font-size:11px;align-items:center">
               <span style="color:var(--text2)">${esc(c.name)}</span>
-              <span style="font-weight:500;color:${scoreColor(v)}">${v}/10</span>
+              <span style="font-weight:500;color:${scoreColor(v)}">${v}/10${isAuto?'<span style="font-size:9px;margin-left:3px;background:var(--teal50);color:var(--teal600);padding:0 4px;border-radius:3px;border:1px solid var(--teal200)">auto</span>':''}</span>
             </div>`;
           }).join('')}
           ${crit.length>4?`<div style="font-size:11px;color:var(--text3)">+${crit.length-4} mais critérios</div>`:''}
@@ -488,13 +494,14 @@ function renderComparador(){
                 const isAuto=isCusto&&b.costMode==='auto';
                 const autoV=calcAutoScore(d.id);
                 const manualV=scores[d.id+'_'+c.id]||0;
-                const displayV=isAuto?autoV:manualV;
                 const hasBudget=calcTotal(b)>0;
+                const notAllHaveBudget=isCusto&&!allDestsHaveBudget();
                 return`<td style="text-align:center;vertical-align:middle">
                   ${isAuto
                     ?`<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
                         <span style="font-weight:600;color:${scoreColor(autoV)}">${autoV}/10</span>
                         <span style="font-size:10px;background:var(--teal50);color:var(--teal600);padding:1px 6px;border-radius:4px;border:1px solid var(--teal200)">Auto</span>
+                        ${notAllHaveBudget?`<span style="font-size:9px;color:var(--amber600);text-align:center;max-width:90px">⚠ Preencha orçamento de todos os destinos</span>`:''}
                         <button onclick="setCostMode(${d.id},'manual')" style="font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text2);font-family:'Inter',sans-serif">Manual</button>
                       </div>`
                     :`<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
