@@ -241,6 +241,7 @@ const DEFAULT_CHECKLIST=[
 // STATE
 // ================================================================
 var dest=[], crit=[], scores={}, budgets={}, itinerary={}, checklist=[];
+var openNotes={}; // persiste estado aberto/fechado das notas entre re-renders
 var isDark=false, currentNav='comparador', itinDest=null;
 
 function uid(){return Date.now()+Math.floor(Math.random()*1000);}
@@ -357,7 +358,42 @@ function setCostMode(dId,mode){
 }
 function toggleComment(key){
   const el=document.getElementById('note_'+key);
-  if(el)el.style.display=el.style.display==='none'?'table-row':'none';
+  if(!el)return;
+  const isOpen=el.style.display!=='none';
+  el.style.display=isOpen?'none':'table-row';
+  openNotes[key]=!isOpen;
+  if(!isOpen)setTimeout(()=>{const ta=el.querySelector('textarea');if(ta)ta.focus();},50);
+}
+
+// Salva nota sem re-renderizar — atualiza só o botão 💬 no DOM
+function saveNote(dId,key,val){
+  if(!budgets[dId])budgets[dId]=getBudget(dId);
+  budgets[dId][key]=String(val||'');
+  save(K.budgets,budgets);
+  // Atualiza cor do botão diretamente sem re-render
+  const btn=document.getElementById('btn_note_'+dId+'_'+key.replace('_notes',''));
+  if(btn){
+    const has=val&&val.trim();
+    btn.style.background=has?'var(--amber50)':'transparent';
+    btn.style.borderColor=has?'var(--amber200)':'var(--border2)';
+    btn.style.color=has?'var(--amber600)':'var(--text3)';
+  }
+}
+
+// Salva nota de item custom sem re-renderizar
+function saveNoteCustom(dId,cxId,val){
+  if(!budgets[dId])return;
+  const item=budgets[dId].custom.find(x=>x.id===cxId);
+  if(!item)return;
+  item.notes=String(val||'');
+  save(K.budgets,budgets);
+  const btn=document.getElementById('btn_note_cx_'+dId+'_'+cxId);
+  if(btn){
+    const has=val&&val.trim();
+    btn.style.background=has?'var(--amber50)':'transparent';
+    btn.style.borderColor=has?'var(--amber200)':'var(--border2)';
+    btn.style.color=has?'var(--amber600)':'var(--text3)';
+  }
 }
 function scoreColor(s){return s>=7.5?'#3B6D11':s>=5?'#BA7517':'#A32D2D';}
 function scoreBg(s){return s>=7.5?'#3B6D11':s>=5?'#EF9F27':'#E24B4A';}
@@ -656,39 +692,41 @@ function renderOrcamento(){
             ${items.map(item=>{
               const pct=grandTotal>0?Math.round((Number(item.val||0)/grandTotal)*100):0;
               const nKey=`${d.id}_${item.key}`;
-              const hasNote=item.notes&&item.notes.trim();
+              const hasNote=!!(item.notes&&item.notes.trim());
+              const isOpen=hasNote||openNotes[nKey];
               return`<tr>
                 <td>${item.label}</td>
                 <td><input type="number" min="0" value="${item.val||0}" placeholder="0" onchange="updateBudget(${d.id},'${item.key}',this.value)" style="width:140px"/></td>
                 <td style="text-align:right">
                   <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px">
                     ${pct>0?`<span class="badge badge-blue">${pct}%</span>`:'<span style="color:var(--text3);font-size:12px">—</span>'}
-                    <button onclick="toggleComment('${nKey}')" title="Adicionar observação" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
+                    <button id="btn_note_${nKey}" onclick="toggleComment('${nKey}')" title="Comentário" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
                   </div>
                 </td>
               </tr>
-              <tr id="note_${nKey}" style="display:${hasNote?'table-row':'none'}">
+              <tr id="note_${nKey}" style="display:${isOpen?'table-row':'none'}">
                 <td colspan="3" style="padding:2px 12px 8px">
-                  <textarea placeholder="Observações, links, detalhes..." oninput="updateBudget(${d.id},'${item.key}_notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(item.notes||'')}</textarea>
+                  <textarea placeholder="Observações, links, detalhes..." oninput="saveNote(${d.id},'${item.key}_notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(item.notes||'')}</textarea>
                 </td>
               </tr>`;
             }).join('')}
             ${(b.custom||[]).map(cx=>{
               const cKey=`${d.id}_cx_${cx.id}`;
-              const hasNote=cx.notes&&cx.notes.trim();
+              const hasNote=!!(cx.notes&&cx.notes.trim());
+              const isOpen=hasNote||openNotes[cKey];
               return`<tr>
                 <td><input type="text" value="${esc(cx.name)}" placeholder="Nome" style="width:140px" onchange="updateCustomItem(${d.id},${cx.id},'name',this.value)"/></td>
                 <td><input type="number" min="0" value="${cx.val||0}" onchange="updateCustomItem(${d.id},${cx.id},'val',this.value)" style="width:140px"/></td>
                 <td style="text-align:right">
                   <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px">
-                    <button onclick="toggleComment('${cKey}')" title="Adicionar observação" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
+                    <button id="btn_note_cx_${d.id}_${cx.id}" onclick="toggleComment('${cKey}')" title="Comentário" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
                     <button class="btn btn-sm btn-danger" onclick="delCustomItem(${d.id},${cx.id})">✕</button>
                   </div>
                 </td>
               </tr>
-              <tr id="note_${cKey}" style="display:${hasNote?'table-row':'none'}">
+              <tr id="note_${cKey}" style="display:${isOpen?'table-row':'none'}">
                 <td colspan="3" style="padding:2px 12px 8px">
-                  <textarea placeholder="Observações..." oninput="updateCustomItem(${d.id},${cx.id},'notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(cx.notes||'')}</textarea>
+                  <textarea placeholder="Observações..." oninput="saveNoteCustom(${d.id},${cx.id},this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(cx.notes||'')}</textarea>
                 </td>
               </tr>`;
             }).join('')}
@@ -710,13 +748,8 @@ function renderOrcamento(){
 
 function updateBudget(dId,key,val){
   if(!budgets[dId])budgets[dId]=getBudget(dId);
-  if(key.endsWith('_notes')){
-    budgets[dId][key]=String(val||'');
-    save(K.budgets,budgets); // só salva, sem re-render — preserva o textarea aberto
-  } else {
-    budgets[dId][key]=key==='nights'?Math.max(1,Number(val)||1):Math.max(0,Number(val)||0);
-    save(K.budgets,budgets);renderOrcamento();
-  }
+  budgets[dId][key]=key==='nights'?Math.max(1,Number(val)||1):Math.max(0,Number(val)||0);
+  save(K.budgets,budgets);renderOrcamento();
 }
 function addCustomItem(dId){
   if(!budgets[dId])budgets[dId]=getBudget(dId);
@@ -730,7 +763,7 @@ function updateCustomItem(dId,cxId,field,val){
   if(item){
     item[field]=field==='val'?Math.max(0,Number(val)||0):val;
     save(K.budgets,budgets);
-    if(field!=='notes')renderOrcamento(); // só re-renderiza se não for nota
+    if(field!=='notes')renderOrcamento();
   }
 }
 function delCustomItem(dId,cxId){
