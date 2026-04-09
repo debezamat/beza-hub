@@ -435,9 +435,60 @@ function renderComparador(){
   if(scored.length===0){
     destHtml='<div class="empty"><div class="empty-icon">✈️</div><div class="empty-title">Nenhum destino ainda</div><div>Clique em "+ Destino" para começar</div></div>';
   } else {
+    // Calcula totais para comparação de cores
+    const allTotals=scored.map(d=>calcTotal(getBudget(d.id))).filter(t=>t>0);
+    const minTotal=allTotals.length?Math.min(...allTotals):0;
+    const maxTotal=allTotals.length?Math.max(...allTotals):0;
+
     destHtml='<div class="dest-grid">';
     scored.forEach((d,i)=>{
       const isWinner=i===0&&d.score>0;
+      const b=getBudget(d.id);
+      const total=calcTotal(b);
+      const perDay=b.nights>0&&total>0?Math.round(total/b.nights):0;
+
+      // Linhas fixas com valor
+      const fixedItems=[
+        {label:'✈️ Passagem',val:b.flight},
+        {label:'🏨 Hotel/noite',val:b.hotelNight},
+        {label:'🍽 Alimentação/dia',val:b.foodDay},
+        {label:'🚇 Transporte',val:b.transport},
+        {label:'🎭 Passeios',val:b.activities},
+        {label:'🛍 Compras',val:b.shopping},
+        {label:'🏥 Seguro',val:b.insurance},
+        {label:'🆘 Emergência',val:b.emergency},
+      ].filter(x=>Number(x.val)>0);
+
+      // Itens customizados com valor
+      const customItems=(b.custom||[]).filter(x=>Number(x.val)>0).map(x=>({label:`📌 ${x.name}`,val:x.val,notes:x.notes}));
+      const allBudgetItems=[...fixedItems,...customItems];
+
+      // Notas dos itens fixos
+      const fixedNotes=[
+        {key:'flight',label:'✈️ Passagem',notes:b.flight_notes},
+        {key:'hotelNight',label:'🏨 Hotel',notes:b.hotelNight_notes},
+        {key:'foodDay',label:'🍽 Alimentação',notes:b.foodDay_notes},
+        {key:'transport',label:'🚇 Transporte',notes:b.transport_notes},
+        {key:'activities',label:'🎭 Passeios',notes:b.activities_notes},
+        {key:'shopping',label:'🛍 Compras',notes:b.shopping_notes},
+        {key:'insurance',label:'🏥 Seguro',notes:b.insurance_notes},
+        {key:'emergency',label:'🆘 Emergência',notes:b.emergency_notes},
+      ].filter(x=>x.notes&&x.notes.trim());
+
+      // Notas dos itens custom com valor
+      const customNotes=(b.custom||[]).filter(x=>Number(x.val)>0&&x.notes&&x.notes.trim()).map(x=>({label:`📌 ${x.name}`,notes:x.notes}));
+      const allNotes=[...fixedNotes,...customNotes];
+
+      // Cor do total: verde=mais barato, vermelho=mais caro, neutro=único
+      const totalColor=allTotals.length>1?(total===minTotal?'var(--green600)':total===maxTotal?'var(--red600)':'var(--text1)'):'var(--text1)';
+
+      // Critérios com nota > 0
+      const critWithScore=crit.filter(c=>{
+        const isCusto=c.name.toLowerCase().includes('custo');
+        const v=(isCusto&&b.costMode==='auto'&&total>0)?calcAutoScore(d.id):(scores[d.id+'_'+c.id]||0);
+        return v>0;
+      });
+
       destHtml+=`<div class="dest-card${isWinner?' winner':''}">
         ${isWinner?'<div style="margin-bottom:8px"><span class="badge badge-green">🏆 Recomendado</span></div>':''}
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
@@ -450,21 +501,50 @@ function renderComparador(){
             <button class="btn btn-sm btn-danger" onclick="delDest(${d.id})">✕</button>
           </div>
         </div>
-        <div style="font-size:22px;font-weight:600;color:${scoreColor(d.score)};margin-bottom:6px">${d.score}<span style="font-size:13px;font-weight:400;color:var(--text3)">/10</span></div>
-        <div class="score-bar"><div class="score-fill" style="width:${d.score*10}%;background:${scoreBg(d.score)}"></div></div>
-        <div style="margin-top:12px;display:flex;flex-direction:column;gap:4px">
-          ${crit.slice(0,4).map(c=>{
+
+        <div style="font-size:22px;font-weight:600;color:${scoreColor(d.score)};margin-bottom:4px">${d.score}<span style="font-size:13px;font-weight:400;color:var(--text3)">/10</span></div>
+        <div class="score-bar" style="margin-bottom:${allBudgetItems.length||allNotes.length?12:4}px"><div class="score-fill" style="width:${d.score*10}%;background:${scoreBg(d.score)}"></div></div>
+
+        ${allBudgetItems.length?`
+        <div style="display:flex;flex-direction:column;gap:5px">
+          ${allBudgetItems.map(item=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
+              <span style="color:var(--text2)">${item.label}</span>
+              <span style="font-weight:500;color:var(--text1)">${fmt(item.val)}</span>
+            </div>`).join('')}
+          ${allNotes.length?`
+          <div style="margin-top:6px;padding:8px;background:var(--amber50);border:1px solid var(--amber200);border-radius:7px;display:flex;flex-direction:column;gap:5px">
+            ${allNotes.map(n=>`
+              <div>
+                <div style="font-size:10px;font-weight:600;color:var(--amber600);margin-bottom:2px">${n.label}</div>
+                <div style="font-size:11px;color:var(--text2);line-height:1.4">${esc(n.notes)}</div>
+              </div>`).join('')}
+          </div>`:''}
+          ${perDay>0?`<div style="margin-top:4px;display:flex;justify-content:space-between;font-size:12px;color:var(--text3)">
+            <span>${b.nights||7} dias · ${fmt(perDay)}/dia</span>
+          </div>`:''}
+          <div style="height:1px;background:var(--border);margin:4px 0"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;font-weight:600;color:var(--text1)">Total estimado</span>
+            <span style="font-size:16px;font-weight:600;color:${totalColor}">${fmt(total)}</span>
+          </div>
+        </div>`:''}
+
+        ${critWithScore.length?`
+        <div style="margin-top:${allBudgetItems.length?10:0}px;display:flex;flex-direction:column;gap:5px${allBudgetItems.length?';padding-top:10px;border-top:1px solid var(--border)':''}">
+          ${critWithScore.map(c=>{
             const isCusto=c.name.toLowerCase().includes('custo');
-            const b=getBudget(d.id);
-            const v=(isCusto&&b.costMode==='auto'&&calcTotal(b)>0)?calcAutoScore(d.id):(scores[d.id+'_'+c.id]||0);
-            const isAuto=isCusto&&b.costMode==='auto'&&calcTotal(b)>0;
-            return`<div style="display:flex;justify-content:space-between;font-size:11px;align-items:center">
+            const v=(isCusto&&b.costMode==='auto'&&total>0)?calcAutoScore(d.id):(scores[d.id+'_'+c.id]||0);
+            const isAuto=isCusto&&b.costMode==='auto'&&total>0;
+            const bg=v>=7.5?'var(--green50)':v>=5?'var(--amber50)':'var(--red50)';
+            const col=v>=7.5?'var(--green700)':v>=5?'var(--amber600)':'var(--red600)';
+            const brd=v>=7.5?'var(--green200)':v>=5?'var(--amber200)':'var(--red200)';
+            return`<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
               <span style="color:var(--text2)">${esc(c.name)}</span>
-              <span style="font-weight:500;color:${scoreColor(v)}">${v}/10${isAuto?'<span style="font-size:9px;margin-left:3px;background:var(--teal50);color:var(--teal600);padding:0 4px;border-radius:3px;border:1px solid var(--teal200)">auto</span>':''}</span>
+              <span style="background:${bg};color:${col};border:1px solid ${brd};padding:1px 7px;border-radius:5px;font-size:11px;font-weight:500">${v}/10${isAuto?'<span style="font-size:9px;margin-left:3px;opacity:.8">auto</span>':''}</span>
             </div>`;
           }).join('')}
-          ${crit.length>4?`<div style="font-size:11px;color:var(--text3)">+${crit.length-4} mais critérios</div>`:''}
-        </div>
+        </div>`:''}
       </div>`;
     });
     destHtml+='</div>';
