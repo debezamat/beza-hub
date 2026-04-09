@@ -326,14 +326,38 @@ function importBackup(input){
 // ================================================================
 // SCORE CALC
 // ================================================================
+function calcAutoScore(dId){
+  const vals=dest.map(d=>({id:d.id,t:calcTotal(getBudget(d.id))})).filter(x=>x.t>0);
+  if(!vals.length)return 0;
+  if(vals.length===1)return 10;
+  const myT=calcTotal(getBudget(dId));
+  if(!myT)return 0;
+  const mn=Math.min(...vals.map(x=>x.t)),mx=Math.max(...vals.map(x=>x.t));
+  if(mx===mn)return 10;
+  return Math.round((10-((myT-mn)/(mx-mn))*9)*10)/10;
+}
 function calcScore(dId){
   if(!crit.length)return 0;
   let wSum=0,total=0;
   crit.forEach(c=>{
-    const v=scores[dId+'_'+c.id]||0;
+    const isCusto=c.name.toLowerCase().includes('custo');
+    const b=getBudget(dId);
+    let v;
+    if(isCusto&&b.costMode==='auto'&&calcTotal(b)>0){v=calcAutoScore(dId);}
+    else{v=scores[dId+'_'+c.id]||0;}
     total+=v*c.weight;wSum+=c.weight*10;
   });
   return wSum>0?Math.round((total/wSum)*100)/10:0;
+}
+function setCostMode(dId,mode){
+  if(!budgets[dId])budgets[dId]=getBudget(dId);
+  budgets[dId].costMode=mode;
+  save(K.budgets,budgets);renderComparador();renderOrcamento();
+  toast(mode==='auto'?'🔗 Custo calculado automaticamente pelo orçamento':'✏️ Custo em modo manual');
+}
+function toggleComment(key){
+  const el=document.getElementById('note_'+key);
+  if(el)el.style.display=el.style.display==='none'?'table-row':'none';
 }
 function scoreColor(s){return s>=7.5?'#3B6D11':s>=5?'#BA7517':'#A32D2D';}
 function scoreBg(s){return s>=7.5?'#3B6D11':s>=5?'#EF9F27':'#E24B4A';}
@@ -423,11 +447,25 @@ function renderComparador(){
               <td style="font-weight:500">${esc(c.name)}</td>
               <td><span class="badge badge-blue">×${c.weight}</span></td>
               ${dest.map(d=>{
-                const v=scores[d.id+'_'+c.id]||0;
-                return`<td style="text-align:center">
-                  <input type="number" min="0" max="10" value="${v}" style="width:52px;text-align:center;padding:5px"
-                    onchange="setScore(${d.id},${c.id},this.value)"
-                    style="background:${v>=7?'var(--green50)':v>=4?'var(--amber50)':'var(--red50)'}"/>
+                const isCusto=c.name.toLowerCase().includes('custo');
+                const b=getBudget(d.id);
+                const isAuto=isCusto&&b.costMode==='auto';
+                const autoV=calcAutoScore(d.id);
+                const manualV=scores[d.id+'_'+c.id]||0;
+                const displayV=isAuto?autoV:manualV;
+                const hasBudget=calcTotal(b)>0;
+                return`<td style="text-align:center;vertical-align:middle">
+                  ${isAuto
+                    ?`<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                        <span style="font-weight:600;color:${scoreColor(autoV)}">${autoV}/10</span>
+                        <span style="font-size:10px;background:var(--teal50);color:var(--teal600);padding:1px 6px;border-radius:4px;border:1px solid var(--teal200)">Auto</span>
+                        <button onclick="setCostMode(${d.id},'manual')" style="font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text2);font-family:'Inter',sans-serif">Manual</button>
+                      </div>`
+                    :`<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
+                        <input type="number" min="0" max="10" value="${manualV}" style="width:52px;text-align:center;padding:5px" onchange="setScore(${d.id},${c.id},this.value)"/>
+                        ${isCusto&&hasBudget?`<button onclick="setCostMode(${d.id},'auto')" style="font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--teal200);background:var(--teal50);cursor:pointer;color:var(--teal600);font-family:'Inter',sans-serif">⚡ Auto</button>`:''}
+                      </div>`
+                  }
                 </td>`;
               }).join('')}
             </tr>`).join('')}
@@ -550,7 +588,17 @@ function delCrit(id){if(!confirm('Remover critério?'))return;crit=crit.filter(x
 // ORÇAMENTO
 // ================================================================
 function getBudget(dId){
-  return budgets[dId]||{flight:0,hotelNight:0,nights:7,foodDay:0,transport:0,activities:0,shopping:0,insurance:0,emergency:0,custom:[]};
+  const s=budgets[dId]||{};
+  return{
+    flight:s.flight||0,hotelNight:s.hotelNight||0,nights:s.nights||7,
+    foodDay:s.foodDay||0,transport:s.transport||0,activities:s.activities||0,
+    shopping:s.shopping||0,insurance:s.insurance||0,emergency:s.emergency||0,
+    flight_notes:s.flight_notes||'',hotelNight_notes:s.hotelNight_notes||'',
+    foodDay_notes:s.foodDay_notes||'',transport_notes:s.transport_notes||'',
+    activities_notes:s.activities_notes||'',shopping_notes:s.shopping_notes||'',
+    insurance_notes:s.insurance_notes||'',emergency_notes:s.emergency_notes||'',
+    costMode:s.costMode||'manual',custom:s.custom||[]
+  };
 }
 function calcTotal(b){
   const base=Number(b.flight||0)+(Number(b.hotelNight||0)*Number(b.nights||0))+(Number(b.foodDay||0)*Number(b.nights||0))+Number(b.transport||0)+Number(b.activities||0)+Number(b.shopping||0)+Number(b.insurance||0)+Number(b.emergency||0);
@@ -579,14 +627,14 @@ function renderOrcamento(){
     const total=calcTotal(b);
     const perDay=b.nights>0?Math.round(total/b.nights):0;
     const items=[
-      {key:'flight',label:'✈️ Passagem aérea',val:b.flight},
-      {key:'hotelNight',label:'🏨 Hotel por noite',val:b.hotelNight},
-      {key:'foodDay',label:'🍽 Alimentação por dia',val:b.foodDay},
-      {key:'transport',label:'🚇 Transporte local',val:b.transport},
-      {key:'activities',label:'🎭 Passeios e atrações',val:b.activities},
-      {key:'shopping',label:'🛍 Compras',val:b.shopping},
-      {key:'insurance',label:'🏥 Seguro viagem',val:b.insurance},
-      {key:'emergency',label:'🆘 Reserva emergência',val:b.emergency},
+      {key:'flight',label:'✈️ Passagem aérea',val:b.flight,notes:b.flight_notes},
+      {key:'hotelNight',label:'🏨 Hotel por noite',val:b.hotelNight,notes:b.hotelNight_notes},
+      {key:'foodDay',label:'🍽 Alimentação por dia',val:b.foodDay,notes:b.foodDay_notes},
+      {key:'transport',label:'🚇 Transporte local',val:b.transport,notes:b.transport_notes},
+      {key:'activities',label:'🎭 Passeios e atrações',val:b.activities,notes:b.activities_notes},
+      {key:'shopping',label:'🛍 Compras',val:b.shopping,notes:b.shopping_notes},
+      {key:'insurance',label:'🏥 Seguro viagem',val:b.insurance,notes:b.insurance_notes},
+      {key:'emergency',label:'🆘 Reserva emergência',val:b.emergency,notes:b.emergency_notes},
     ];
     const mainTotal=items.reduce((s,x)=>s+Number(x.val||0),0);
     const grandTotal=total;
@@ -607,19 +655,43 @@ function renderOrcamento(){
           <tbody>
             ${items.map(item=>{
               const pct=grandTotal>0?Math.round((Number(item.val||0)/grandTotal)*100):0;
+              const nKey=`${d.id}_${item.key}`;
+              const hasNote=item.notes&&item.notes.trim();
               return`<tr>
                 <td>${item.label}</td>
                 <td><input type="number" min="0" value="${item.val||0}" placeholder="0" onchange="updateBudget(${d.id},'${item.key}',this.value)" style="width:140px"/></td>
                 <td style="text-align:right">
-                  ${pct>0?`<span class="badge badge-blue">${pct}%</span>`:'<span style="color:var(--text3);font-size:12px">—</span>'}
+                  <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px">
+                    ${pct>0?`<span class="badge badge-blue">${pct}%</span>`:'<span style="color:var(--text3);font-size:12px">—</span>'}
+                    <button onclick="toggleComment('${nKey}')" title="Adicionar observação" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="note_${nKey}" style="display:${hasNote?'table-row':'none'}">
+                <td colspan="3" style="padding:2px 12px 8px">
+                  <textarea placeholder="Observações, links, detalhes..." onchange="updateBudget(${d.id},'${item.key}_notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(item.notes||'')}</textarea>
                 </td>
               </tr>`;
             }).join('')}
-            ${(b.custom||[]).map(cx=>`<tr>
-              <td><input type="text" value="${esc(cx.name)}" placeholder="Nome" style="width:140px" onchange="updateCustomItem(${d.id},${cx.id},'name',this.value)"/></td>
-              <td><input type="number" min="0" value="${cx.val||0}" onchange="updateCustomItem(${d.id},${cx.id},'val',this.value)" style="width:140px"/></td>
-              <td style="text-align:right"><button class="btn btn-sm btn-danger" onclick="delCustomItem(${d.id},${cx.id})">✕</button></td>
-            </tr>`).join('')}
+            ${(b.custom||[]).map(cx=>{
+              const cKey=`${d.id}_cx_${cx.id}`;
+              const hasNote=cx.notes&&cx.notes.trim();
+              return`<tr>
+                <td><input type="text" value="${esc(cx.name)}" placeholder="Nome" style="width:140px" onchange="updateCustomItem(${d.id},${cx.id},'name',this.value)"/></td>
+                <td><input type="number" min="0" value="${cx.val||0}" onchange="updateCustomItem(${d.id},${cx.id},'val',this.value)" style="width:140px"/></td>
+                <td style="text-align:right">
+                  <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px">
+                    <button onclick="toggleComment('${cKey}')" title="Adicionar observação" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
+                    <button class="btn btn-sm btn-danger" onclick="delCustomItem(${d.id},${cx.id})">✕</button>
+                  </div>
+                </td>
+              </tr>
+              <tr id="note_${cKey}" style="display:${hasNote?'table-row':'none'}">
+                <td colspan="3" style="padding:2px 12px 8px">
+                  <textarea placeholder="Observações..." onchange="updateCustomItem(${d.id},${cx.id},'notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(cx.notes||'')}</textarea>
+                </td>
+              </tr>`;
+            }).join('')}
           </tbody>
           <tfoot>
             <tr style="background:var(--bg)">
