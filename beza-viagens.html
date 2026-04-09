@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Beza Viagens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F8FA;--card:#fff;--border:#E4E7EC;--border2:#CBD2DA;
+  --text1:#101828;--text2:#475467;--text3:#98A2B3;
+  --blue50:#EFF8FF;--blue200:#B2DDFF;--blue600:#1570EF;--blue700:#175CD3;
+  --green50:#ECFDF3;--green200:#A9EFC5;--green600:#079455;--green700:#067647;
+  --amber50:#FFFAEB;--amber200:#FEDF89;--amber600:#B54708;
+  --red50:#FEF3F2;--red200:#FECDCA;--red600:#D92D20;
+  --purple50:#F4F3FF;--purple200:#C4B5FD;--purple600:#6938EF;
+  --orange50:#FFF6ED;--orange200:#FDD49A;--orange600:#C4520A;
+  --teal50:#F0FDFA;--teal200:#99F6E4;--teal600:#0D9488;
+}
+body.dark{
+  --bg:#0F172A;--card:#1E293B;--border:#334155;--border2:#475569;
+  --text1:#F1F5F9;--text2:#94A3B8;--text3:#475569;
+  --blue50:#1E3A5F;--blue200:#1D4ED8;--blue600:#3B82F6;--blue700:#60A5FA;
+  --green50:#14532D;--green200:#166534;--green600:#4ADE80;--green700:#86EFAC;
+  --amber50:#451A03;--amber200:#92400E;--amber600:#FCD34D;
+  --red50:#450A0A;--red200:#991B1B;--red600:#FCA5A5;
+  --purple50:#2E1065;--purple200:#6D28D9;--purple600:#C4B5FD;
+  --orange50:#431407;--orange200:#9A3412;--orange600:#FDBA74;
+  --teal50:#134E4A;--teal200:#0F766E;--teal600:#5EEAD4;
+}
+body.dark input,body.dark select,body.dark textarea{background:var(--card)!important;color:var(--text1)!important;border-color:var(--border2)!important}
+body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;color:var(--text1)}
+.page{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+/* TOPBAR */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:38px;height:38px;background:var(--blue600);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.brand-name{font-size:18px;font-weight:600;color:var(--text1)}
+.brand-sub{font-size:12px;color:var(--text3)}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* CONTROLS */
+.ctrl-btn{padding:7px 13px;border-radius:8px;border:1px solid var(--border2);background:var(--card);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
+.ctrl-btn:hover{border-color:var(--blue600);color:var(--blue600)}
+.ctrl-btn.green{border-color:var(--green200);background:var(--green50);color:var(--green700)}
+.ctrl-btn.blue{border-color:var(--blue200);background:var(--blue50);color:var(--blue700)}
+/* NAV */
+.nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:5px;margin-bottom:20px}
+.nav-btn{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text3);font-family:'Inter',sans-serif;transition:all .15s;text-align:center}
+.nav-btn:hover{color:var(--text2);background:var(--bg)}
+.nav-btn.active{background:var(--blue600);color:#fff}
+.section{display:none}.section.active{display:block}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.card-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card-title{font-size:14px;font-weight:600;color:var(--text1);display:flex;align-items:center;gap:8px}
+.card-body{padding:16px}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.stat-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.stat-val{font-size:24px;font-weight:600;color:var(--text1)}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
+/* INPUTS */
+input[type=text],input[type=number],select,textarea{font-size:13px;padding:7px 10px;border:1px solid var(--border2);border-radius:8px;background:#fff;color:var(--text1);outline:none;font-family:'Inter',sans-serif;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--blue600);box-shadow:0 0 0 3px rgba(21,112,239,.08)}
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-primary{background:var(--blue600);color:#fff}.btn-primary:hover{background:var(--blue700)}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}.btn-ghost:hover{background:var(--bg)}
+.btn-danger{background:var(--red50);border:1px solid var(--red200);color:var(--red600)}.btn-danger:hover{background:var(--red200)}
+.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px}
+/* SCORE */
+.score-bar{height:7px;border-radius:4px;background:var(--border);overflow:hidden;margin-top:4px}
+.score-fill{height:100%;border-radius:4px;transition:width .5s}
+/* BADGE */
+.badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500;white-space:nowrap;border:1px solid transparent}
+.badge-green{background:var(--green50);color:var(--green700);border-color:var(--green200)}
+.badge-amber{background:var(--amber50);color:var(--amber600);border-color:var(--amber200)}
+.badge-red{background:var(--red50);color:var(--red600);border-color:var(--red200)}
+.badge-blue{background:var(--blue50);color:var(--blue700);border-color:var(--blue200)}
+.badge-purple{background:var(--purple50);color:var(--purple600);border-color:var(--purple200)}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{background:var(--bg);color:var(--text2);font-weight:500;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.tbl td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text1);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg)}
+/* PROGRESS */
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.prog-bar{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width .5s;background:var(--blue600)}
+.prog-label{font-size:12px;color:var(--text2);min-width:80px;text-align:right;font-weight:500}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:600;color:var(--text1)}
+.modal-field{display:flex;flex-direction:column;gap:5px}
+.modal-label{font-size:12px;font-weight:500;color:var(--text2)}
+.modal-row{display:flex;gap:10px}
+.modal-row .modal-field{flex:1}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+/* ITINERARY */
+.day-block{margin-bottom:14px}
+.day-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--blue50);border:1px solid var(--blue200);border-radius:8px;margin-bottom:6px}
+.day-title{font-size:13px;font-weight:600;color:var(--blue700)}
+.activity{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:5px;background:var(--card)}
+.act-time{font-size:12px;color:var(--text3);min-width:42px;margin-top:2px}
+.act-body{flex:1}
+.act-title{font-size:13px;font-weight:500;color:var(--text1)}
+.act-notes{font-size:12px;color:var(--text2);margin-top:2px}
+/* CHECKLIST */
+.check-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
+.check-item:last-child{border-bottom:none}
+.check-box{width:18px;height:18px;min-width:18px;border:1.5px solid var(--border2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;user-select:none}
+.check-box.done{background:var(--green600);border-color:var(--green600);color:#fff}
+.check-text{flex:1;font-size:13px;color:var(--text1)}
+.check-text.done{text-decoration:line-through;color:var(--text3)}
+/* DEST CARD */
+.dest-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;transition:all .2s}
+.dest-card.winner{border:2px solid var(--green600)}
+.dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:300px;line-height:1.4}
+/* MISC */
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sep{height:1px;background:var(--border);margin:14px 0}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px}
+.empty-icon{font-size:30px;margin-bottom:8px}
+.empty-title{font-weight:500;color:var(--text2);margin-bottom:4px}
+.type-passeio{color:#1570EF}.type-restaurante{color:#C4520A}.type-hotel{color:#6938EF}.type-transporte{color:#079455}.type-compras{color:#B54708}.type-outro{color:#475467}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon">✈</div>
+      <div>
+        <div class="brand-name">Beza Viagens</div>
+        <div class="brand-sub">Planejamento de viagem · André Bezamat</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="ctrl-btn green" onclick="exportBackup()">⬇ Backup</button>
+      <button class="ctrl-btn blue" onclick="document.getElementById('importFile').click()">⬆ Restaurar</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(this)"/>
+      <button class="ctrl-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button class="nav-btn active" onclick="setNav('comparador',this)">🏆 Comparador</button>
+    <button class="nav-btn" onclick="setNav('orcamento',this)">💰 Orçamento</button>
+    <button class="nav-btn" onclick="setNav('roteiro',this)">🗺 Roteiro</button>
+    <button class="nav-btn" onclick="setNav('checklist',this)">✅ Checklist</button>
+  </div>
+
+  <!-- COMPARADOR -->
+  <div class="section active" id="sec-comparador">
+    <div id="comp-content"></div>
+  </div>
+
+  <!-- ORCAMENTO -->
+  <div class="section" id="sec-orcamento">
+    <div id="orc-content"></div>
+  </div>
+
+  <!-- ROTEIRO -->
+  <div class="section" id="sec-roteiro">
+    <div id="rot-content"></div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="section" id="sec-checklist">
+    <div id="chk-content"></div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+<div id="modal-container"></div>
+
+<script>
+'use strict';
+
+// ================================================================
+// KEYS & DEFAULTS
+// ================================================================
+const K={
+  dest:'beza-trip-dest',crit:'beza-trip-crit',scores:'beza-trip-scores',
+  budgets:'beza-trip-budgets',itinerary:'beza-trip-itinerary',
+  checklist:'beza-trip-checklist',dark:'beza-trip-dark'
+};
+
+const DEFAULT_CRIT=[
+  {id:1,name:'Custo',weight:5},{id:2,name:'Clima',weight:3},
+  {id:3,name:'Atrações',weight:4},{id:4,name:'Gastronomia',weight:3},
+  {id:5,name:'Segurança',weight:4},{id:6,name:'Voo direto',weight:3},
+  {id:7,name:'Idioma',weight:2},{id:8,name:'Infraestrutura',weight:2}
+];
+
+const DEFAULT_CHECKLIST=[
+  {id:1,name:'Documentos',items:[
+    {id:11,text:'Passaporte válido (6+ meses)',done:false},
+    {id:12,text:'Visto (se necessário)',done:false},
+    {id:13,text:'CNH internacional',done:false},
+    {id:14,text:'Carteirinha vacinas',done:false}
+  ]},
+  {id:2,name:'Passagens & Reservas',items:[
+    {id:21,text:'Passagem aérea comprada',done:false},
+    {id:22,text:'Hotel / hospedagem reservado',done:false},
+    {id:23,text:'Transfer aeroporto reservado',done:false},
+    {id:24,text:'Passeios agendados',done:false}
+  ]},
+  {id:3,name:'Saúde & Seguro',items:[
+    {id:31,text:'Seguro viagem contratado',done:false},
+    {id:32,text:'Vacinas em dia',done:false},
+    {id:33,text:'Remédios de uso contínuo',done:false},
+    {id:34,text:'Kit primeiros socorros',done:false}
+  ]},
+  {id:4,name:'Finanças',items:[
+    {id:41,text:'Moeda estrangeira / cartão internacional',done:false},
+    {id:42,text:'Avisar banco da viagem',done:false},
+    {id:43,text:'App de câmbio instalado',done:false},
+    {id:44,text:'Orçamento definido',done:false}
+  ]},
+  {id:5,name:'Bagagem',items:[
+    {id:51,text:'Mala tamanho correto (regras cia aérea)',done:false},
+    {id:52,text:'Adaptador de tomada',done:false},
+    {id:53,text:'Roupas para o clima do destino',done:false},
+    {id:54,text:'Carregador e power bank',done:false}
+  ]}
+];
+
+// ================================================================
+// STATE
+// ================================================================
+var dest=[], crit=[], scores={}, budgets={}, itinerary={}, checklist=[];
+var isDark=false, currentNav='comparador', itinDest=null;
+
+function uid(){return Date.now()+Math.floor(Math.random()*1000);}
+
+function load(){
+  dest=ls(K.dest)||[];
+  crit=ls(K.crit)||JSON.parse(JSON.stringify(DEFAULT_CRIT));
+  scores=ls(K.scores)||{};
+  budgets=ls(K.budgets)||{};
+  itinerary=ls(K.itinerary)||{};
+  checklist=ls(K.checklist)||JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+  isDark=localStorage.getItem(K.dark)==='1';
+  applyDark();
+}
+function ls(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function saveAll(){save(K.dest,dest);save(K.crit,crit);save(K.scores,scores);save(K.budgets,budgets);save(K.itinerary,itinerary);save(K.checklist,checklist);}
+
+// ================================================================
+// DARK MODE
+// ================================================================
+function applyDark(){
+  document.body.classList.toggle('dark',isDark);
+  document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';
+}
+function toggleDark(){isDark=!isDark;localStorage.setItem(K.dark,isDark?'1':'0');applyDark();}
+
+// ================================================================
+// NAV
+// ================================================================
+function setNav(sec,btn){
+  currentNav=sec;
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+sec).classList.add('active');
+  btn.classList.add('active');
+  render();
+}
+
+// ================================================================
+// TOAST
+// ================================================================
+function toast(msg,dur=3000){
+  const t=document.getElementById('toast');
+  t.style.background=msg.includes('❌')?'#D92D20':'#101828';
+  t.style.color='#fff';t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',dur);
+}
+
+// ================================================================
+// MODAL
+// ================================================================
+function openModal(html){
+  document.getElementById('modal-container').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()">${html}</div>`;
+}
+function closeModal(){document.getElementById('modal-container').innerHTML='';}
+
+// ================================================================
+// BACKUP
+// ================================================================
+function exportBackup(){
+  const data={v:'beza-trip-v1',exportado:new Date().toISOString(),dest,crit,scores,budgets,itinerary,checklist};
+  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download=`beza-viagens-backup-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();toast('✅ Backup exportado!');
+}
+function importBackup(input){
+  const f=input.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(d.dest)dest=d.dest;if(d.crit)crit=d.crit;if(d.scores)scores=d.scores;
+      if(d.budgets)budgets=d.budgets;if(d.itinerary)itinerary=d.itinerary;if(d.checklist)checklist=d.checklist;
+      saveAll();render();toast('✅ Dados restaurados com sucesso!');
+    }catch(err){toast('❌ Arquivo inválido',4000);}
+    input.value='';
+  };
+  r.readAsText(f);
+}
+
+// ================================================================
+// SCORE CALC
+// ================================================================
+function calcScore(dId){
+  if(!crit.length)return 0;
+  let wSum=0,total=0;
+  crit.forEach(c=>{
+    const v=scores[dId+'_'+c.id]||0;
+    total+=v*c.weight;wSum+=c.weight*10;
+  });
+  return wSum>0?Math.round((total/wSum)*100)/10:0;
+}
+function scoreColor(s){return s>=7.5?'#3B6D11':s>=5?'#BA7517':'#A32D2D';}
+function scoreBg(s){return s>=7.5?'#3B6D11':s>=5?'#EF9F27':'#E24B4A';}
+
+// ================================================================
+// CURRENCY
+// ================================================================
+function fmt(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});}
+
+// ================================================================
+// RENDER ROUTER
+// ================================================================
+function render(){
+  if(currentNav==='comparador')renderComparador();
+  else if(currentNav==='orcamento')renderOrcamento();
+  else if(currentNav==='roteiro')renderRoteiro();
+  else if(currentNav==='checklist')renderChecklist();
+}
+
+// ================================================================
+// COMPARADOR
+// ================================================================
+function renderComparador(){
+  const scored=dest.map(d=>({...d,score:calcScore(d.id)})).sort((a,b)=>b.score-a.score);
+  const winner=scored[0];
+
+  let statsHtml=`<div class="stats">
+    <div class="stat"><div class="stat-label">Destinos</div><div class="stat-val">${dest.length}</div><div class="stat-sub">cadastrados</div></div>
+    <div class="stat"><div class="stat-label">Critérios</div><div class="stat-val">${crit.length}</div><div class="stat-sub">avaliados</div></div>
+    <div class="stat"><div class="stat-label">Recomendado</div><div class="stat-val" style="font-size:16px">${winner?winner.name:'—'}</div><div class="stat-sub">${winner?winner.score+'/10':''}</div></div>
+    <div class="stat"><div class="stat-label">Maior pontuação</div><div class="stat-val">${winner?winner.score:'—'}</div><div class="stat-sub">${winner?'/10':''}</div></div>
+  </div>`;
+
+  // Destination cards
+  let destHtml='';
+  if(scored.length===0){
+    destHtml='<div class="empty"><div class="empty-icon">✈️</div><div class="empty-title">Nenhum destino ainda</div><div>Clique em "+ Destino" para começar</div></div>';
+  } else {
+    destHtml='<div class="dest-grid">';
+    scored.forEach((d,i)=>{
+      const isWinner=i===0&&d.score>0;
+      destHtml+=`<div class="dest-card${isWinner?' winner':''}">
+        ${isWinner?'<div style="margin-bottom:8px"><span class="badge badge-green">🏆 Recomendado</span></div>':''}
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div>
+            <div style="font-size:15px;font-weight:600;color:var(--text1)">${d.flag||'🌍'} ${esc(d.name)}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:2px">${esc(d.country||'')}</div>
+          </div>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-sm btn-ghost" onclick="editDest(${d.id})">✏</button>
+            <button class="btn btn-sm btn-danger" onclick="delDest(${d.id})">✕</button>
+          </div>
+        </div>
+        <div style="font-size:22px;font-weight:600;color:${scoreColor(d.score)};margin-bottom:6px">${d.score}<span style="font-size:13px;font-weight:400;color:var(--text3)">/10</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:${d.score*10}%;background:${scoreBg(d.score)}"></div></div>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:4px">
+          ${crit.slice(0,4).map(c=>{
+            const v=scores[d.id+'_'+c.id]||0;
+            return`<div style="display:flex;justify-content:space-between;font-size:11px">
+              <span style="color:var(--text2)">${esc(c.name)}</span>
+              <span style="font-weight:500;color:${scoreColor(v)}">${v}/10</span>
+            </div>`;
+          }).join('')}
+          ${crit.length>4?`<div style="font-size:11px;color:var(--text3)">+${crit.length-4} mais critérios</div>`:''}
+        </div>
+      </div>`;
+    });
+    destHtml+='</div>';
+  }
+
+  // Score matrix
+  let matrixHtml='';
+  if(dest.length>0&&crit.length>0){
+    matrixHtml=`<div class="card" style="margin-top:16px">
+      <div class="card-hdr">
+        <div class="card-title">Matriz de pontuação</div>
+        <div style="font-size:12px;color:var(--text3)">Clique nas células para editar (1–10)</div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead><tr>
+            <th>Critério</th><th>Peso</th>
+            ${dest.map(d=>`<th style="text-align:center">${d.flag||'🌍'} ${esc(d.name)}</th>`).join('')}
+          </tr></thead>
+          <tbody>
+            ${crit.map(c=>`<tr>
+              <td style="font-weight:500">${esc(c.name)}</td>
+              <td><span class="badge badge-blue">×${c.weight}</span></td>
+              ${dest.map(d=>{
+                const v=scores[d.id+'_'+c.id]||0;
+                return`<td style="text-align:center">
+                  <input type="number" min="0" max="10" value="${v}" style="width:52px;text-align:center;padding:5px"
+                    onchange="setScore(${d.id},${c.id},this.value)"
+                    style="background:${v>=7?'var(--green50)':v>=4?'var(--amber50)':'var(--red50)'}"/>
+                </td>`;
+              }).join('')}
+            </tr>`).join('')}
+            <tr style="background:var(--bg)">
+              <td style="font-weight:600" colspan="2">Pontuação total</td>
+              ${dest.map(d=>{const s=calcScore(d.id);return`<td style="text-align:center;font-weight:600;color:${scoreColor(s)}">${s}/10</td>`;}).join('')}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  // Criteria editor
+  let critHtml=`<div class="card" style="margin-top:16px">
+    <div class="card-hdr">
+      <div class="card-title">⚙️ Critérios e pesos</div>
+      <button class="btn btn-sm btn-primary" onclick="addCritModal()">+ Critério</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="tbl">
+        <thead><tr><th>Critério</th><th>Peso (1–5)</th><th></th></tr></thead>
+        <tbody>
+          ${crit.map(c=>`<tr>
+            <td><input type="text" value="${esc(c.name)}" style="border:none;background:transparent;font-weight:500;padding:0" onchange="updateCritName(${c.id},this.value)"/></td>
+            <td>
+              <div style="display:flex;gap:4px">
+                ${[1,2,3,4,5].map(w=>`<button onclick="setCritWeight(${c.id},${w})" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--border2);background:${c.weight>=w?'var(--blue600)':'transparent'};color:${c.weight>=w?'#fff':'var(--text3)'};cursor:pointer;font-size:12px;font-weight:500">${w}</button>`).join('')}
+              </div>
+            </td>
+            <td><button class="btn btn-sm btn-danger" onclick="delCrit(${c.id})">✕</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+
+  document.getElementById('comp-content').innerHTML=
+    `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:15px;font-weight:600;color:var(--text1)">Comparador de Destinos</div>
+      <button class="btn btn-primary" onclick="addDestModal()">+ Destino</button>
+    </div>
+    ${statsHtml}${destHtml}${matrixHtml}${critHtml}`;
+}
+
+// ================================================================
+// DEST CRUD
+// ================================================================
+function addDestModal(id){
+  const d=id?dest.find(x=>x.id===id):{};
+  const editing=!!id;
+  openModal(`<div class="modal">
+    <div class="modal-title">${editing?'Editar':'Novo'} destino</div>
+    <div class="modal-row">
+      <div class="modal-field" style="flex:0 0 60px"><div class="modal-label">Emoji</div><input id="mFlag" type="text" value="${d.flag||'🌍'}" style="text-align:center"/></div>
+      <div class="modal-field"><div class="modal-label">Nome do destino*</div><input id="mName" type="text" value="${esc(d.name||'')}" placeholder="Ex: Madri"/></div>
+    </div>
+    <div class="modal-field"><div class="modal-label">País / Região</div><input id="mCountry" type="text" value="${esc(d.country||'')}" placeholder="Ex: Espanha"/></div>
+    <div class="modal-field"><div class="modal-label">Observações</div><textarea id="mNotes" rows="2" style="resize:vertical">${esc(d.notes||'')}</textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveDest(${id||'null'})">Salvar</button>
+    </div>
+  </div>`);
+  setTimeout(()=>document.getElementById('mName').focus(),50);
+}
+function editDest(id){addDestModal(id);}
+function saveDest(id){
+  const name=document.getElementById('mName').value.trim();
+  if(!name){toast('❌ Nome é obrigatório');return;}
+  const obj={id:id||uid(),name,country:document.getElementById('mCountry').value.trim(),flag:document.getElementById('mFlag').value.trim()||'🌍',notes:document.getElementById('mNotes').value.trim()};
+  if(id){const i=dest.findIndex(x=>x.id===id);if(i>=0)dest[i]=obj;}
+  else dest.push(obj);
+  save(K.dest,dest);closeModal();renderComparador();toast(id?'✅ Destino atualizado':'✅ Destino adicionado');
+}
+function delDest(id){
+  if(!confirm('Remover este destino e todos seus dados?'))return;
+  dest=dest.filter(x=>x.id!==id);
+  Object.keys(scores).filter(k=>k.startsWith(id+'_')).forEach(k=>delete scores[k]);
+  delete budgets[id];delete itinerary[id];
+  save(K.dest,dest);save(K.scores,scores);save(K.budgets,budgets);save(K.itinerary,itinerary);
+  renderComparador();toast('🗑 Destino removido');
+}
+function setScore(dId,cId,val){
+  scores[dId+'_'+cId]=Math.max(0,Math.min(10,Number(val)||0));
+  save(K.scores,scores);renderComparador();
+}
+function addCritModal(){
+  openModal(`<div class="modal">
+    <div class="modal-title">Novo critério</div>
+    <div class="modal-field"><div class="modal-label">Nome*</div><input id="cName" type="text" placeholder="Ex: Culinária local"/></div>
+    <div class="modal-field"><div class="modal-label">Peso (1 = menor, 5 = maior importância)</div>
+      <div style="display:flex;gap:6px" id="cWeightBtns">
+        ${[1,2,3,4,5].map(w=>`<button onclick="selectCWeight(${w})" id="cw${w}" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:${w===3?'var(--blue600)':'transparent'};color:${w===3?'#fff':'var(--text2)'};cursor:pointer;font-size:14px;font-weight:500">${w}</button>`).join('')}
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCrit()">Adicionar</button>
+    </div>
+  </div>`);
+  setTimeout(()=>document.getElementById('cName').focus(),50);
+}
+var _cWeight=3;
+function selectCWeight(w){
+  _cWeight=w;
+  [1,2,3,4,5].forEach(x=>{const b=document.getElementById('cw'+x);if(b){b.style.background=x===w?'var(--blue600)':'transparent';b.style.color=x===w?'#fff':'var(--text2)';}});
+}
+function saveCrit(){
+  const name=document.getElementById('cName').value.trim();
+  if(!name){toast('❌ Nome é obrigatório');return;}
+  crit.push({id:uid(),name,weight:_cWeight});
+  save(K.crit,crit);closeModal();renderComparador();toast('✅ Critério adicionado');
+}
+function updateCritName(id,val){const c=crit.find(x=>x.id===id);if(c){c.name=val;save(K.crit,crit);}}
+function setCritWeight(id,w){const c=crit.find(x=>x.id===id);if(c){c.weight=w;save(K.crit,crit);renderComparador();}}
+function delCrit(id){if(!confirm('Remover critério?'))return;crit=crit.filter(x=>x.id!==id);save(K.crit,crit);renderComparador();}
+
+// ================================================================
+// ORÇAMENTO
+// ================================================================
+function getBudget(dId){
+  return budgets[dId]||{flight:0,hotelNight:0,nights:7,foodDay:0,transport:0,activities:0,shopping:0,insurance:0,emergency:0,custom:[]};
+}
+function calcTotal(b){
+  const base=Number(b.flight||0)+(Number(b.hotelNight||0)*Number(b.nights||0))+(Number(b.foodDay||0)*Number(b.nights||0))+Number(b.transport||0)+Number(b.activities||0)+Number(b.shopping||0)+Number(b.insurance||0)+Number(b.emergency||0);
+  const custom=(b.custom||[]).reduce((s,x)=>s+Number(x.val||0),0);
+  return base+custom;
+}
+
+function renderOrcamento(){
+  if(dest.length===0){
+    document.getElementById('orc-content').innerHTML='<div class="empty"><div class="empty-icon">💰</div><div class="empty-title">Cadastre destinos primeiro</div><div>Vá até o Comparador e adicione destinos</div></div>';
+    return;
+  }
+  // Summary cards
+  const totals=dest.map(d=>({...d,total:calcTotal(getBudget(d.id))})).sort((a,b)=>a.total-b.total);
+  let html=`<div class="stats">
+    ${totals.map(d=>`<div class="stat">
+      <div class="stat-label">${d.flag||'🌍'} ${esc(d.name)}</div>
+      <div class="stat-val" style="font-size:16px">${fmt(d.total)}</div>
+      <div class="stat-sub">${getBudget(d.id).nights||7} dias</div>
+    </div>`).join('')}
+  </div>`;
+
+  // Per dest budget forms
+  dest.forEach(d=>{
+    const b=getBudget(d.id);
+    const total=calcTotal(b);
+    const perDay=b.nights>0?Math.round(total/b.nights):0;
+    const items=[
+      {key:'flight',label:'✈️ Passagem aérea',val:b.flight},
+      {key:'hotelNight',label:'🏨 Hotel por noite',val:b.hotelNight},
+      {key:'foodDay',label:'🍽 Alimentação por dia',val:b.foodDay},
+      {key:'transport',label:'🚇 Transporte local',val:b.transport},
+      {key:'activities',label:'🎭 Passeios e atrações',val:b.activities},
+      {key:'shopping',label:'🛍 Compras',val:b.shopping},
+      {key:'insurance',label:'🏥 Seguro viagem',val:b.insurance},
+      {key:'emergency',label:'🆘 Reserva emergência',val:b.emergency},
+    ];
+    const mainTotal=items.reduce((s,x)=>s+Number(x.val||0),0);
+    const grandTotal=total;
+
+    html+=`<div class="card">
+      <div class="card-hdr">
+        <div class="card-title">${d.flag||'🌍'} ${esc(d.name)} — ${esc(d.country||'')}</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="text-align:right">
+            <div style="font-size:18px;font-weight:600;color:var(--text1)">${fmt(total)}</div>
+            <div style="font-size:11px;color:var(--text3)">${fmt(perDay)}/dia · <input type="number" value="${b.nights||7}" min="1" max="365" style="width:36px;padding:2px 4px;font-size:11px;display:inline" onchange="updateBudget(${d.id},'nights',this.value)"/> dias</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="tbl">
+          <thead><tr><th>Categoria</th><th style="width:160px">Valor (R$)</th><th style="width:80px;text-align:right">% do total</th></tr></thead>
+          <tbody>
+            ${items.map(item=>{
+              const pct=grandTotal>0?Math.round((Number(item.val||0)/grandTotal)*100):0;
+              return`<tr>
+                <td>${item.label}</td>
+                <td><input type="number" min="0" value="${item.val||0}" placeholder="0" onchange="updateBudget(${d.id},'${item.key}',this.value)" style="width:140px"/></td>
+                <td style="text-align:right">
+                  ${pct>0?`<span class="badge badge-blue">${pct}%</span>`:'<span style="color:var(--text3);font-size:12px">—</span>'}
+                </td>
+              </tr>`;
+            }).join('')}
+            ${(b.custom||[]).map(cx=>`<tr>
+              <td><input type="text" value="${esc(cx.name)}" placeholder="Nome" style="width:140px" onchange="updateCustomItem(${d.id},${cx.id},'name',this.value)"/></td>
+              <td><input type="number" min="0" value="${cx.val||0}" onchange="updateCustomItem(${d.id},${cx.id},'val',this.value)" style="width:140px"/></td>
+              <td style="text-align:right"><button class="btn btn-sm btn-danger" onclick="delCustomItem(${d.id},${cx.id})">✕</button></td>
+            </tr>`).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--bg)">
+              <td style="font-weight:600">Total</td>
+              <td style="font-weight:600;color:var(--blue600)">${fmt(grandTotal)}</td>
+              <td style="text-align:right"><button class="btn btn-sm btn-ghost" onclick="addCustomItem(${d.id})">+ Categoria</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('orc-content').innerHTML=html;
+}
+
+function updateBudget(dId,key,val){
+  if(!budgets[dId])budgets[dId]=getBudget(dId);
+  budgets[dId][key]=key==='nights'?Math.max(1,Number(val)||1):Math.max(0,Number(val)||0);
+  save(K.budgets,budgets);renderOrcamento();
+}
+function addCustomItem(dId){
+  if(!budgets[dId])budgets[dId]=getBudget(dId);
+  if(!budgets[dId].custom)budgets[dId].custom=[];
+  budgets[dId].custom.push({id:uid(),name:'Outros',val:0});
+  save(K.budgets,budgets);renderOrcamento();
+}
+function updateCustomItem(dId,cxId,field,val){
+  if(!budgets[dId])return;
+  const item=budgets[dId].custom.find(x=>x.id===cxId);
+  if(item){item[field]=field==='val'?Math.max(0,Number(val)||0):val;save(K.budgets,budgets);renderOrcamento();}
+}
+function delCustomItem(dId,cxId){
+  if(!budgets[dId])return;
+  budgets[dId].custom=budgets[dId].custom.filter(x=>x.id!==cxId);
+  save(K.budgets,budgets);renderOrcamento();
+}
+
+// ================================================================
+// ROTEIRO
+// ================================================================
+const ACT_TYPES={passeio:'Passeio',restaurante:'Restaurante',hotel:'Hotel/Check-in',transporte:'Transporte',compras:'Compras',outro:'Outro'};
+
+function renderRoteiro(){
+  if(dest.length===0){
+    document.getElementById('rot-content').innerHTML='<div class="empty"><div class="empty-icon">🗺</div><div class="empty-title">Cadastre destinos primeiro</div></div>';
+    return;
+  }
+  if(!itinDest||!dest.find(d=>d.id===itinDest))itinDest=dest[0].id;
+  const d=dest.find(x=>x.id===itinDest);
+  const bNights=getBudget(itinDest).nights||7;
+  const days=itinerary[itinDest]||[];
+
+  // Group by day
+  const byDay={};
+  days.forEach(a=>{if(!byDay[a.day])byDay[a.day]=[];byDay[a.day].push(a);});
+
+  let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+    <div>
+      <div style="font-size:15px;font-weight:600;color:var(--text1)">Roteiro de Viagem</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select onchange="itinDest=Number(this.value);renderRoteiro()" style="width:auto">
+        ${dest.map(d=>`<option value="${d.id}"${d.id===itinDest?' selected':''}>${d.flag||'🌍'} ${esc(d.name)}</option>`).join('')}
+      </select>
+      <button class="btn btn-primary" onclick="addActivityModal()">+ Atividade</button>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px 16px;background:var(--blue50);border:1px solid var(--blue200);border-radius:10px">
+    <div style="font-size:22px">${d.flag||'🌍'}</div>
+    <div>
+      <div style="font-weight:600;color:var(--text1)">${esc(d.name)}${d.country?` · ${esc(d.country)}`:''}</div>
+      <div style="font-size:12px;color:var(--text2)">${bNights} dias planejados · ${days.length} atividades cadastradas</div>
+    </div>
+  </div>`;
+
+  if(days.length===0){
+    html+='<div class="empty"><div class="empty-icon">📅</div><div class="empty-title">Nenhuma atividade ainda</div><div>Clique em "+ Atividade" para montar o roteiro</div></div>';
+  } else {
+    for(let day=1;day<=Math.max(...Object.keys(byDay).map(Number),bNights);day++){
+      const acts=(byDay[day]||[]).sort((a,b)=>a.time.localeCompare(b.time));
+      html+=`<div class="day-block">
+        <div class="day-hdr">
+          <div class="day-title">Dia ${day}</div>
+          <button class="btn btn-sm btn-primary" onclick="addActivityModal(${day})">+</button>
+        </div>
+        ${acts.length?acts.map(a=>{
+          const typeClass='type-'+(a.type||'outro');
+          const typeLabel=ACT_TYPES[a.type]||'Outro';
+          return`<div class="activity">
+            <div class="act-time">${a.time||'—'}</div>
+            <div class="act-body">
+              <div class="act-title">${esc(a.title)}</div>
+              ${a.notes?`<div class="act-notes">${esc(a.notes)}</div>`:''}
+            </div>
+            <span class="badge ${typeClass==='type-passeio'?'badge-blue':typeClass==='type-restaurante'?'badge-amber':typeClass==='type-hotel'?'badge-purple':'badge-green'}">${typeLabel}</span>
+            <div style="display:flex;gap:3px;margin-left:4px">
+              <button class="btn btn-sm btn-ghost" onclick="editActivity(${a.id})">✏</button>
+              <button class="btn btn-sm btn-danger" onclick="delActivity(${a.id})">✕</button>
+            </div>
+          </div>`;
+        }).join(''):'<div style="padding:8px 12px;font-size:12px;color:var(--text3)">Nenhuma atividade neste dia</div>'}
+      </div>`;
+    }
+  }
+
+  document.getElementById('rot-content').innerHTML=html;
+}
+
+function addActivityModal(preDay,id){
+  const a=id?(itinerary[itinDest]||[]).find(x=>x.id===id):{};
+  const editing=!!id;
+  const b=getBudget(itinDest);
+  const maxDay=b.nights||7;
+  openModal(`<div class="modal">
+    <div class="modal-title">${editing?'Editar':'Nova'} atividade</div>
+    <div class="modal-row">
+      <div class="modal-field"><div class="modal-label">Dia*</div>
+        <select id="aDay">
+          ${Array.from({length:maxDay},(_,i)=>`<option value="${i+1}"${(a.day||preDay||1)===i+1?' selected':''}>${i+1}</option>`).join('')}
+        </select>
+      </div>
+      <div class="modal-field"><div class="modal-label">Horário</div><input id="aTime" type="time" value="${a.time||''}"/></div>
+    </div>
+    <div class="modal-field"><div class="modal-label">Título*</div><input id="aTitle" type="text" value="${esc(a.title||'')}" placeholder="Ex: Visita ao Museu do Prado"/></div>
+    <div class="modal-field"><div class="modal-label">Tipo</div>
+      <select id="aType">
+        ${Object.entries(ACT_TYPES).map(([k,v])=>`<option value="${k}"${a.type===k?' selected':''}>${v}</option>`).join('')}
+      </select>
+    </div>
+    <div class="modal-field"><div class="modal-label">Observações / Endereço</div><textarea id="aNotes" rows="2" style="resize:vertical">${esc(a.notes||'')}</textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveActivity(${id||'null'})">Salvar</button>
+    </div>
+  </div>`);
+  setTimeout(()=>document.getElementById('aTitle').focus(),50);
+}
+function editActivity(id){addActivityModal(null,id);}
+function saveActivity(id){
+  const title=document.getElementById('aTitle').value.trim();
+  if(!title){toast('❌ Título é obrigatório');return;}
+  const obj={id:id||uid(),day:Number(document.getElementById('aDay').value),time:document.getElementById('aTime').value,title,type:document.getElementById('aType').value,notes:document.getElementById('aNotes').value.trim()};
+  if(!itinerary[itinDest])itinerary[itinDest]=[];
+  if(id){const i=itinerary[itinDest].findIndex(x=>x.id===id);if(i>=0)itinerary[itinDest][i]=obj;}
+  else itinerary[itinDest].push(obj);
+  save(K.itinerary,itinerary);closeModal();renderRoteiro();toast(id?'✅ Atividade atualizada':'✅ Atividade adicionada');
+}
+function delActivity(id){
+  if(!confirm('Remover atividade?'))return;
+  itinerary[itinDest]=(itinerary[itinDest]||[]).filter(x=>x.id!==id);
+  save(K.itinerary,itinerary);renderRoteiro();toast('🗑 Atividade removida');
+}
+
+// ================================================================
+// CHECKLIST
+// ================================================================
+function renderChecklist(){
+  const totalItems=checklist.reduce((s,c)=>s+c.items.length,0);
+  const doneItems=checklist.reduce((s,c)=>s+c.items.filter(i=>i.done).length,0);
+  const pct=totalItems>0?Math.round((doneItems/totalItems)*100):0;
+
+  let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+    <div style="font-size:15px;font-weight:600;color:var(--text1)">Checklist da Viagem</div>
+    <button class="btn btn-primary" onclick="addCatModal()">+ Categoria</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${totalItems}</div><div class="stat-sub">itens</div></div>
+    <div class="stat"><div class="stat-label">Concluídos</div><div class="stat-val">${doneItems}</div><div class="stat-sub">${pct}% pronto</div></div>
+    <div class="stat"><div class="stat-label">Pendentes</div><div class="stat-val">${totalItems-doneItems}</div><div class="stat-sub">restantes</div></div>
+  </div>
+  <div class="prog-row">
+    <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pct===100?'var(--green600)':'var(--blue600)'}"></div></div>
+    <div class="prog-label">${pct}% completo</div>
+  </div>`;
+
+  checklist.forEach(cat=>{
+    const catDone=cat.items.filter(i=>i.done).length;
+    const catPct=cat.items.length>0?Math.round((catDone/cat.items.length)*100):0;
+    html+=`<div class="card">
+      <div class="card-hdr">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <div class="card-title">${esc(cat.name)}</div>
+          <span class="badge ${catPct===100?'badge-green':catPct>0?'badge-amber':'badge-red'}">${catDone}/${cat.items.length}</span>
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-ghost" onclick="addItemModal(${cat.id})">+ Item</button>
+          <button class="btn btn-sm btn-danger" onclick="delCat(${cat.id})">✕ Cat.</button>
+        </div>
+      </div>
+      <div>
+        ${cat.items.map(item=>`<div class="check-item">
+          <div class="check-box${item.done?' done':''}" onclick="toggleItem(${cat.id},${item.id})">${item.done?'✓':''}</div>
+          <div class="check-text${item.done?' done':''}">${esc(item.text)}</div>
+          <button class="btn btn-sm btn-danger" onclick="delItem(${cat.id},${item.id})" style="padding:2px 7px">✕</button>
+        </div>`).join('')}
+        ${cat.items.length===0?'<div style="padding:12px 16px;font-size:12px;color:var(--text3)">Nenhum item. Clique em "+ Item"</div>':''}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('chk-content').innerHTML=html;
+}
+
+function toggleItem(catId,itemId){
+  const cat=checklist.find(c=>c.id===catId);if(!cat)return;
+  const item=cat.items.find(i=>i.id===itemId);if(!item)return;
+  item.done=!item.done;
+  save(K.checklist,checklist);renderChecklist();
+}
+function addItemModal(catId){
+  openModal(`<div class="modal">
+    <div class="modal-title">Novo item</div>
+    <div class="modal-field"><div class="modal-label">Descrição*</div><input id="iText" type="text" placeholder="Ex: Passaporte válido"/></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveItem(${catId})">Adicionar</button>
+    </div>
+  </div>`);
+  setTimeout(()=>document.getElementById('iText').focus(),50);
+}
+function saveItem(catId){
+  const text=document.getElementById('iText').value.trim();
+  if(!text){toast('❌ Descrição é obrigatória');return;}
+  const cat=checklist.find(c=>c.id===catId);if(!cat)return;
+  cat.items.push({id:uid(),text,done:false});
+  save(K.checklist,checklist);closeModal();renderChecklist();
+}
+function delItem(catId,itemId){
+  const cat=checklist.find(c=>c.id===catId);if(!cat)return;
+  cat.items=cat.items.filter(i=>i.id!==itemId);
+  save(K.checklist,checklist);renderChecklist();
+}
+function addCatModal(){
+  openModal(`<div class="modal">
+    <div class="modal-title">Nova categoria</div>
+    <div class="modal-field"><div class="modal-label">Nome*</div><input id="catName" type="text" placeholder="Ex: Entretenimento"/></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCat()">Criar</button>
+    </div>
+  </div>`);
+  setTimeout(()=>document.getElementById('catName').focus(),50);
+}
+function saveCat(){
+  const name=document.getElementById('catName').value.trim();
+  if(!name){toast('❌ Nome é obrigatório');return;}
+  checklist.push({id:uid(),name,items:[]});
+  save(K.checklist,checklist);closeModal();renderChecklist();
+}
+function delCat(id){
+  if(!confirm('Remover categoria e todos os itens?'))return;
+  checklist=checklist.filter(c=>c.id!==id);
+  save(K.checklist,checklist);renderChecklist();
+}
+
+// ================================================================
+// UTILS
+// ================================================================
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ================================================================
+// INIT
+// ================================================================
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+load();
+render();
+console.info('[Beza Viagens v1] ✅ Pronto');
+</script>
+</body>
+</html>
