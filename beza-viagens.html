@@ -669,7 +669,7 @@ function renderOrcamento(){
               </tr>
               <tr id="note_${nKey}" style="display:${hasNote?'table-row':'none'}">
                 <td colspan="3" style="padding:2px 12px 8px">
-                  <textarea placeholder="Observações, links, detalhes..." onchange="updateBudget(${d.id},'${item.key}_notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(item.notes||'')}</textarea>
+                  <textarea placeholder="Observações, links, detalhes..." oninput="updateBudget(${d.id},'${item.key}_notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(item.notes||'')}</textarea>
                 </td>
               </tr>`;
             }).join('')}
@@ -688,7 +688,7 @@ function renderOrcamento(){
               </tr>
               <tr id="note_${cKey}" style="display:${hasNote?'table-row':'none'}">
                 <td colspan="3" style="padding:2px 12px 8px">
-                  <textarea placeholder="Observações..." onchange="updateCustomItem(${d.id},${cx.id},'notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(cx.notes||'')}</textarea>
+                  <textarea placeholder="Observações..." oninput="updateCustomItem(${d.id},${cx.id},'notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(cx.notes||'')}</textarea>
                 </td>
               </tr>`;
             }).join('')}
@@ -710,8 +710,13 @@ function renderOrcamento(){
 
 function updateBudget(dId,key,val){
   if(!budgets[dId])budgets[dId]=getBudget(dId);
-  budgets[dId][key]=key==='nights'?Math.max(1,Number(val)||1):Math.max(0,Number(val)||0);
-  save(K.budgets,budgets);renderOrcamento();
+  if(key.endsWith('_notes')){
+    budgets[dId][key]=String(val||'');
+    save(K.budgets,budgets); // só salva, sem re-render — preserva o textarea aberto
+  } else {
+    budgets[dId][key]=key==='nights'?Math.max(1,Number(val)||1):Math.max(0,Number(val)||0);
+    save(K.budgets,budgets);renderOrcamento();
+  }
 }
 function addCustomItem(dId){
   if(!budgets[dId])budgets[dId]=getBudget(dId);
@@ -722,7 +727,11 @@ function addCustomItem(dId){
 function updateCustomItem(dId,cxId,field,val){
   if(!budgets[dId])return;
   const item=budgets[dId].custom.find(x=>x.id===cxId);
-  if(item){item[field]=field==='val'?Math.max(0,Number(val)||0):val;save(K.budgets,budgets);renderOrcamento();}
+  if(item){
+    item[field]=field==='val'?Math.max(0,Number(val)||0):val;
+    save(K.budgets,budgets);
+    if(field!=='notes')renderOrcamento(); // só re-renderiza se não for nota
+  }
 }
 function delCustomItem(dId,cxId){
   if(!budgets[dId])return;
