@@ -411,7 +411,7 @@ body.presentation .pmt-history,body.presentation .settle-btn{display:none}
 <!-- MODAL: SETTLEMENT (registrar pagamento entre pessoas) -->
 <div class="modal-bg" id="modalSettle" style="display:none" onclick="if(event.target===this)closeModal('modalSettle')">
   <div class="modal" style="max-width:440px">
-    <div class="modal-title">Registrar pagamento</div>
+    <div class="modal-title" id="settleModalTitle">Registrar pagamento</div>
     <div class="modal-sub" id="settleHint"></div>
     <div class="mrow">
       <div class="mf"><div class="ml">De (quem pagou)</div><select id="sFrom"></select></div>
@@ -430,9 +430,10 @@ body.presentation .pmt-history,body.presentation .settle-btn{display:none}
         <option value="Outro">Outro</option>
       </select>
     </div>
-    <div class="mf"><div class="ml">Despesa relacionada (opcional)</div><select id="sExp"><option value="">— Nenhuma despesa específica —</option></select></div>
+    <div class="mf"><div class="ml">Despesa relacionada (opcional, mas recomendado)</div><select id="sExp"><option value="">— Nenhuma despesa específica —</option></select><div id="sExpHint" style="font-size:11px;color:var(--text3);margin-top:4px"></div></div>
     <div class="mf"><div class="ml">Observação (opcional)</div><input type="text" id="sNote" placeholder="Ex: parcial, fechamento, etc."/></div>
     <div class="modal-actions">
+      <button class="btn-danger" id="sDelBtn" style="margin-right:auto;display:none" onclick="deleteSettlementFromModal()">Excluir</button>
       <button class="btn-cancel" onclick="closeModal('modalSettle')">Cancelar</button>
       <button class="btn-save" onclick="saveSettlement()">Salvar</button>
     </div>
@@ -514,6 +515,7 @@ var instSelected=[]; // parcelas marcadas como pagas no modal de despesa
 var expandedTransfers={}; // {"fromId|toId": true} — quais linhas de dívida estão abertas
 var currentReceipt=null; // base64 do recibo no modal de despesa
 var presentationMode=localStorage.getItem('beza-viagens-pres')==='1';
+var editingSettlementId=null; // se aberto em modo edição
 
 // =====================================================================
 // SEED DATA (only first run)
@@ -966,15 +968,30 @@ function renderSplitwise(trip,expenses){
       if(!from||!to)return;
       const linkedExp=s.expenseId?findById(trip.expenses,s.expenseId):null;
       const linkedCat=linkedExp?findById(trip.categories,linkedExp.categoryId):null;
-      const catColor=(linkedCat&&COLOR_HEX[linkedCat.color])?COLOR_HEX[linkedCat.color].solid:null;
-      html+=`<div class="pmt-history-row" style="flex-wrap:wrap">
+      const catColor=(linkedCat&&COLOR_HEX[linkedCat.color])?COLOR_HEX[linkedCat.color].solid:'#98A2B3';
+      let refLine;
+      if(linkedExp){
+        refLine=`<div style="width:100%;display:flex;align-items:center;gap:6px;padding-left:6px;font-size:11px;color:var(--text2);margin-top:4px">
+          <span style="width:3px;height:14px;background:${catColor};border-radius:2px"></span>
+          <span>↳ Referente a:</span>
+          <span style="color:var(--text1);font-weight:600">${esc(linkedExp.description)}</span>
+          <span style="color:var(--text3)">· ${fmtMoney(expenseTotal(linkedExp,trip),trip.baseCurrency)}${linkedCat?' · '+esc(linkedCat.name):''}</span>
+        </div>`;
+      } else {
+        refLine=`<div style="width:100%;display:flex;align-items:center;gap:6px;padding-left:6px;font-size:11px;color:var(--amber600);margin-top:4px">
+          <span style="width:3px;height:14px;background:var(--amber600);border-radius:2px"></span>
+          <span>↳ Sem despesa vinculada</span>
+          <button class="settle-btn ghost" style="padding:2px 8px;font-size:10px;border-color:var(--amber200);color:var(--amber600)" onclick="event.stopPropagation();editSettlement('${s.id}')">✏ Vincular agora</button>
+        </div>`;
+      }
+      html+=`<div class="pmt-history-row" style="flex-wrap:wrap;cursor:pointer" onclick="editSettlement('${s.id}')" title="Clique pra editar">
         <span class="who">${esc(from.name)}</span>
         <span style="color:var(--text3)">→</span>
         <span class="who">${esc(to.name)}</span>
         <span style="color:var(--text3);font-size:11px">· ${fmtDateShort(s.date)}${s.method?' · '+esc(s.method):''}${s.note?' · '+esc(s.note):''}</span>
         <span class="amt">${fmtMoney(s.amount,trip.baseCurrency)}</span>
-        <button class="del-x" onclick="deleteSettlement('${s.id}')" title="Remover">✕</button>
-        ${linkedExp?`<div style="width:100%;display:flex;align-items:center;gap:6px;padding-left:6px;font-size:11px;color:var(--text2);margin-top:2px">${catColor?`<span style="width:3px;height:12px;background:${catColor};border-radius:2px"></span>`:''}<span>↳ Referente a:</span><span style="color:var(--text1);font-weight:500">${esc(linkedExp.description)}</span><span style="color:var(--text3)">· ${fmtMoney(expenseTotal(linkedExp,trip),trip.baseCurrency)}</span></div>`:''}
+        <button class="del-x" onclick="event.stopPropagation();deleteSettlement('${s.id}')" title="Remover">✕</button>
+        ${refLine}
       </div>`;
     });
     html+=`</div>`;
@@ -1457,10 +1474,14 @@ function deleteExpenseDirect(id){
 // =====================================================================
 // MODAL: SETTLEMENT (pagamentos entre pessoas)
 // =====================================================================
-function openSettlement(fromId,toId,suggestedAmount,expenseId){
+function openSettlement(fromId,toId,suggestedAmount,expenseId,editId){
   const trip=activeTrip();
   if(!trip){showToast('⚠ Crie uma viagem primeiro');return;}
   if(trip.people.length<2){showToast('⚠ Precisa de 2+ pessoas');return;}
+  editingSettlementId=editId||null;
+  document.getElementById('settleModalTitle').textContent=editId?'Editar pagamento':'Registrar pagamento';
+  document.getElementById('sDelBtn').style.display=editId?'inline-block':'none';
+
   const sFrom=document.getElementById('sFrom');
   const sTo=document.getElementById('sTo');
   sFrom.innerHTML=trip.people.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
@@ -1471,7 +1492,28 @@ function openSettlement(fromId,toId,suggestedAmount,expenseId){
   document.getElementById('sDate').value=new Date().toISOString().slice(0,10);
   document.getElementById('sMethod').value='Pix';
   document.getElementById('sNote').value='';
+
   // Populate expense dropdown — expenses sorted by date desc
+  populateSettlementExpenseDropdown(trip,expenseId);
+
+  // If editing, override with stored values
+  if(editId){
+    const s=findById(trip.settlements||[],editId);
+    if(s){
+      sFrom.value=s.fromId;sTo.value=s.toId;
+      document.getElementById('sAmt').value=Number(s.amount).toFixed(2);
+      document.getElementById('sDate').value=s.date||new Date().toISOString().slice(0,10);
+      document.getElementById('sMethod').value=s.method||'Pix';
+      document.getElementById('sNote').value=s.note||'';
+      document.getElementById('sExp').value=s.expenseId||'';
+    }
+  }
+  updateSettlementHint();
+  document.getElementById('modalSettle').style.display='flex';
+  setTimeout(()=>document.getElementById('sAmt').focus(),50);
+}
+
+function populateSettlementExpenseDropdown(trip,preselectId){
   const sExp=document.getElementById('sExp');
   const sortedExp=[...(trip.expenses||[])].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   sExp.innerHTML='<option value="">— Nenhuma despesa específica —</option>'+sortedExp.map(e=>{
@@ -1480,18 +1522,76 @@ function openSettlement(fromId,toId,suggestedAmount,expenseId){
     const baseAmt=expenseTotal(e,trip);
     return`<option value="${e.id}">${esc(e.description)} — ${fmtMoney(baseAmt,trip.baseCurrency)}${cat?' · '+esc(cat.name):''}${paidBy?' · '+esc(paidBy.name)+' pagou':''}${e.date?' · '+fmtDateShort(e.date):''}</option>`;
   }).join('');
-  sExp.value=expenseId||'';
-  // Hint
-  const balances=calcBalances(trip,trip.expenses||[]);
-  const transfers=simplifyDebts(balances);
-  let hint='Registre quando uma pessoa paga a outra para acertar a conta.';
-  if(transfers.length){
-    const lines=transfers.map(t=>{const f=findById(trip.people,t.fromId),tt=findById(trip.people,t.toId);return f&&tt?`${f.name} → ${tt.name}: ${fmtMoney(t.amount,trip.baseCurrency)}`:'';}).filter(Boolean);
-    hint='Pendências atuais: '+lines.join(' · ');
+  sExp.value=preselectId||'';
+  // Listen for changes (only attach once)
+  if(!sExp._bezaBound){
+    sExp._bezaBound=true;
+    sExp.addEventListener('change',updateSettlementHint);
+    document.getElementById('sFrom').addEventListener('change',updateSettlementHint);
+    document.getElementById('sTo').addEventListener('change',updateSettlementHint);
+    document.getElementById('sAmt').addEventListener('input',updateSettlementHint);
   }
-  document.getElementById('settleHint').textContent=hint;
-  document.getElementById('modalSettle').style.display='flex';
-  setTimeout(()=>document.getElementById('sAmt').focus(),50);
+}
+
+function updateSettlementHint(){
+  const trip=activeTrip();if(!trip)return;
+  const sExp=document.getElementById('sExp');
+  const fromId=document.getElementById('sFrom').value;
+  const toId=document.getElementById('sTo').value;
+  const hintEl=document.getElementById('settleHint');
+  const expHintEl=document.getElementById('sExpHint');
+  // Top hint: show pending balance between this pair
+  if(fromId&&toId&&fromId!==toId){
+    const breakdown=pairwiseDebtBreakdown(trip,fromId,toId);
+    const f=findById(trip.people,fromId),t=findById(trip.people,toId);
+    if(breakdown.netDebt>0.01){
+      hintEl.textContent=`${f.name} ainda deve ${fmtMoney(breakdown.netDebt,trip.baseCurrency)} para ${t.name} (já pagou ${fmtMoney(breakdown.settled,trip.baseCurrency)} dos ${fmtMoney(breakdown.grossDebt,trip.baseCurrency)} de dívida bruta).`;
+    } else if(breakdown.netDebt<-0.01){
+      hintEl.textContent=`Atenção: na verdade ${t.name} deve ${fmtMoney(-breakdown.netDebt,trip.baseCurrency)} para ${f.name}. Quer inverter?`;
+    } else {
+      hintEl.textContent=`Sem pendências entre ${f.name} e ${t.name}.`;
+    }
+  } else {
+    hintEl.textContent='Registre quando uma pessoa paga a outra para acertar a conta.';
+  }
+  // Expense hint
+  if(sExp.value){
+    const exp=findById(trip.expenses,sExp.value);
+    if(exp){
+      const fromInExp=(exp.participantIds||[]).includes(fromId);
+      const toIsPayer=exp.paidBy===toId;
+      if(fromInExp&&toIsPayer){
+        const share=expenseTotal(exp,trip)/(exp.participantIds.length||1);
+        expHintEl.innerHTML=`✓ Faz sentido: ${esc(findById(trip.people,toId).name)} pagou e ${esc(findById(trip.people,fromId).name)} é participante. Cota: <strong>${fmtMoney(share,trip.baseCurrency)}</strong>.`;
+        expHintEl.style.color='var(--green700)';
+      } else {
+        expHintEl.textContent=`⚠ Atenção: a despesa "${exp.description}" foi paga por ${findById(trip.people,exp.paidBy)?.name||'?'} e os participantes são ${(exp.participantIds||[]).map(p=>findById(trip.people,p)?.name).filter(Boolean).join(', ')}. Confirme se está correto.`;
+        expHintEl.style.color='var(--amber600)';
+      }
+    }
+  } else {
+    // Try to auto-suggest based on amount match
+    const amt=parseFloat(document.getElementById('sAmt').value);
+    if(!isNaN(amt)&&amt>0&&fromId&&toId){
+      const candidates=(trip.expenses||[]).filter(e=>e.paidBy===toId&&(e.participantIds||[]).includes(fromId));
+      let best=null,bestDiff=Infinity;
+      candidates.forEach(e=>{
+        const share=expenseTotal(e,trip)/(e.participantIds.length||1);
+        const diff=Math.abs(share-amt);
+        if(diff<bestDiff){best=e;bestDiff=diff;}
+      });
+      if(best&&bestDiff<amt*0.05){
+        expHintEl.innerHTML=`💡 Sugestão: o valor bate com a cota de "<strong>${esc(best.description)}</strong>". <button class="settle-btn ghost" style="padding:2px 8px;font-size:10px;margin-left:4px" onclick="document.getElementById('sExp').value='${best.id}';updateSettlementHint()">Vincular</button>`;
+        expHintEl.style.color='var(--blue700)';
+      } else {
+        expHintEl.textContent='💡 Dica: vincule a despesa pra deixar o histórico claro.';
+        expHintEl.style.color='var(--text3)';
+      }
+    } else {
+      expHintEl.textContent='💡 Dica: vincule a despesa pra deixar o histórico claro.';
+      expHintEl.style.color='var(--text3)';
+    }
+  }
 }
 function saveSettlement(){
   const trip=activeTrip();if(!trip)return;
@@ -1505,9 +1605,16 @@ function saveSettlement(){
   const note=document.getElementById('sNote').value.trim();
   const expenseId=document.getElementById('sExp').value||null;
   if(!Array.isArray(trip.settlements))trip.settlements=[];
-  trip.settlements.push({id:uid('s'),fromId,toId,amount:amt,date,method,note,expenseId});
+  if(editingSettlementId){
+    const s=findById(trip.settlements,editingSettlementId);
+    if(s){s.fromId=fromId;s.toId=toId;s.amount=amt;s.date=date;s.method=method;s.note=note;s.expenseId=expenseId;}
+    showToast('✅ Pagamento atualizado');
+  } else {
+    trip.settlements.push({id:uid('s'),fromId,toId,amount:amt,date,method,note,expenseId});
+    showToast('✅ Pagamento registrado');
+  }
+  editingSettlementId=null;
   saveAll();closeModal('modalSettle');render();
-  showToast('✅ Pagamento registrado');
 }
 function deleteSettlement(id){
   const trip=activeTrip();if(!trip)return;
@@ -1515,6 +1622,21 @@ function deleteSettlement(id){
   trip.settlements=(trip.settlements||[]).filter(s=>s.id!==id);
   saveAll();render();
   showToast('🗑️ Pagamento removido');
+}
+function deleteSettlementFromModal(){
+  if(!editingSettlementId)return;
+  if(!confirm('Remover este pagamento do histórico?'))return;
+  const trip=activeTrip();
+  trip.settlements=(trip.settlements||[]).filter(s=>s.id!==editingSettlementId);
+  editingSettlementId=null;
+  saveAll();closeModal('modalSettle');render();
+  showToast('🗑️ Pagamento removido');
+}
+function editSettlement(id){
+  const trip=activeTrip();if(!trip)return;
+  const s=findById(trip.settlements||[],id);
+  if(!s)return;
+  openSettlement(s.fromId,s.toId,null,s.expenseId,id);
 }
 
 // =====================================================================
