@@ -57,11 +57,47 @@ body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;color:
 .trip-chip.add:hover{color:var(--blue600);border-color:var(--blue600)}
 
 /* ACTION BAR */
-.action-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.action-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
 .act-btn{padding:8px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--card);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
 .act-btn:hover{border-color:var(--blue600);color:var(--blue600)}
 .act-btn.green{border-color:var(--green200);background:var(--green50);color:var(--green700)}
 .act-btn.blue{border-color:var(--blue200);background:var(--blue50);color:var(--blue700)}
+
+/* VIEW SELECTOR */
+.view-sel{display:flex;align-items:center;gap:8px;padding:6px 8px 6px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex:1;min-width:240px}
+.view-sel-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.06em;text-transform:uppercase;flex-shrink:0}
+.view-sel select{flex:1;border:none;background:transparent;color:var(--text1);font-size:13px;font-weight:500;font-family:inherit;outline:none;cursor:pointer;padding:5px}
+.view-sel select option{background:var(--card);color:var(--text1)}
+.view-sel.person{border-color:var(--purple200);background:var(--purple50)}
+.view-sel.person .view-sel-label{color:var(--purple700)}
+.view-sel.person select{color:var(--purple700)}
+
+/* INSTALLMENTS */
+.inst-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.inst-pill{padding:5px 10px;border-radius:7px;border:1px solid var(--border2);background:var(--card);font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:all .12s}
+.inst-pill:hover{border-color:var(--blue600);color:var(--blue600)}
+.inst-pill.paid{background:var(--green50);border-color:var(--green200);color:var(--green700)}
+.inst-pill.unpaid{background:var(--amber50);border-color:var(--amber200);color:var(--amber600)}
+.inst-progress{font-size:11px;color:var(--text2);margin-top:3px}
+
+/* SETTLEMENT */
+.settle-row.has-pmt{flex-direction:column;align-items:stretch;gap:8px;background:var(--amber50);border-color:var(--amber200);color:var(--amber600)}
+.settle-row .pmt-line{display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:8px}
+.settle-row .pmt-progress{height:5px;background:var(--card);border-radius:3px;overflow:hidden}
+.settle-row .pmt-progress-fill{height:100%;background:var(--green600);border-radius:3px;transition:width .5s}
+.settle-row .pmt-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between;width:100%;font-size:11px}
+.settle-btn{padding:5px 11px;border-radius:7px;border:none;background:var(--green600);color:#fff;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit}
+.settle-btn:hover{background:var(--green700)}
+.settle-btn.ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}
+.settle-btn.ghost:hover{color:var(--blue600);border-color:var(--blue600)}
+.pmt-history{margin-top:10px;border-top:1px dashed var(--border);padding-top:10px}
+.pmt-history-row{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:12px;color:var(--text2);border-bottom:1px dashed var(--border)}
+.pmt-history-row:last-child{border-bottom:none}
+.pmt-history-row .who{font-weight:500;color:var(--text1)}
+.pmt-history-row .amt{color:var(--green700);font-weight:600;margin-left:auto}
+.pmt-history-row .del-x{background:transparent;border:none;color:var(--text3);cursor:pointer;padding:3px 6px;font-size:12px;border-radius:4px}
+.pmt-history-row .del-x:hover{color:var(--red600);background:var(--red50)}
+.pmt-toggle{cursor:pointer;font-size:11px;color:var(--text2);text-decoration:underline;font-family:inherit;background:transparent;border:none;padding:0}
 
 /* HERO */
 .hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:14px}
@@ -259,6 +295,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;color:
 <!-- TRIP SELECTOR -->
 <div class="trip-selector" id="tripSelector"></div>
 
+<!-- VIEW SELECTOR -->
+<div class="action-bar" id="viewBar" style="display:none">
+  <div class="view-sel" id="viewSel">
+    <span class="view-sel-label">👁 Ver custos como</span>
+    <select id="viewModeSelect" onchange="setViewMode(this.value)"></select>
+  </div>
+</div>
+
 <!-- MAIN CONTENT -->
 <div id="main"></div>
 
@@ -299,7 +343,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;color:
     <div class="modal-title" id="expModalTitle">Nova despesa</div>
     <div class="mf"><div class="ml">Descrição</div><input type="text" id="eDesc" placeholder="Ex: Hostel em Cusco"/></div>
     <div class="mrow">
-      <div class="mf" style="flex:2"><div class="ml">Valor</div><input type="number" id="eAmt" step="0.01" placeholder="0,00"/></div>
+      <div class="mf" style="flex:2"><div class="ml">Valor total</div><input type="number" id="eAmt" step="0.01" placeholder="0,00"/></div>
       <div class="mf"><div class="ml">Moeda</div><select id="eCurr"></select></div>
     </div>
     <div class="mrow">
@@ -313,14 +357,46 @@ body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;color:
       <div class="people-picker" id="ePart"></div>
     </div>
     <div class="mf">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text2);user-select:none">
-        <input type="checkbox" id="ePaid" style="width:auto"/> Já foi pago (saiu da conta)
-      </label>
+      <div class="ml">Parcelas</div>
+      <div class="mrow">
+        <div class="mf"><div class="ml" style="font-size:11px">Total de parcelas</div><input type="number" id="eInst" min="1" max="60" value="1" onchange="renderInstPills()"/></div>
+        <div class="mf" style="flex:2"><div class="ml" style="font-size:11px">Marque as parcelas já pagas</div><div class="inst-row" id="eInstRow"></div></div>
+      </div>
     </div>
     <div class="modal-actions">
       <button class="btn-danger" id="eDelBtn" style="margin-right:auto;display:none" onclick="deleteExpense()">Excluir</button>
       <button class="btn-cancel" onclick="closeModal('modalExp')">Cancelar</button>
       <button class="btn-save" onclick="saveExpense()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SETTLEMENT (registrar pagamento entre pessoas) -->
+<div class="modal-bg" id="modalSettle" style="display:none" onclick="if(event.target===this)closeModal('modalSettle')">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-title">Registrar pagamento</div>
+    <div class="modal-sub" id="settleHint"></div>
+    <div class="mrow">
+      <div class="mf"><div class="ml">De (quem pagou)</div><select id="sFrom"></select></div>
+      <div class="mf"><div class="ml">Para (quem recebeu)</div><select id="sTo"></select></div>
+    </div>
+    <div class="mrow">
+      <div class="mf" style="flex:2"><div class="ml">Valor</div><input type="number" id="sAmt" step="0.01" placeholder="0,00"/></div>
+      <div class="mf"><div class="ml">Data</div><input type="date" id="sDate"/></div>
+    </div>
+    <div class="mf"><div class="ml">Método</div>
+      <select id="sMethod">
+        <option value="Pix">Pix</option>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Transferência">Transferência</option>
+        <option value="Crédito">Crédito</option>
+        <option value="Outro">Outro</option>
+      </select>
+    </div>
+    <div class="mf"><div class="ml">Observação (opcional)</div><input type="text" id="sNote" placeholder="Ex: parcial, fechamento, etc."/></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modalSettle')">Cancelar</button>
+      <button class="btn-save" onclick="saveSettlement()">Salvar</button>
     </div>
   </div>
 </div>
@@ -395,6 +471,8 @@ var editingExpenseId=null;
 var editingTripId=null;
 var expFilter='todas';
 var charts={};
+var viewMode='total'; // 'total' or personId
+var instSelected=[]; // parcelas marcadas como pagas no modal de despesa
 
 // =====================================================================
 // SEED DATA (only first run)
@@ -429,12 +507,13 @@ function seed(){
         {id:pm3,name:'Cartão pré-pago'}
       ],
       expenses:[
-        {id:'e1',date:'2026-03-15',description:'Hostel em Cusco — 3 noites',amount:850,currency:'BRL',categoryId:c1,paymentMethodId:pm2,paidBy:p1,participantIds:[p1,p2],paid:true},
-        {id:'e2',date:'2026-03-14',description:'Trem a Aguas Calientes',amount:521.74,currency:'PEN',categoryId:c2,paymentMethodId:pm1,paidBy:p2,participantIds:[p1,p2],paid:true},
-        {id:'e3',date:'2026-03-12',description:'Tour Machu Picchu',amount:240.38,currency:'USD',categoryId:c3,paymentMethodId:pm3,paidBy:p1,participantIds:[p1,p2],paid:false},
-        {id:'e4',date:'2026-03-13',description:'Almoço no Sacred Valley',amount:130.43,currency:'PEN',categoryId:c4,paymentMethodId:pm1,paidBy:p1,participantIds:[p1],paid:true},
-        {id:'e5',date:'2026-03-11',description:'Uber aeroporto',amount:95,currency:'BRL',categoryId:c2,paymentMethodId:pm1,paidBy:p2,participantIds:[p1,p2],paid:true}
-      ]
+        {id:'e1',date:'2026-03-15',description:'Hostel em Cusco — 3 noites',amount:850,currency:'BRL',categoryId:c1,paymentMethodId:pm2,paidBy:p1,participantIds:[p1,p2],installments:1,paidInstallments:1},
+        {id:'e2',date:'2026-03-14',description:'Trem a Aguas Calientes',amount:521.74,currency:'PEN',categoryId:c2,paymentMethodId:pm1,paidBy:p2,participantIds:[p1,p2],installments:1,paidInstallments:1},
+        {id:'e3',date:'2026-03-12',description:'Tour Machu Picchu',amount:240.38,currency:'USD',categoryId:c3,paymentMethodId:pm3,paidBy:p1,participantIds:[p1,p2],installments:6,paidInstallments:2},
+        {id:'e4',date:'2026-03-13',description:'Almoço no Sacred Valley',amount:130.43,currency:'PEN',categoryId:c4,paymentMethodId:pm1,paidBy:p1,participantIds:[p1],installments:1,paidInstallments:1},
+        {id:'e5',date:'2026-03-11',description:'Uber aeroporto',amount:95,currency:'BRL',categoryId:c2,paymentMethodId:pm1,paidBy:p2,participantIds:[p1,p2],installments:1,paidInstallments:1}
+      ],
+      settlements:[]
     }]
   };
 }
@@ -451,6 +530,18 @@ function loadAll(){
   if(state.activeTripId&&!state.trips.find(t=>t.id===state.activeTripId)){
     state.activeTripId=state.trips[0]?state.trips[0].id:null;
   }
+  // Migrations: settlements + installments
+  state.trips.forEach(t=>{
+    if(!Array.isArray(t.settlements))t.settlements=[];
+    (t.expenses||[]).forEach(e=>{
+      if(typeof e.installments!=='number'||e.installments<1)e.installments=1;
+      if(typeof e.paidInstallments!=='number'){
+        e.paidInstallments=e.paid?e.installments:0;
+      }
+      if(e.paidInstallments>e.installments)e.paidInstallments=e.installments;
+      if(e.paidInstallments<0)e.paidInstallments=0;
+    });
+  });
 }
 function saveAll(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){console.error(e);}}
 function activeTrip(){return state.trips.find(t=>t.id===state.activeTripId);}
@@ -480,6 +571,21 @@ function tripCurrencies(trip){
   return[trip.baseCurrency,...trip.currencies.map(c=>c.code)];
 }
 function findById(arr,id){return arr.find(x=>x.id===id);}
+function expenseTotal(e,trip){return toBase(e.amount,e.currency,trip);}
+function expensePaid(e,trip){
+  const inst=e.installments||1;
+  const paid=e.paidInstallments||0;
+  return expenseTotal(e,trip)*(paid/inst);
+}
+function isExpenseFullyPaid(e){return(e.paidInstallments||0)>=(e.installments||1);}
+function isExpenseUnpaid(e){return(e.paidInstallments||0)===0;}
+function expenseShareForPerson(e,personId,trip){
+  const parts=e.participantIds||[];
+  if(!parts.includes(personId)||parts.length===0)return{total:0,paid:0};
+  const total=expenseTotal(e,trip)/parts.length;
+  const paid=expensePaid(e,trip)/parts.length;
+  return{total,paid};
+}
 function showToast(msg,dur=3000){
   const t=document.getElementById('toast');
   t.style.background=msg.includes('❌')?'#D92D20':msg.includes('⚠')?'#B54708':'#101828';
@@ -493,8 +599,7 @@ function showToast(msg,dur=3000){
 function applyDark(){
   document.body.classList.toggle('dark',isDark);
   document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';
-  // Re-render charts with new theme
-  if(activeTrip())renderCharts(activeTrip());
+  if(activeTrip())render();
 }
 function toggleDark(){isDark=!isDark;localStorage.setItem(KEY_DARK,isDark?'1':'0');applyDark();}
 
@@ -512,7 +617,21 @@ function renderTripSelector(){
   if(activeTrip())html+=`<button class="trip-chip" onclick="openTrip('${state.activeTripId}')" style="margin-left:auto">✏ Editar viagem</button>`;
   c.innerHTML=html;
 }
-function setActiveTrip(id){state.activeTripId=id;saveAll();render();}
+function setActiveTrip(id){state.activeTripId=id;viewMode='total';saveAll();render();}
+function setViewMode(m){viewMode=m;render();}
+function renderViewSelector(trip){
+  const bar=document.getElementById('viewBar');
+  const sel=document.getElementById('viewModeSelect');
+  const wrap=document.getElementById('viewSel');
+  if(!trip||trip.people.length===0){bar.style.display='none';return;}
+  bar.style.display='flex';
+  let html=`<option value="total">🌐 Total da viagem (todos)</option>`;
+  trip.people.forEach(p=>{html+=`<option value="${p.id}">👤 Só ${esc(p.name)} (parte dele${p.name.endsWith('a')?'a':''})</option>`;});
+  sel.innerHTML=html;
+  if(viewMode!=='total'&&!trip.people.find(p=>p.id===viewMode))viewMode='total';
+  sel.value=viewMode;
+  wrap.classList.toggle('person',viewMode!=='total');
+}
 
 // =====================================================================
 // RENDER: MAIN
@@ -523,6 +642,7 @@ function render(){
   const trip=activeTrip();
   const sub=document.getElementById('brandSub');
   if(sub)sub.textContent=trip?(trip.name+(trip.destination?' · '+trip.destination:'')):'Hub de viagens';
+  renderViewSelector(trip);
   if(!trip){
     main.innerHTML=`<div class="empty">
       <div class="empty-big">✈️</div>
@@ -534,8 +654,14 @@ function render(){
   }
 
   const expenses=trip.expenses||[];
-  const totalBase=expenses.reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
-  const paidBase=expenses.filter(e=>e.paid).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+  const isPersonView=viewMode!=='total';
+  const personObj=isPersonView?findById(trip.people,viewMode):null;
+  // viewable expenses: only those the person participated in
+  const viewExpenses=isPersonView?expenses.filter(e=>(e.participantIds||[]).includes(viewMode)):expenses;
+  // amounts respecting viewMode
+  const amounts=viewExpenses.map(e=>isPersonView?expenseShareForPerson(e,viewMode,trip):{total:expenseTotal(e,trip),paid:expensePaid(e,trip)});
+  const totalBase=amounts.reduce((s,a)=>s+a.total,0);
+  const paidBase=amounts.reduce((s,a)=>s+a.paid,0);
   const remaining=totalBase-paidBase;
   const pct=totalBase>0?Math.round((paidBase/totalBase)*100):0;
   const dayCount=tripDays(trip);
@@ -543,12 +669,16 @@ function render(){
   let html='';
 
   // HERO
+  const heroEyebrow=isPersonView?`Sua parte na viagem · ${esc(personObj.name)}`:'Custo total da viagem';
+  const heroMeta=isPersonView
+    ?`${viewExpenses.length} despesa${viewExpenses.length!==1?'s':''} que você participa${viewExpenses.length!==1?'m':''}`+(trip.destination?' · '+esc(trip.destination):'')
+    :`${dayCount?dayCount+' dias · ':''}${trip.people.length} pessoa${trip.people.length!==1?'s':''}${trip.destination?' · '+esc(trip.destination):''}`;
   html+=`<div class="hero">
     <div class="hero-top">
       <div>
-        <div class="hero-eyebrow">Custo total da viagem</div>
+        <div class="hero-eyebrow">${heroEyebrow}</div>
         <div class="hero-total">${fmtMoney(totalBase,trip.baseCurrency)}</div>
-        <div class="hero-meta">${dayCount?dayCount+' dias · ':''}${trip.people.length} pessoa${trip.people.length!==1?'s':''}${trip.destination?' · '+esc(trip.destination):''}</div>
+        <div class="hero-meta">${heroMeta}</div>
       </div>
       <div class="hero-kpis">
         <div>
@@ -563,7 +693,7 @@ function render(){
     </div>
     <div class="progress-wrap">
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <div class="progress-info"><span>${pct}% pago</span><span>${expenses.length} despesa${expenses.length!==1?'s':''} registrada${expenses.length!==1?'s':''}</span></div>
+      <div class="progress-info"><span>${pct}% pago</span><span>${viewExpenses.length} despesa${viewExpenses.length!==1?'s':''}${isPersonView?' da sua parte':' registrada'+(viewExpenses.length!==1?'s':'')}</span></div>
     </div>
   </div>`;
 
@@ -575,24 +705,22 @@ function render(){
   if(trip.currencies.length===0)html+=`<span class="curr-chip" style="color:var(--text3)">Só ${trip.baseCurrency} configurado</span>`;
   html+=`<button class="curr-chip add" onclick="openManage()">+ Editar moedas</button></div>`;
 
-  // CATEGORIES
+  // CATEGORIES (respecting viewMode)
   if(trip.categories.length>0){
     html+=`<div class="cats-grid">`;
-    const dailyByDay=expensesByDayMap(trip);
     trip.categories.forEach(cat=>{
-      const catExp=expenses.filter(e=>e.categoryId===cat.id);
-      const sum=catExp.reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
-      const pct=totalBase>0?Math.round((sum/totalBase)*100):0;
+      const catExp=viewExpenses.filter(e=>e.categoryId===cat.id);
+      const sum=catExp.reduce((s,e)=>s+(isPersonView?expenseShareForPerson(e,viewMode,trip).total:expenseTotal(e,trip)),0);
+      const catPct=totalBase>0?Math.round((sum/totalBase)*100):0;
       const c=COLOR_HEX[cat.color]||COLOR_HEX.blue;
-      // sparkline data (per day)
       const days=daysOfTrip(trip);
-      const spark=days.map(d=>catExp.filter(e=>e.date===d).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0));
+      const spark=days.map(d=>catExp.filter(e=>e.date===d).reduce((s,e)=>s+(isPersonView?expenseShareForPerson(e,viewMode,trip).total:expenseTotal(e,trip)),0));
       const maxS=Math.max(1,...spark);
       const sparkHtml=spark.map(v=>`<span style="background:${c.solid};height:${Math.max(6,(v/maxS)*100)}%;opacity:${v>0?1:.2}"></span>`).join('');
       html+=`<div class="cat-card" style="border-left-color:${c.solid}">
         <div class="cat-name" style="color:${c.solid}">${esc(cat.name)}</div>
         <div class="cat-val">${fmtMoney(sum,trip.baseCurrency)}</div>
-        <div class="cat-pct" style="color:${c.solid}">${pct}% · ${catExp.length} despesa${catExp.length!==1?'s':''}</div>
+        <div class="cat-pct" style="color:${c.solid}">${catPct}% · ${catExp.length} despesa${catExp.length!==1?'s':''}</div>
         <div class="spark">${sparkHtml||'<span style="background:var(--border);height:10%;opacity:.3"></span>'.repeat(5)}</div>
       </div>`;
     });
@@ -611,41 +739,41 @@ function render(){
     </div>
   </div>`;
 
-  // PAYMENT METHODS
+  // PAYMENT METHODS (respecting viewMode)
   if(trip.paymentMethods.length>0){
     html+=`<div class="pm-section"><div class="pm-section-title">💳 Despesas por forma de pagamento</div><div class="pm-grid">`;
     trip.paymentMethods.forEach(pm=>{
-      const pmExp=expenses.filter(e=>e.paymentMethodId===pm.id);
-      const sum=pmExp.reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
-      const pct=totalBase>0?(sum/totalBase)*100:0;
+      const pmExp=viewExpenses.filter(e=>e.paymentMethodId===pm.id);
+      const sum=pmExp.reduce((s,e)=>s+(isPersonView?expenseShareForPerson(e,viewMode,trip).total:expenseTotal(e,trip)),0);
+      const pmPct=totalBase>0?(sum/totalBase)*100:0;
       html+=`<div class="pm-card">
         <div class="pm-name">${esc(pm.name)}</div>
         <div class="pm-val">${fmtMoney(sum,trip.baseCurrency)}</div>
-        <div class="pm-bar"><div class="pm-bar-fill" style="width:${pct}%"></div></div>
+        <div class="pm-bar"><div class="pm-bar-fill" style="width:${pmPct}%"></div></div>
       </div>`;
     });
     html+=`</div></div>`;
   }
 
-  // SPLITWISE
-  html+=renderSplitwise(trip,expenses,totalBase);
+  // SPLITWISE (sempre mostra a viagem inteira, independente do viewMode)
+  html+=renderSplitwise(trip,expenses);
 
-  // EXPENSES LIST
-  html+=renderExpensesList(trip,expenses);
+  // EXPENSES LIST (respecting viewMode)
+  html+=renderExpensesList(trip,viewExpenses,isPersonView);
 
   main.innerHTML=html;
 
   // Render charts after DOM ready
-  setTimeout(()=>renderCharts(trip),0);
+  setTimeout(()=>renderCharts(trip,viewExpenses,isPersonView),0);
 }
 
 // =====================================================================
 // SPLITWISE LOGIC
 // =====================================================================
 function calcBalances(trip,expenses){
-  // For each person: paid (what they put down) - owed (sum of their share in each expense they participated in)
+  // For each person: paid - owed + settled (settlements paid out reduce debt)
   const balances={};
-  trip.people.forEach(p=>{balances[p.id]={paid:0,owed:0};});
+  trip.people.forEach(p=>{balances[p.id]={paid:0,owed:0,settledOut:0,settledIn:0};});
   expenses.forEach(e=>{
     if(!balances[e.paidBy])return;
     const amtBase=toBase(e.amount,e.currency,trip);
@@ -655,8 +783,15 @@ function calcBalances(trip,expenses){
     const share=amtBase/parts.length;
     parts.forEach(pid=>{balances[pid].owed+=share;});
   });
-  // balance = paid - owed (positive = receive, negative = owe)
-  Object.keys(balances).forEach(id=>{balances[id].balance=balances[id].paid-balances[id].owed;});
+  // Apply settlements: A → B reduces A's net debt, B's net credit
+  (trip.settlements||[]).forEach(s=>{
+    if(balances[s.fromId])balances[s.fromId].settledOut+=s.amount;
+    if(balances[s.toId])balances[s.toId].settledIn+=s.amount;
+  });
+  Object.keys(balances).forEach(id=>{
+    const b=balances[id];
+    b.balance=b.paid-b.owed+b.settledOut-b.settledIn;
+  });
   return balances;
 }
 function simplifyDebts(balances){
@@ -676,29 +811,36 @@ function simplifyDebts(balances){
   }
   return transfers;
 }
-function renderSplitwise(trip,expenses,totalBase){
+function renderSplitwise(trip,expenses){
   if(trip.people.length<2){
     return`<div class="split-card"><div class="split-head"><div><div class="split-title">Acerto de contas</div><div class="split-sub">Adicione pelo menos 2 pessoas pra ativar o cálculo de divisão.</div></div><button class="act-btn blue" onclick="openManage()">⚙️ Pessoas</button></div></div>`;
   }
   const balances=calcBalances(trip,expenses);
   const transfers=simplifyDebts(balances);
+  const settlements=trip.settlements||[];
   let html=`<div class="split-card">
     <div class="split-head">
-      <div><div class="split-title">Acerto de contas</div><div class="split-sub">${trip.people.length} pessoa${trip.people.length!==1?'s':''} · cálculo automático</div></div>
-      <button class="act-btn" onclick="openManage()">+ Pessoa</button>
+      <div><div class="split-title">Acerto de contas</div><div class="split-sub">${trip.people.length} pessoas · ${settlements.length} pagamento${settlements.length!==1?'s':''} já registrado${settlements.length!==1?'s':''}</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="act-btn" onclick="openSettlement()">💸 Registrar pagamento</button>
+        <button class="act-btn" onclick="openManage()">+ Pessoa</button>
+      </div>
     </div>
     <div class="people-grid">`;
   trip.people.forEach(p=>{
-    const b=balances[p.id]||{paid:0,owed:0,balance:0};
+    const b=balances[p.id]||{paid:0,owed:0,balance:0,settledOut:0,settledIn:0};
     const c=COLOR_HEX[p.color]||COLOR_HEX.blue;
     let labelCls='gray',label='Quitado',valCls='gray';
-    if(b.balance>0.01){labelCls='green';label='Recebe';valCls='green';}
-    else if(b.balance<-0.01){labelCls='red';label='Deve';valCls='red';}
+    if(b.balance>0.01){labelCls='green';label='Ainda recebe';valCls='green';}
+    else if(b.balance<-0.01){labelCls='red';label='Ainda deve';valCls='red';}
+    let extraInfo='';
+    if(b.settledOut>0)extraInfo+=` · pagou ${fmtMoney(b.settledOut,trip.baseCurrency)} de acerto`;
+    if(b.settledIn>0)extraInfo+=` · recebeu ${fmtMoney(b.settledIn,trip.baseCurrency)} de acerto`;
     html+=`<div class="person-card">
       <div class="avatar" style="background:${c.solid}">${initials(p.name)}</div>
       <div class="person-info">
         <div class="person-name">${esc(p.name)}</div>
-        <div class="person-paid">Pagou ${fmtMoney(b.paid,trip.baseCurrency)} · cota ${fmtMoney(b.owed,trip.baseCurrency)}</div>
+        <div class="person-paid">Pagou ${fmtMoney(b.paid,trip.baseCurrency)} · cota ${fmtMoney(b.owed,trip.baseCurrency)}${extraInfo}</div>
       </div>
       <div class="person-bal">
         <div class="bal-label ${labelCls}">${label}</div>
@@ -715,7 +857,32 @@ function renderSplitwise(trip,expenses,totalBase){
       const from=findById(trip.people,t.fromId);
       const to=findById(trip.people,t.toId);
       if(!from||!to)return;
-      html+=`<div class="settle-row"><span style="font-weight:600">${esc(from.name)}</span><span class="settle-arrow">→</span><span style="font-weight:600">${esc(to.name)}</span><span class="settle-arrow">·</span><span style="font-weight:600">${fmtMoney(t.amount,trip.baseCurrency)}</span></div>`;
+      html+=`<div class="settle-row">
+        <div class="pmt-line">
+          <span><span style="font-weight:600">${esc(from.name)}</span> <span class="settle-arrow">→</span> <span style="font-weight:600">${esc(to.name)}</span></span>
+          <span style="font-weight:600">${fmtMoney(t.amount,trip.baseCurrency)}</span>
+          <button class="settle-btn" onclick="openSettlement('${t.fromId}','${t.toId}',${t.amount.toFixed(2)})">+ Registrar pagamento</button>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+  // Histórico de acertos
+  if(settlements.length){
+    const sorted=[...settlements].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    html+=`<div class="pmt-history"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:12px;font-weight:600;color:var(--text2)">📋 Histórico de pagamentos entre pessoas</div></div>`;
+    sorted.forEach(s=>{
+      const from=findById(trip.people,s.fromId);
+      const to=findById(trip.people,s.toId);
+      if(!from||!to)return;
+      html+=`<div class="pmt-history-row">
+        <span class="who">${esc(from.name)}</span>
+        <span style="color:var(--text3)">→</span>
+        <span class="who">${esc(to.name)}</span>
+        <span style="color:var(--text3);font-size:11px">· ${fmtDateShort(s.date)}${s.method?' · '+esc(s.method):''}${s.note?' · '+esc(s.note):''}</span>
+        <span class="amt">${fmtMoney(s.amount,trip.baseCurrency)}</span>
+        <button class="del-x" onclick="deleteSettlement('${s.id}')" title="Remover">✕</button>
+      </div>`;
     });
     html+=`</div>`;
   }
@@ -732,17 +899,17 @@ function initials(name){
 // =====================================================================
 // EXPENSES LIST
 // =====================================================================
-function renderExpensesList(trip,expenses){
+function renderExpensesList(trip,expenses,isPersonView){
   const filters=[
     {k:'todas',label:'Todas',f:()=>true},
-    {k:'naopagas',label:'Não pagas',f:e=>!e.paid},
-    {k:'pagas',label:'Pagas',f:e=>e.paid}
+    {k:'naopagas',label:'Não pagas',f:e=>!isExpenseFullyPaid(e)},
+    {k:'pagas',label:'Pagas',f:e=>isExpenseFullyPaid(e)}
   ];
   const sorted=[...expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const filtered=sorted.filter(filters.find(x=>x.k===expFilter).f);
   let html=`<div class="exp-card">
     <div class="exp-head">
-      <div><div class="exp-title">Despesas</div><div class="split-sub">${expenses.length} no total · clique pra editar</div></div>
+      <div><div class="exp-title">Despesas${isPersonView?' (sua parte)':''}</div><div class="split-sub">${expenses.length} no total · clique pra editar</div></div>
       <button class="add-exp-btn" onclick="openExpense()">+ Nova despesa</button>
     </div>
     <div class="exp-filters">`;
@@ -761,23 +928,40 @@ function renderExpensesList(trip,expenses){
       const paidBy=findById(trip.people,e.paidBy);
       const partNames=(e.participantIds||[]).map(pid=>{const p=findById(trip.people,pid);return p?p.name:'?';});
       const partTxt=partNames.length===trip.people.length?'Todos':partNames.join(', ');
-      const baseAmt=toBase(e.amount,e.currency,trip);
-      const showSubAmt=e.currency!==trip.baseCurrency;
+      const inst=e.installments||1;
+      const paidInst=e.paidInstallments||0;
+      const fullyPaid=isExpenseFullyPaid(e);
+      const partial=paidInst>0&&!fullyPaid;
+      let statusTag;
+      if(fullyPaid)statusTag='<span class="tag tag-paid">pago</span>';
+      else if(partial)statusTag=`<span class="tag tag-unpaid">${paidInst}/${inst} parcelas</span>`;
+      else statusTag=inst>1?`<span class="tag tag-unpaid">a pagar · ${inst}x</span>`:'<span class="tag tag-unpaid">a pagar</span>';
+      // Display amount: in person view, show person's share
+      let mainAmt,subAmt;
+      if(isPersonView){
+        const share=expenseShareForPerson(e,viewMode,trip);
+        mainAmt=fmtMoney(share.total,trip.baseCurrency);
+        subAmt=`sua parte · ${fmtMoney(expenseTotal(e,trip),trip.baseCurrency)} total`;
+      } else {
+        const baseAmt=expenseTotal(e,trip);
+        mainAmt=fmtMoney(baseAmt,trip.baseCurrency);
+        subAmt=e.currency!==trip.baseCurrency?fmtMoney(e.amount,e.currency):(inst>1?`${fmtMoney(baseAmt/inst,trip.baseCurrency)}/parc`:'');
+      }
       html+=`<div class="exp-row">
         <div class="exp-bar" style="background:${c.solid}"></div>
         <div class="exp-body">
-          <div class="exp-desc">${esc(e.description)} ${e.paid?'<span class="tag tag-paid">pago</span>':'<span class="tag tag-unpaid">a pagar</span>'}</div>
+          <div class="exp-desc">${esc(e.description)} ${statusTag}</div>
           <div class="exp-meta">
             ${fmtDateShort(e.date)} ·
             ${cat?esc(cat.name):'Sem categoria'} ·
             ${paidBy?esc(paidBy.name)+' pagou':'?'} ·
-            ${pm?esc(pm.name):'Sem forma'} ·
+            ${pm?esc(pm.name):'Sem forma'}${inst>1?' '+inst+'x':''} ·
             ${partTxt}
           </div>
         </div>
         <div class="exp-amt">
-          <div class="exp-amt-main">${fmtMoney(baseAmt,trip.baseCurrency)}</div>
-          ${showSubAmt?`<div class="exp-amt-sub">${fmtMoney(e.amount,e.currency)}</div>`:''}
+          <div class="exp-amt-main">${mainAmt}</div>
+          ${subAmt?`<div class="exp-amt-sub">${subAmt}</div>`:''}
         </div>
         <div class="exp-actions">
           <button class="exp-act-btn edit" onclick="openExpense('${e.id}')" title="Editar">✏</button>
@@ -795,19 +979,20 @@ function setExpFilter(k){expFilter=k;render();}
 // CHARTS
 // =====================================================================
 function destroyCharts(){Object.keys(charts).forEach(k=>{try{charts[k].destroy();}catch(e){}});charts={};}
-function renderCharts(trip){
+function renderCharts(trip,viewExpenses,isPersonView){
   if(typeof Chart==='undefined')return;
   destroyCharts();
-  const expenses=trip.expenses||[];
+  const expenses=viewExpenses||trip.expenses||[];
   const text=isDark?'#94A3B8':'#475467';
   const grid=isDark?'rgba(148,163,184,0.15)':'rgba(71,84,103,0.1)';
+  const valueOf=e=>isPersonView?expenseShareForPerson(e,viewMode,trip).total:expenseTotal(e,trip);
 
   // Donut: by category
   const donutEl=document.getElementById('donutChart');
   if(donutEl&&trip.categories.length){
     const labels=[],data=[],colors=[];
     trip.categories.forEach(cat=>{
-      const sum=expenses.filter(e=>e.categoryId===cat.id).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+      const sum=expenses.filter(e=>e.categoryId===cat.id).reduce((s,e)=>s+valueOf(e),0);
       if(sum>0){labels.push(cat.name);data.push(Math.round(sum*100)/100);colors.push((COLOR_HEX[cat.color]||COLOR_HEX.blue).solid);}
     });
     if(data.length){
@@ -823,7 +1008,7 @@ function renderCharts(trip){
     const days=daysOfTrip(trip);
     if(days.length){
       const dayLabels=days.map(fmtDateShort);
-      let cum=0;const cumData=days.map(d=>{cum+=expenses.filter(e=>e.date===d).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);return Math.round(cum*100)/100;});
+      let cum=0;const cumData=days.map(d=>{cum+=expenses.filter(e=>e.date===d).reduce((s,e)=>s+valueOf(e),0);return Math.round(cum*100)/100;});
       charts.line=new Chart(lineEl,{type:'line',data:{labels:dayLabels,datasets:[{label:'Acumulado',data:cumData,borderColor:'#1570EF',backgroundColor:'rgba(21,112,239,0.12)',fill:true,tension:0.35,pointRadius:3,pointBackgroundColor:'#1570EF',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmtMoney(c.parsed.y,trip.baseCurrency)}}},scales:{y:{ticks:{color:text,font:{size:10},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v.toFixed(0)},grid:{color:grid}},x:{ticks:{color:text,font:{size:10}},grid:{display:false}}}}});
     } else {
       lineEl.parentElement.innerHTML='<div style="text-align:center;padding:60px 8px;font-size:12px;color:var(--text3)">Defina datas da viagem</div>';
@@ -904,7 +1089,8 @@ function saveTrip(){
         {id:uid('pm'),name:'Cartão crédito'},
         {id:uid('pm'),name:'Cartão pré-pago'}
       ],
-      expenses:[]
+      expenses:[],
+      settlements:[]
     };
     state.trips.push(newTrip);
     state.activeTripId=newTrip.id;
@@ -951,7 +1137,7 @@ function openExpense(id){
     initial=findById(trip.expenses,id);
     if(!initial)return;
   } else {
-    initial={date:new Date().toISOString().slice(0,10),description:'',amount:'',currency:trip.baseCurrency,categoryId:trip.categories[0].id,paymentMethodId:trip.paymentMethods[0].id,paidBy:trip.people[0].id,participantIds:trip.people.map(p=>p.id),paid:true};
+    initial={date:new Date().toISOString().slice(0,10),description:'',amount:'',currency:trip.baseCurrency,categoryId:trip.categories[0].id,paymentMethodId:trip.paymentMethods[0].id,paidBy:trip.people[0].id,participantIds:trip.people.map(p=>p.id),installments:1,paidInstallments:1};
   }
   document.getElementById('eDesc').value=initial.description||'';
   document.getElementById('eAmt').value=initial.amount||'';
@@ -960,7 +1146,12 @@ function openExpense(id){
   document.getElementById('eCat').value=initial.categoryId||trip.categories[0].id;
   document.getElementById('ePm').value=initial.paymentMethodId||trip.paymentMethods[0].id;
   document.getElementById('ePaidBy').value=initial.paidBy||trip.people[0].id;
-  document.getElementById('ePaid').checked=initial.paid!==false;
+  document.getElementById('eInst').value=initial.installments||1;
+  // initialize selected installments
+  instSelected=[];
+  const initPaid=initial.paidInstallments||0;
+  for(let i=1;i<=initPaid;i++)instSelected.push(i);
+  renderInstPills();
 
   // Render people picker
   const ePart=document.getElementById('ePart');
@@ -974,6 +1165,38 @@ function openExpense(id){
   document.getElementById('modalExp').style.display='flex';
   setTimeout(()=>document.getElementById('eDesc').focus(),50);
 }
+function renderInstPills(){
+  const inst=Math.max(1,Math.min(60,parseInt(document.getElementById('eInst').value,10)||1));
+  document.getElementById('eInst').value=inst;
+  // clamp selected to range
+  instSelected=instSelected.filter(n=>n>=1&&n<=inst);
+  const row=document.getElementById('eInstRow');
+  if(inst===1){
+    const isPaid=instSelected.includes(1);
+    row.innerHTML=`<button class="inst-pill ${isPaid?'paid':'unpaid'}" onclick="toggleInst(1)">${isPaid?'✓ Pago':'A pagar'}</button>`;
+    return;
+  }
+  let html='';
+  for(let i=1;i<=inst;i++){
+    const isPaid=instSelected.includes(i);
+    html+=`<button class="inst-pill${isPaid?' paid':''}" onclick="toggleInst(${i})">${isPaid?'✓ ':''}${i}/${inst}</button>`;
+  }
+  // Quick actions
+  html+=`<button class="inst-pill" style="margin-left:6px" onclick="markAllInst(true)">Marcar todas</button>`;
+  html+=`<button class="inst-pill" onclick="markAllInst(false)">Limpar</button>`;
+  row.innerHTML=html;
+}
+function toggleInst(n){
+  const i=instSelected.indexOf(n);
+  if(i>=0)instSelected.splice(i,1);else instSelected.push(n);
+  renderInstPills();
+}
+function markAllInst(all){
+  const inst=parseInt(document.getElementById('eInst').value,10)||1;
+  if(all){instSelected=[];for(let i=1;i<=inst;i++)instSelected.push(i);}
+  else instSelected=[];
+  renderInstPills();
+}
 function togglePart(btn){btn.classList.toggle('on');}
 function saveExpense(){
   const trip=activeTrip();if(!trip)return;
@@ -983,6 +1206,8 @@ function saveExpense(){
   if(isNaN(amt)||amt<=0){showToast('⚠ Valor inválido');return;}
   const part=Array.from(document.querySelectorAll('#ePart .pp-chip.on')).map(b=>b.dataset.pid);
   if(part.length===0){showToast('⚠ Marque pelo menos um participante');return;}
+  const inst=Math.max(1,Math.min(60,parseInt(document.getElementById('eInst').value,10)||1));
+  const paidInst=instSelected.filter(n=>n>=1&&n<=inst).length;
   const obj={
     id:editingExpenseId||uid('e'),
     date:document.getElementById('eDate').value||new Date().toISOString().slice(0,10),
@@ -993,7 +1218,8 @@ function saveExpense(){
     paymentMethodId:document.getElementById('ePm').value,
     paidBy:document.getElementById('ePaidBy').value,
     participantIds:part,
-    paid:document.getElementById('ePaid').checked
+    installments:inst,
+    paidInstallments:paidInst
   };
   if(editingExpenseId){
     const idx=trip.expenses.findIndex(e=>e.id===editingExpenseId);
@@ -1017,6 +1243,58 @@ function deleteExpenseDirect(id){
   if(!confirm('Excluir esta despesa?'))return;
   trip.expenses=trip.expenses.filter(e=>e.id!==id);
   saveAll();render();showToast('🗑️ Despesa removida');
+}
+
+// =====================================================================
+// MODAL: SETTLEMENT (pagamentos entre pessoas)
+// =====================================================================
+function openSettlement(fromId,toId,suggestedAmount){
+  const trip=activeTrip();
+  if(!trip){showToast('⚠ Crie uma viagem primeiro');return;}
+  if(trip.people.length<2){showToast('⚠ Precisa de 2+ pessoas');return;}
+  const sFrom=document.getElementById('sFrom');
+  const sTo=document.getElementById('sTo');
+  sFrom.innerHTML=trip.people.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  sTo.innerHTML=trip.people.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  if(fromId)sFrom.value=fromId;else sFrom.value=trip.people[0].id;
+  if(toId)sTo.value=toId;else sTo.value=trip.people[1].id;
+  document.getElementById('sAmt').value=suggestedAmount?Number(suggestedAmount).toFixed(2):'';
+  document.getElementById('sDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('sMethod').value='Pix';
+  document.getElementById('sNote').value='';
+  // Hint
+  const balances=calcBalances(trip,trip.expenses||[]);
+  const transfers=simplifyDebts(balances);
+  let hint='Registre quando uma pessoa paga a outra para acertar a conta.';
+  if(transfers.length){
+    const lines=transfers.map(t=>{const f=findById(trip.people,t.fromId),tt=findById(trip.people,t.toId);return f&&tt?`${f.name} → ${tt.name}: ${fmtMoney(t.amount,trip.baseCurrency)}`:'';}).filter(Boolean);
+    hint='Pendências atuais: '+lines.join(' · ');
+  }
+  document.getElementById('settleHint').textContent=hint;
+  document.getElementById('modalSettle').style.display='flex';
+  setTimeout(()=>document.getElementById('sAmt').focus(),50);
+}
+function saveSettlement(){
+  const trip=activeTrip();if(!trip)return;
+  const fromId=document.getElementById('sFrom').value;
+  const toId=document.getElementById('sTo').value;
+  if(fromId===toId){showToast('⚠ Quem paga e quem recebe têm que ser pessoas diferentes');return;}
+  const amt=parseFloat(document.getElementById('sAmt').value);
+  if(isNaN(amt)||amt<=0){showToast('⚠ Valor inválido');return;}
+  const date=document.getElementById('sDate').value||new Date().toISOString().slice(0,10);
+  const method=document.getElementById('sMethod').value;
+  const note=document.getElementById('sNote').value.trim();
+  if(!Array.isArray(trip.settlements))trip.settlements=[];
+  trip.settlements.push({id:uid('s'),fromId,toId,amount:amt,date,method,note});
+  saveAll();closeModal('modalSettle');render();
+  showToast('✅ Pagamento registrado');
+}
+function deleteSettlement(id){
+  const trip=activeTrip();if(!trip)return;
+  if(!confirm('Remover este pagamento do histórico?'))return;
+  trip.settlements=(trip.settlements||[]).filter(s=>s.id!==id);
+  saveAll();render();
+  showToast('🗑️ Pagamento removido');
 }
 
 // =====================================================================
@@ -1186,7 +1464,7 @@ function importBackup(input){
 // =====================================================================
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
-    ['modalTrip','modalExp','modalManage'].forEach(id=>closeModal(id));
+    ['modalTrip','modalExp','modalManage','modalSettle'].forEach(id=>closeModal(id));
   }
 });
 
