@@ -11,1084 +11,1190 @@
 :root{
   --bg:#F7F8FA;--card:#fff;--border:#E4E7EC;--border2:#CBD2DA;
   --text1:#101828;--text2:#475467;--text3:#98A2B3;
-  --blue50:#EFF8FF;--blue200:#B2DDFF;--blue600:#1570EF;--blue700:#175CD3;
-  --green50:#ECFDF3;--green200:#A9EFC5;--green600:#079455;--green700:#067647;
-  --amber50:#FFFAEB;--amber200:#FEDF89;--amber600:#B54708;
-  --red50:#FEF3F2;--red200:#FECDCA;--red600:#D92D20;
-  --purple50:#F4F3FF;--purple200:#C4B5FD;--purple600:#6938EF;
-  --orange50:#FFF6ED;--orange200:#FDD49A;--orange600:#C4520A;
+  --blue50:#EFF8FF;--blue100:#D1E9FF;--blue200:#B2DDFF;--blue600:#1570EF;--blue700:#175CD3;--blue800:#1849A8;--blue900:#102A56;
+  --green50:#ECFDF3;--green200:#A9EFC5;--green600:#079455;--green700:#067647;--green800:#055038;--green900:#053321;
+  --amber50:#FFFAEB;--amber200:#FEDF89;--amber600:#B54708;--amber800:#7A2E0E;--amber900:#4E1D09;
+  --red50:#FEF3F2;--red200:#FECDCA;--red600:#D92D20;--red800:#912018;--red900:#55160C;
+  --purple50:#F4F3FF;--purple200:#C4B5FD;--purple600:#6938EF;--purple700:#5B21B6;--purple800:#42307D;--purple900:#27115F;
   --teal50:#F0FDFA;--teal200:#99F6E4;--teal600:#0D9488;
+  --pink50:#FDF2F8;--pink200:#FBCFE8;--pink600:#DB2777;--pink800:#831843;
+  --orange50:#FFF6ED;--orange200:#FDD49A;--orange600:#C4520A;
+  --shadow:0 4px 16px rgba(16,24,40,.08);
 }
 body.dark{
   --bg:#0F172A;--card:#1E293B;--border:#334155;--border2:#475569;
-  --text1:#F1F5F9;--text2:#94A3B8;--text3:#475569;
-  --blue50:#1E3A5F;--blue200:#1D4ED8;--blue600:#3B82F6;--blue700:#60A5FA;
-  --green50:#14532D;--green200:#166534;--green600:#4ADE80;--green700:#86EFAC;
-  --amber50:#451A03;--amber200:#92400E;--amber600:#FCD34D;
-  --red50:#450A0A;--red200:#991B1B;--red600:#FCA5A5;
-  --purple50:#2E1065;--purple200:#6D28D9;--purple600:#C4B5FD;
-  --orange50:#431407;--orange200:#9A3412;--orange600:#FDBA74;
+  --text1:#F1F5F9;--text2:#94A3B8;--text3:#64748B;
+  --blue50:#1E3A5F;--blue100:#1E40AF;--blue200:#1D4ED8;--blue600:#3B82F6;--blue700:#60A5FA;--blue800:#93C5FD;--blue900:#DBEAFE;
+  --green50:#14532D;--green200:#166534;--green600:#4ADE80;--green700:#86EFAC;--green800:#BBF7D0;--green900:#DCFCE7;
+  --amber50:#451A03;--amber200:#92400E;--amber600:#FCD34D;--amber800:#FDE68A;--amber900:#FEF3C7;
+  --red50:#450A0A;--red200:#991B1B;--red600:#FCA5A5;--red800:#FECACA;--red900:#FEE2E2;
+  --purple50:#2E1065;--purple200:#6D28D9;--purple600:#C4B5FD;--purple700:#A78BFA;--purple800:#DDD6FE;--purple900:#EDE9FE;
   --teal50:#134E4A;--teal200:#0F766E;--teal600:#5EEAD4;
+  --pink50:#500724;--pink200:#9D174D;--pink600:#F9A8D4;--pink800:#FBCFE8;
+  --orange50:#431407;--orange200:#9A3412;--orange600:#FDBA74;
+  --shadow:0 4px 16px rgba(0,0,0,.4);
 }
-body.dark input,body.dark select,body.dark textarea{background:var(--card)!important;color:var(--text1)!important;border-color:var(--border2)!important}
 body{font-family:'Inter',sans-serif;background:var(--bg);min-height:100vh;color:var(--text1)}
-.page{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+.page{max-width:1100px;margin:0 auto;padding:20px 16px 80px}
+
 /* TOPBAR */
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px}
 .brand{display:flex;align-items:center;gap:10px}
-.brand-icon{width:38px;height:38px;background:var(--blue600);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.brand-icon{width:38px;height:38px;background:var(--blue600);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .brand-name{font-size:18px;font-weight:600;color:var(--text1)}
 .brand-sub{font-size:12px;color:var(--text3)}
 .topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-/* CONTROLS */
-.ctrl-btn{padding:7px 13px;border-radius:8px;border:1px solid var(--border2);background:var(--card);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:'Inter',sans-serif;transition:all .15s;white-space:nowrap}
-.ctrl-btn:hover{border-color:var(--blue600);color:var(--blue600)}
-.ctrl-btn.green{border-color:var(--green200);background:var(--green50);color:var(--green700)}
-.ctrl-btn.blue{border-color:var(--blue200);background:var(--blue50);color:var(--blue700)}
-/* NAV */
-.nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:5px;margin-bottom:20px}
-.nav-btn{flex:1;padding:9px;border-radius:9px;border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:500;color:var(--text3);font-family:'Inter',sans-serif;transition:all .15s;text-align:center}
-.nav-btn:hover{color:var(--text2);background:var(--bg)}
-.nav-btn.active{background:var(--blue600);color:#fff}
-.section{display:none}.section.active{display:block}
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px}
-.card-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.card-title{font-size:14px;font-weight:600;color:var(--text1);display:flex;align-items:center;gap:8px}
-.card-body{padding:16px}
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.stat-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
-.stat-val{font-size:24px;font-weight:600;color:var(--text1)}
-.stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
-/* INPUTS */
-input[type=text],input[type=number],select,textarea{font-size:13px;padding:7px 10px;border:1px solid var(--border2);border-radius:8px;background:#fff;color:var(--text1);outline:none;font-family:'Inter',sans-serif;width:100%}
-input:focus,select:focus,textarea:focus{border-color:var(--blue600);box-shadow:0 0 0 3px rgba(21,112,239,.08)}
-/* BUTTONS */
-.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:'Inter',sans-serif;transition:all .15s}
-.btn-primary{background:var(--blue600);color:#fff}.btn-primary:hover{background:var(--blue700)}
-.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text2)}.btn-ghost:hover{background:var(--bg)}
-.btn-danger{background:var(--red50);border:1px solid var(--red200);color:var(--red600)}.btn-danger:hover{background:var(--red200)}
-.btn-sm{padding:5px 10px;font-size:12px;border-radius:6px}
-/* SCORE */
-.score-bar{height:7px;border-radius:4px;background:var(--border);overflow:hidden;margin-top:4px}
-.score-fill{height:100%;border-radius:4px;transition:width .5s}
-/* BADGE */
-.badge{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500;white-space:nowrap;border:1px solid transparent}
-.badge-green{background:var(--green50);color:var(--green700);border-color:var(--green200)}
-.badge-amber{background:var(--amber50);color:var(--amber600);border-color:var(--amber200)}
-.badge-red{background:var(--red50);color:var(--red600);border-color:var(--red200)}
-.badge-blue{background:var(--blue50);color:var(--blue700);border-color:var(--blue200)}
-.badge-purple{background:var(--purple50);color:var(--purple600);border-color:var(--purple200)}
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{background:var(--bg);color:var(--text2);font-weight:500;padding:9px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
-.tbl td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text1);vertical-align:middle}
-.tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:var(--bg)}
-/* PROGRESS */
-.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.prog-bar{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;border-radius:3px;transition:width .5s;background:var(--blue600)}
-.prog-label{font-size:12px;color:var(--text2);min-width:80px;text-align:right;font-weight:500}
+.icon-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text2);font-family:inherit;transition:all .15s}
+.icon-btn:hover{border-color:var(--blue600);color:var(--blue600)}
+
+/* TRIP SELECTOR */
+.trip-selector{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:18px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+.tsel-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-right:4px}
+.trip-chip{padding:7px 14px;border-radius:999px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+.trip-chip:hover{border-color:var(--blue600);color:var(--blue600)}
+.trip-chip.on{background:var(--blue50);border-color:var(--blue200);color:var(--blue700)}
+.trip-chip.add{border-style:dashed;color:var(--text3)}
+.trip-chip.add:hover{color:var(--blue600);border-color:var(--blue600)}
+
+/* ACTION BAR */
+.action-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.act-btn{padding:8px 14px;border-radius:9px;border:1px solid var(--border2);background:var(--card);cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.act-btn:hover{border-color:var(--blue600);color:var(--blue600)}
+.act-btn.green{border-color:var(--green200);background:var(--green50);color:var(--green700)}
+.act-btn.blue{border-color:var(--blue200);background:var(--blue50);color:var(--blue700)}
+
+/* HERO */
+.hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:14px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;margin-bottom:16px}
+.hero-eyebrow{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.hero-total{font-size:30px;font-weight:600;color:var(--text1);line-height:1;letter-spacing:-.01em}
+.hero-meta{font-size:13px;color:var(--text2);margin-top:6px}
+.hero-kpis{display:flex;gap:24px;flex-wrap:wrap}
+.kpi-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.kpi-val{font-size:18px;font-weight:600}
+.kpi-val.green{color:var(--green700)}
+.kpi-val.amber{color:var(--amber600)}
+.progress-wrap{display:flex;flex-direction:column;gap:6px}
+.progress-bar{height:7px;background:var(--bg);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green600);border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.progress-info{display:flex;justify-content:space-between;font-size:11px;color:var(--text2)}
+
+/* CURRENCIES */
+.curr-strip{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.curr-strip-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
+.curr-chip{padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-size:12px;color:var(--text2);font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.curr-chip strong{color:var(--text1);font-weight:600}
+.curr-chip.add{border-style:dashed;cursor:pointer;color:var(--text3);font-family:inherit;background:transparent}
+.curr-chip.add:hover{color:var(--blue600);border-color:var(--blue600)}
+
+/* CATEGORIES GRID */
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;border-left:4px solid;cursor:default;transition:transform .15s}
+.cat-card:hover{transform:translateY(-2px)}
+.cat-name{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.cat-val{font-size:20px;font-weight:600;line-height:1.1;color:var(--text1)}
+.cat-pct{font-size:11px;margin-top:3px}
+.spark{display:flex;align-items:end;gap:2px;margin-top:10px;height:22px}
+.spark span{flex:1;border-radius:2px;min-height:2px;transition:opacity .2s}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:760px){.charts-row{grid-template-columns:1fr}}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.chart-title{font-size:13px;font-weight:600;color:var(--text1);margin-bottom:10px}
+.chart-box{position:relative;width:100%;height:200px}
+
+/* PAYMENT METHODS GRID */
+.pm-section{margin-bottom:14px}
+.pm-section-title{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.pm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.pm-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.pm-name{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.pm-val{font-size:16px;font-weight:600}
+.pm-bar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:8px}
+.pm-bar-fill{height:100%;background:var(--blue600);border-radius:2px;transition:width .5s}
+
+/* SPLITWISE */
+.split-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.split-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.split-title{font-size:14px;font-weight:600;color:var(--text1)}
+.split-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px}
+.person-card{display:flex;gap:12px;align-items:center;background:var(--bg);border-radius:11px;padding:11px 14px;border:1px solid var(--border)}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex-shrink:0;color:#fff}
+.person-info{flex:1;min-width:0}
+.person-name{font-size:14px;font-weight:600;color:var(--text1)}
+.person-paid{font-size:11px;color:var(--text2);margin-top:2px}
+.person-bal{text-align:right}
+.bal-label{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.bal-label.green{color:var(--green700)}
+.bal-label.red{color:var(--red600)}
+.bal-label.gray{color:var(--text3)}
+.bal-val{font-size:15px;font-weight:600;margin-top:2px}
+.bal-val.green{color:var(--green700)}
+.bal-val.red{color:var(--red600)}
+.bal-val.gray{color:var(--text3)}
+.settle-list{display:flex;flex-direction:column;gap:6px}
+.settle-row{display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 14px;background:var(--green50);border-radius:10px;border:1px solid var(--green200);font-size:13px;color:var(--green900);flex-wrap:wrap}
+.settle-row.zero{background:var(--bg);border-color:var(--border);color:var(--text2)}
+.settle-arrow{color:var(--green600);font-weight:600}
+
+/* EXPENSES */
+.exp-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.exp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.exp-title{font-size:14px;font-weight:600;color:var(--text1)}
+.exp-filters{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.exp-filter{padding:4px 10px;border-radius:7px;border:1px solid transparent;background:transparent;cursor:pointer;font-size:11px;font-weight:500;color:var(--text3);font-family:inherit;transition:all .15s}
+.exp-filter:hover{background:var(--bg);color:var(--text2)}
+.exp-filter.on{background:var(--blue50);border-color:var(--blue200);color:var(--blue700)}
+.exp-list{display:flex;flex-direction:column}
+.exp-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);transition:background .12s}
+.exp-row:last-child{border-bottom:none}
+.exp-row:hover{background:var(--bg)}
+.exp-bar{width:5px;height:42px;border-radius:3px;flex-shrink:0}
+.exp-body{flex:1;min-width:0}
+.exp-desc{font-size:13px;font-weight:500;color:var(--text1);margin-bottom:3px}
+.exp-meta{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.exp-amt{text-align:right;flex-shrink:0}
+.exp-amt-main{font-size:14px;font-weight:600;color:var(--text1)}
+.exp-amt-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.exp-actions{display:flex;gap:2px;margin-left:8px}
+.exp-act-btn{background:transparent;border:none;cursor:pointer;font-size:13px;padding:5px 7px;border-radius:5px;color:var(--text3);font-family:inherit;transition:all .12s}
+.exp-act-btn.edit:hover{color:var(--blue600);background:var(--blue50)}
+.exp-act-btn.del:hover{color:var(--red600);background:var(--red50)}
+.add-exp-btn{padding:9px 18px;border-radius:9px;border:none;background:var(--blue600);color:#fff;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+.add-exp-btn:hover{background:var(--blue700)}
+
+/* FAB (mobile) */
+.fab{position:fixed;bottom:22px;right:22px;width:54px;height:54px;border-radius:50%;border:none;background:var(--blue600);color:#fff;font-size:26px;cursor:pointer;font-family:inherit;box-shadow:var(--shadow);z-index:50;display:none;align-items:center;justify-content:center;line-height:0}
+.fab:hover{background:var(--blue700)}
+@media(max-width:680px){.fab{display:flex}}
+
+/* BADGES */
+.tag{font-size:11px;padding:2px 8px;border-radius:6px;font-weight:500;white-space:nowrap;border:1px solid transparent}
+.tag-paid{background:var(--green50);color:var(--green700);border-color:var(--green200)}
+.tag-unpaid{background:var(--amber50);color:var(--amber600);border-color:var(--amber200)}
+.tag-currency{background:var(--bg);color:var(--text2);border-color:var(--border)}
+
 /* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(16,24,40,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
-.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:480px;display:flex;flex-direction:column;gap:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);max-height:90vh;overflow-y:auto}
-.modal-title{font-size:15px;font-weight:600;color:var(--text1)}
-.modal-field{display:flex;flex-direction:column;gap:5px}
-.modal-label{font-size:12px;font-weight:500;color:var(--text2)}
-.modal-row{display:flex;gap:10px}
-.modal-row .modal-field{flex:1}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
-/* ITINERARY */
-.day-block{margin-bottom:14px}
-.day-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--blue50);border:1px solid var(--blue200);border-radius:8px;margin-bottom:6px}
-.day-title{font-size:13px;font-weight:600;color:var(--blue700)}
-.activity{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:5px;background:var(--card)}
-.act-time{font-size:12px;color:var(--text3);min-width:42px;margin-top:2px}
-.act-body{flex:1}
-.act-title{font-size:13px;font-weight:500;color:var(--text1)}
-.act-notes{font-size:12px;color:var(--text2);margin-top:2px}
-/* CHECKLIST */
-.check-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
-.check-item:last-child{border-bottom:none}
-.check-box{width:18px;height:18px;min-width:18px;border:1.5px solid var(--border2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;user-select:none}
-.check-box.done{background:var(--green600);border-color:var(--green600);color:#fff}
-.check-text{flex:1;font-size:13px;color:var(--text1)}
-.check-text.done{text-decoration:line-through;color:var(--text3)}
-/* DEST CARD */
-.dest-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;transition:all .2s}
-.dest-card.winner{border:2px solid var(--green600)}
-.dest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:600;color:var(--text1)}
+.modal-sub{font-size:12px;color:var(--text2);margin-top:-8px}
+.mf{display:flex;flex-direction:column;gap:5px}
+.ml{font-size:12px;font-weight:500;color:var(--text2)}
+.mf input,.mf select,.mf textarea{width:100%;font-size:13px;padding:9px 12px;border:1px solid var(--border2);border-radius:9px;background:var(--card);color:var(--text1);outline:none;font-family:inherit}
+.mf input:focus,.mf select:focus,.mf textarea:focus{border-color:var(--blue600);box-shadow:0 0 0 3px rgba(21,112,239,.1)}
+.mrow{display:flex;gap:10px;flex-wrap:wrap}
+.mrow .mf{flex:1;min-width:120px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;padding-top:6px;flex-wrap:wrap}
+.btn-cancel{padding:9px 16px;border-radius:9px;border:1px solid var(--border2);background:transparent;cursor:pointer;font-size:13px;color:var(--text2);font-family:inherit}
+.btn-cancel:hover{background:var(--bg)}
+.btn-save{padding:9px 18px;border-radius:9px;border:none;background:var(--blue600);color:#fff;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit}
+.btn-save:hover{background:var(--blue700)}
+.btn-danger{padding:9px 16px;border-radius:9px;border:1px solid var(--red200);background:var(--red50);color:var(--red600);cursor:pointer;font-size:13px;font-weight:500;font-family:inherit}
+.btn-danger:hover{background:var(--red200)}
+
+/* PEOPLE PICKER inside modal */
+.people-picker{display:flex;flex-wrap:wrap;gap:6px}
+.pp-chip{padding:6px 12px;border-radius:999px;border:1px solid var(--border2);background:var(--card);cursor:pointer;font-size:12px;color:var(--text2);font-family:inherit;display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.pp-chip:hover{border-color:var(--blue600);color:var(--blue600)}
+.pp-chip.on{background:var(--blue50);border-color:var(--blue600);color:var(--blue700);font-weight:500}
+.pp-chip .mini-avatar{width:18px;height:18px;border-radius:50%;font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600}
+
+/* MANAGE LIST (people, categories, payment methods) */
+.manage-list{display:flex;flex-direction:column;gap:6px}
+.manage-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--bg);border-radius:9px}
+.manage-row input{flex:1;border:none;background:transparent;font-size:13px;color:var(--text1);outline:none;font-family:inherit;padding:4px 6px}
+.manage-row input:focus{background:var(--card);border:1px solid var(--blue200);border-radius:6px}
+.manage-row .swatch{width:20px;height:20px;border-radius:6px;cursor:pointer;flex-shrink:0;border:1px solid var(--border2)}
+.manage-row .del-x{background:transparent;border:none;color:var(--text3);cursor:pointer;padding:4px 6px;font-size:13px;font-family:inherit;border-radius:5px}
+.manage-row .del-x:hover{color:var(--red600);background:var(--red50)}
+.add-row-mini{padding:8px 10px;border:1px dashed var(--border2);border-radius:9px;color:var(--text3);font-size:12px;cursor:pointer;text-align:center;background:transparent;font-family:inherit;transition:all .12s}
+.add-row-mini:hover{color:var(--blue600);border-color:var(--blue600)}
+
+/* COLOR SWATCH PICKER */
+.swatch-grid{display:flex;gap:6px;flex-wrap:wrap;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;position:absolute;z-index:5;box-shadow:var(--shadow)}
+.swatch-opt{width:24px;height:24px;border-radius:6px;cursor:pointer;border:2px solid transparent}
+.swatch-opt.selected{border-color:var(--text1)}
+
+/* EMPTY STATES */
+.empty{text-align:center;padding:48px 16px;background:var(--card);border:1px dashed var(--border2);border-radius:14px;margin-bottom:14px}
+.empty-big{font-size:48px;margin-bottom:12px}
+.empty-title{font-size:15px;font-weight:600;color:var(--text1);margin-bottom:5px}
+.empty-sub{font-size:13px;color:var(--text2);margin-bottom:16px}
+.empty-btn{padding:10px 20px;border-radius:10px;border:none;background:var(--blue600);color:#fff;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit}
+.empty-btn:hover{background:var(--blue700)}
+
 /* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;padding:11px 18px;border-radius:10px;font-size:13px;font-family:'Inter',sans-serif;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:300px;line-height:1.4}
-/* MISC */
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.sep{height:1px;background:var(--border);margin:14px 0}
-.empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:13px}
-.empty-icon{font-size:30px;margin-bottom:8px}
-.empty-title{font-weight:500;color:var(--text2);margin-bottom:4px}
-.type-passeio{color:#1570EF}.type-restaurante{color:#C4520A}.type-hotel{color:#6938EF}.type-transporte{color:#079455}.type-compras{color:#B54708}.type-outro{color:#475467}
+#toast{position:fixed;bottom:24px;right:24px;padding:12px 18px;border-radius:10px;font-size:13px;font-family:inherit;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;line-height:1.4;max-width:300px;background:#101828;color:#fff}
+
+.footer{text-align:center;margin-top:32px;font-size:11px;color:var(--text3)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--blue600);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
+
 <div class="page">
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-icon">✈</div>
-      <div>
-        <div class="brand-name">Beza Viagens</div>
-        <div class="brand-sub">Planejamento de viagem · André Bezamat</div>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <button class="ctrl-btn green" onclick="exportBackup()">⬇ Backup</button>
-      <button class="ctrl-btn blue" onclick="document.getElementById('importFile').click()">⬆ Restaurar</button>
-      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(this)"/>
-      <button class="ctrl-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon">✈️</div>
+    <div>
+      <div class="brand-name">Beza Viagens</div>
+      <div class="brand-sub" id="brandSub">Hub de viagens · André</div>
     </div>
   </div>
-
-  <!-- NAV -->
-  <div class="nav">
-    <button class="nav-btn active" onclick="setNav('comparador',this)">🏆 Comparador</button>
-    <button class="nav-btn" onclick="setNav('orcamento',this)">💰 Orçamento</button>
-    <button class="nav-btn" onclick="setNav('roteiro',this)">🗺 Roteiro</button>
-    <button class="nav-btn" onclick="setNav('checklist',this)">✅ Checklist</button>
+  <div class="topbar-right">
+    <button class="icon-btn" onclick="toggleDark()" id="darkBtn" title="Alternar tema">🌙</button>
+    <button class="icon-btn" onclick="openManage()" title="Pessoas, categorias e formas de pagamento">⚙️</button>
+    <button class="icon-btn" onclick="exportBackup()" title="Exportar backup">⬇️</button>
+    <button class="icon-btn" onclick="document.getElementById('importFile').click()" title="Importar backup">⬆️</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(this)"/>
   </div>
+</div>
 
-  <!-- COMPARADOR -->
-  <div class="section active" id="sec-comparador">
-    <div id="comp-content"></div>
+<!-- TRIP SELECTOR -->
+<div class="trip-selector" id="tripSelector"></div>
+
+<!-- MAIN CONTENT -->
+<div id="main"></div>
+
+<div class="footer">Beza Viagens v1 · Dados salvos localmente · Faça backup regularmente</div>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fab" onclick="openExpense()" title="Nova despesa">+</button>
+
+<!-- MODAL: TRIP CREATE/EDIT -->
+<div class="modal-bg" id="modalTrip" style="display:none" onclick="if(event.target===this)closeModal('modalTrip')">
+  <div class="modal">
+    <div class="modal-title" id="tripModalTitle">Nova viagem</div>
+    <div class="mf"><div class="ml">Nome da viagem</div><input type="text" id="tName" placeholder="Ex: Peru, Itália, Lisboa..."/></div>
+    <div class="mf"><div class="ml">Destino</div><input type="text" id="tDest" placeholder="Ex: Cusco, Peru"/></div>
+    <div class="mrow">
+      <div class="mf"><div class="ml">Data início</div><input type="date" id="tStart"/></div>
+      <div class="mf"><div class="ml">Data fim</div><input type="date" id="tEnd"/></div>
+    </div>
+    <div class="mf"><div class="ml">Moeda base (em que tudo é convertido)</div>
+      <select id="tBase">
+        <option value="BRL">BRL — Real brasileiro</option>
+        <option value="USD">USD — Dólar americano</option>
+        <option value="EUR">EUR — Euro</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-danger" id="tDelBtn" style="margin-right:auto;display:none" onclick="deleteTrip()">Excluir viagem</button>
+      <button class="btn-cancel" onclick="closeModal('modalTrip')">Cancelar</button>
+      <button class="btn-save" onclick="saveTrip()">Salvar</button>
+    </div>
   </div>
+</div>
 
-  <!-- ORCAMENTO -->
-  <div class="section" id="sec-orcamento">
-    <div id="orc-content"></div>
+<!-- MODAL: EXPENSE CREATE/EDIT -->
+<div class="modal-bg" id="modalExp" style="display:none" onclick="if(event.target===this)closeModal('modalExp')">
+  <div class="modal">
+    <div class="modal-title" id="expModalTitle">Nova despesa</div>
+    <div class="mf"><div class="ml">Descrição</div><input type="text" id="eDesc" placeholder="Ex: Hostel em Cusco"/></div>
+    <div class="mrow">
+      <div class="mf" style="flex:2"><div class="ml">Valor</div><input type="number" id="eAmt" step="0.01" placeholder="0,00"/></div>
+      <div class="mf"><div class="ml">Moeda</div><select id="eCurr"></select></div>
+    </div>
+    <div class="mrow">
+      <div class="mf"><div class="ml">Data</div><input type="date" id="eDate"/></div>
+      <div class="mf"><div class="ml">Categoria</div><select id="eCat"></select></div>
+    </div>
+    <div class="mf"><div class="ml">Forma de pagamento</div><select id="ePm"></select></div>
+    <div class="mf"><div class="ml">Quem pagou</div><select id="ePaidBy"></select></div>
+    <div class="mf">
+      <div class="ml">Quem participa (rateio entre os marcados)</div>
+      <div class="people-picker" id="ePart"></div>
+    </div>
+    <div class="mf">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--text2);user-select:none">
+        <input type="checkbox" id="ePaid" style="width:auto"/> Já foi pago (saiu da conta)
+      </label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-danger" id="eDelBtn" style="margin-right:auto;display:none" onclick="deleteExpense()">Excluir</button>
+      <button class="btn-cancel" onclick="closeModal('modalExp')">Cancelar</button>
+      <button class="btn-save" onclick="saveExpense()">Salvar</button>
+    </div>
   </div>
+</div>
 
-  <!-- ROTEIRO -->
-  <div class="section" id="sec-roteiro">
-    <div id="rot-content"></div>
+<!-- MODAL: MANAGE (people / cats / pms / currencies) -->
+<div class="modal-bg" id="modalManage" style="display:none" onclick="if(event.target===this)closeModal('modalManage')">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-title">Configurações da viagem</div>
+    <div class="modal-sub">Personalize pessoas, categorias, formas de pagamento e cotações para esta viagem.</div>
+
+    <div>
+      <div class="ml" style="margin-bottom:6px;font-weight:600">👥 Pessoas</div>
+      <div class="manage-list" id="mgPeople"></div>
+      <button class="add-row-mini" onclick="addPerson()" style="margin-top:6px">+ Adicionar pessoa</button>
+    </div>
+
+    <div>
+      <div class="ml" style="margin-bottom:6px;font-weight:600">📂 Categorias</div>
+      <div class="manage-list" id="mgCats"></div>
+      <button class="add-row-mini" onclick="addCategory()" style="margin-top:6px">+ Adicionar categoria</button>
+    </div>
+
+    <div>
+      <div class="ml" style="margin-bottom:6px;font-weight:600">💳 Formas de pagamento</div>
+      <div class="manage-list" id="mgPms"></div>
+      <button class="add-row-mini" onclick="addPm()" style="margin-top:6px">+ Adicionar forma</button>
+    </div>
+
+    <div>
+      <div class="ml" style="margin-bottom:6px;font-weight:600">💱 Cotações (1 unidade = X na moeda base)</div>
+      <div class="manage-list" id="mgCurrs"></div>
+      <button class="add-row-mini" onclick="addCurrency()" style="margin-top:6px">+ Adicionar moeda</button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-save" onclick="closeModal('modalManage');saveAll();render()">Concluir</button>
+    </div>
   </div>
-
-  <!-- CHECKLIST -->
-  <div class="section" id="sec-checklist">
-    <div id="chk-content"></div>
-  </div>
-
 </div>
 
 <div id="toast"></div>
-<div id="modal-container"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 'use strict';
 
-// ================================================================
-// KEYS & DEFAULTS
-// ================================================================
-const K={
-  dest:'beza-trip-dest',crit:'beza-trip-crit',scores:'beza-trip-scores',
-  budgets:'beza-trip-budgets',itinerary:'beza-trip-itinerary',
-  checklist:'beza-trip-checklist',dark:'beza-trip-dark'
+// =====================================================================
+// BEZA VIAGENS v1
+// Dual-panel: trip dashboard + splitwise + expense list
+// =====================================================================
+
+const KEY='beza-viagens-v1';
+const KEY_DARK='beza-viagens-dark';
+const COLORS=['blue','green','amber','purple','red','teal','pink','orange'];
+const COLOR_HEX={
+  blue:{bg:'var(--blue50)',text:'var(--blue700)',border:'var(--blue200)',solid:'#1570EF',dark:'var(--blue900)'},
+  green:{bg:'var(--green50)',text:'var(--green700)',border:'var(--green200)',solid:'#079455',dark:'var(--green900)'},
+  amber:{bg:'var(--amber50)',text:'var(--amber600)',border:'var(--amber200)',solid:'#B54708',dark:'var(--amber900)'},
+  purple:{bg:'var(--purple50)',text:'var(--purple700)',border:'var(--purple200)',solid:'#6938EF',dark:'var(--purple900)'},
+  red:{bg:'var(--red50)',text:'var(--red600)',border:'var(--red200)',solid:'#D92D20',dark:'var(--red900)'},
+  teal:{bg:'var(--teal50)',text:'var(--teal600)',border:'var(--teal200)',solid:'#0D9488',dark:'#04342C'},
+  pink:{bg:'var(--pink50)',text:'var(--pink600)',border:'var(--pink200)',solid:'#DB2777',dark:'var(--pink800)'},
+  orange:{bg:'var(--orange50)',text:'var(--orange600)',border:'var(--orange200)',solid:'#C4520A',dark:'#431407'}
 };
 
-const DEFAULT_CRIT=[
-  {id:1,name:'Custo',weight:5},{id:2,name:'Clima',weight:3},
-  {id:3,name:'Atrações',weight:4},{id:4,name:'Gastronomia',weight:3},
-  {id:5,name:'Segurança',weight:4},{id:6,name:'Voo direto',weight:3},
-  {id:7,name:'Idioma',weight:2},{id:8,name:'Infraestrutura',weight:2}
-];
-
-const DEFAULT_CHECKLIST=[
-  {id:1,name:'Documentos',items:[
-    {id:11,text:'Passaporte válido (6+ meses)',done:false},
-    {id:12,text:'Visto (se necessário)',done:false},
-    {id:13,text:'CNH internacional',done:false},
-    {id:14,text:'Carteirinha vacinas',done:false}
-  ]},
-  {id:2,name:'Passagens & Reservas',items:[
-    {id:21,text:'Passagem aérea comprada',done:false},
-    {id:22,text:'Hotel / hospedagem reservado',done:false},
-    {id:23,text:'Transfer aeroporto reservado',done:false},
-    {id:24,text:'Passeios agendados',done:false}
-  ]},
-  {id:3,name:'Saúde & Seguro',items:[
-    {id:31,text:'Seguro viagem contratado',done:false},
-    {id:32,text:'Vacinas em dia',done:false},
-    {id:33,text:'Remédios de uso contínuo',done:false},
-    {id:34,text:'Kit primeiros socorros',done:false}
-  ]},
-  {id:4,name:'Finanças',items:[
-    {id:41,text:'Moeda estrangeira / cartão internacional',done:false},
-    {id:42,text:'Avisar banco da viagem',done:false},
-    {id:43,text:'App de câmbio instalado',done:false},
-    {id:44,text:'Orçamento definido',done:false}
-  ]},
-  {id:5,name:'Bagagem',items:[
-    {id:51,text:'Mala tamanho correto (regras cia aérea)',done:false},
-    {id:52,text:'Adaptador de tomada',done:false},
-    {id:53,text:'Roupas para o clima do destino',done:false},
-    {id:54,text:'Carregador e power bank',done:false}
-  ]}
-];
-
-// ================================================================
+// =====================================================================
 // STATE
-// ================================================================
-var dest=[], crit=[], scores={}, budgets={}, itinerary={}, checklist=[];
-var openNotes={}; // persiste estado aberto/fechado das notas entre re-renders
-var isDark=false, currentNav='comparador', itinDest=null;
+// =====================================================================
+var state={v:'v1',trips:[],activeTripId:null};
+var isDark=localStorage.getItem(KEY_DARK)==='1';
+var editingExpenseId=null;
+var editingTripId=null;
+var expFilter='todas';
+var charts={};
 
-function uid(){return Date.now()+Math.floor(Math.random()*1000);}
-
-function load(){
-  dest=ls(K.dest)||[];
-  crit=ls(K.crit)||JSON.parse(JSON.stringify(DEFAULT_CRIT));
-  scores=ls(K.scores)||{};
-  budgets=ls(K.budgets)||{};
-  itinerary=ls(K.itinerary)||{};
-  checklist=ls(K.checklist)||JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
-  isDark=localStorage.getItem(K.dark)==='1';
-  applyDark();
+// =====================================================================
+// SEED DATA (only first run)
+// =====================================================================
+function seed(){
+  const tripId='trip-'+Date.now();
+  const p1='p-'+(Date.now()+1);
+  const p2='p-'+(Date.now()+2);
+  const c1='c1',c2='c2',c3='c3',c4='c4',c5='c5';
+  const pm1='pm1',pm2='pm2',pm3='pm3';
+  return{
+    v:'v1',
+    activeTripId:tripId,
+    trips:[{
+      id:tripId,name:'Peru',destination:'Cusco, Peru',
+      startDate:'2026-03-11',endDate:'2026-03-15',baseCurrency:'BRL',
+      currencies:[{code:'USD',rate:5.20},{code:'EUR',rate:5.45},{code:'PEN',rate:1.38}],
+      people:[
+        {id:p1,name:'André',color:'blue'},
+        {id:p2,name:'Maria',color:'pink'}
+      ],
+      categories:[
+        {id:c1,name:'Hospedagem',color:'blue'},
+        {id:c2,name:'Transporte',color:'green'},
+        {id:c3,name:'Atividades',color:'amber'},
+        {id:c4,name:'Alimentação',color:'purple'},
+        {id:c5,name:'Outros',color:'red'}
+      ],
+      paymentMethods:[
+        {id:pm1,name:'Dinheiro'},
+        {id:pm2,name:'Cartão crédito'},
+        {id:pm3,name:'Cartão pré-pago'}
+      ],
+      expenses:[
+        {id:'e1',date:'2026-03-15',description:'Hostel em Cusco — 3 noites',amount:850,currency:'BRL',categoryId:c1,paymentMethodId:pm2,paidBy:p1,participantIds:[p1,p2],paid:true},
+        {id:'e2',date:'2026-03-14',description:'Trem a Aguas Calientes',amount:521.74,currency:'PEN',categoryId:c2,paymentMethodId:pm1,paidBy:p2,participantIds:[p1,p2],paid:true},
+        {id:'e3',date:'2026-03-12',description:'Tour Machu Picchu',amount:240.38,currency:'USD',categoryId:c3,paymentMethodId:pm3,paidBy:p1,participantIds:[p1,p2],paid:false},
+        {id:'e4',date:'2026-03-13',description:'Almoço no Sacred Valley',amount:130.43,currency:'PEN',categoryId:c4,paymentMethodId:pm1,paidBy:p1,participantIds:[p1],paid:true},
+        {id:'e5',date:'2026-03-11',description:'Uber aeroporto',amount:95,currency:'BRL',categoryId:c2,paymentMethodId:pm1,paidBy:p2,participantIds:[p1,p2],paid:true}
+      ]
+    }]
+  };
 }
-function ls(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function saveAll(){save(K.dest,dest);save(K.crit,crit);save(K.scores,scores);save(K.budgets,budgets);save(K.itinerary,itinerary);save(K.checklist,checklist);}
 
-// ================================================================
-// DARK MODE
-// ================================================================
-function applyDark(){
-  document.body.classList.toggle('dark',isDark);
-  document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';
+// =====================================================================
+// DATA LAYER
+// =====================================================================
+function loadAll(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){const p=JSON.parse(raw);if(p&&p.trips)state=p;else state=seed();}
+    else state=seed();
+  }catch(e){state=seed();}
+  if(state.activeTripId&&!state.trips.find(t=>t.id===state.activeTripId)){
+    state.activeTripId=state.trips[0]?state.trips[0].id:null;
+  }
 }
-function toggleDark(){isDark=!isDark;localStorage.setItem(K.dark,isDark?'1':'0');applyDark();}
+function saveAll(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){console.error(e);}}
+function activeTrip(){return state.trips.find(t=>t.id===state.activeTripId);}
+function uid(prefix){return prefix+'-'+Date.now()+'-'+Math.floor(Math.random()*1000);}
 
-// ================================================================
-// NAV
-// ================================================================
-function setNav(sec,btn){
-  currentNav=sec;
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+sec).classList.add('active');
-  btn.classList.add('active');
-  render();
+// =====================================================================
+// HELPERS
+// =====================================================================
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtMoney(n,curr){
+  const v=Math.round(n*100)/100;
+  if(!curr||curr==='BRL')return'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(curr==='USD')return'US$ '+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(curr==='EUR')return'€ '+v.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+  return curr+' '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-
-// ================================================================
-// TOAST
-// ================================================================
-function toast(msg,dur=3000){
+function fmtDate(s){if(!s)return'';const[y,m,d]=s.split('-');return`${d}/${m}/${y}`;}
+function fmtDateShort(s){if(!s)return'';const[y,m,d]=s.split('-');const months=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];return`${parseInt(d,10)} ${months[parseInt(m,10)-1]}`;}
+function toBase(amount,currency,trip){
+  if(!trip)return amount;
+  if(currency===trip.baseCurrency)return amount;
+  const fx=trip.currencies.find(c=>c.code===currency);
+  return fx?amount*fx.rate:amount;
+}
+function tripCurrencies(trip){
+  if(!trip)return[];
+  return[trip.baseCurrency,...trip.currencies.map(c=>c.code)];
+}
+function findById(arr,id){return arr.find(x=>x.id===id);}
+function showToast(msg,dur=3000){
   const t=document.getElementById('toast');
-  t.style.background=msg.includes('❌')?'#D92D20':'#101828';
-  t.style.color='#fff';t.textContent=msg;t.style.opacity='1';
+  t.style.background=msg.includes('❌')?'#D92D20':msg.includes('⚠')?'#B54708':'#101828';
+  t.textContent=msg;t.style.opacity='1';
   clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',dur);
 }
 
-// ================================================================
-// MODAL
-// ================================================================
-function openModal(html){
-  document.getElementById('modal-container').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()">${html}</div>`;
+// =====================================================================
+// DARK MODE
+// =====================================================================
+function applyDark(){
+  document.body.classList.toggle('dark',isDark);
+  document.getElementById('darkBtn').textContent=isDark?'☀️':'🌙';
+  // Re-render charts with new theme
+  if(activeTrip())renderCharts(activeTrip());
 }
-function closeModal(){document.getElementById('modal-container').innerHTML='';}
+function toggleDark(){isDark=!isDark;localStorage.setItem(KEY_DARK,isDark?'1':'0');applyDark();}
 
-// ================================================================
-// BACKUP
-// ================================================================
-function exportBackup(){
-  const data={v:'beza-trip-v1',exportado:new Date().toISOString(),dest,crit,scores,budgets,itinerary,checklist};
-  const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(b);
-  a.download=`beza-viagens-backup-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();toast('✅ Backup exportado!');
-}
-function importBackup(input){
-  const f=input.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    try{
-      const d=JSON.parse(e.target.result);
-      if(d.dest)dest=d.dest;if(d.crit)crit=d.crit;if(d.scores)scores=d.scores;
-      if(d.budgets)budgets=d.budgets;if(d.itinerary)itinerary=d.itinerary;if(d.checklist)checklist=d.checklist;
-      saveAll();render();toast('✅ Dados restaurados com sucesso!');
-    }catch(err){toast('❌ Arquivo inválido',4000);}
-    input.value='';
-  };
-  r.readAsText(f);
-}
-
-// ================================================================
-// SCORE CALC
-// ================================================================
-function calcAutoScore(dId){
-  const vals=dest.map(d=>({id:d.id,t:calcTotal(getBudget(d.id))})).filter(x=>x.t>0);
-  if(!vals.length)return 0;
-  const myT=calcTotal(getBudget(dId));
-  if(!myT)return 0;
-  if(vals.length===1)return 10; // único com orçamento → 10/10
-  const mn=Math.min(...vals.map(x=>x.t)),mx=Math.max(...vals.map(x=>x.t));
-  if(mx===mn)return 10;
-  return Math.round((10-((myT-mn)/(mx-mn))*9)*10)/10;
-}
-function allDestsHaveBudget(){
-  return dest.length>0&&dest.every(d=>calcTotal(getBudget(d.id))>0);
-}
-function calcScore(dId){
-  if(!crit.length)return 0;
-  let wSum=0,total=0;
-  crit.forEach(c=>{
-    const isCusto=c.name.toLowerCase().includes('custo');
-    const b=getBudget(dId);
-    let v;
-    if(isCusto&&b.costMode==='auto'&&calcTotal(b)>0){v=calcAutoScore(dId);}
-    else{v=scores[dId+'_'+c.id]||0;}
-    total+=v*c.weight;wSum+=c.weight*10;
+// =====================================================================
+// RENDER: TRIP SELECTOR
+// =====================================================================
+function renderTripSelector(){
+  const c=document.getElementById('tripSelector');
+  let html='<span class="tsel-label">Viagem</span>';
+  state.trips.forEach(t=>{
+    const cls='trip-chip'+(t.id===state.activeTripId?' on':'');
+    html+=`<button class="${cls}" onclick="setActiveTrip('${t.id}')">${esc(t.name)}${t.startDate?' · '+fmtDateShort(t.startDate):''}</button>`;
   });
-  return wSum>0?Math.round((total/wSum)*100)/10:0;
+  html+=`<button class="trip-chip add" onclick="openTrip()">+ Nova viagem</button>`;
+  if(activeTrip())html+=`<button class="trip-chip" onclick="openTrip('${state.activeTripId}')" style="margin-left:auto">✏ Editar viagem</button>`;
+  c.innerHTML=html;
 }
-function setCostMode(dId,mode){
-  if(!budgets[dId])budgets[dId]=getBudget(dId);
-  budgets[dId].costMode=mode;
-  save(K.budgets,budgets);renderComparador();renderOrcamento();
-  toast(mode==='auto'?'🔗 Custo calculado automaticamente pelo orçamento':'✏️ Custo em modo manual');
-}
-function toggleComment(key){
-  const el=document.getElementById('note_'+key);
-  if(!el)return;
-  const isOpen=el.style.display!=='none';
-  el.style.display=isOpen?'none':'table-row';
-  openNotes[key]=!isOpen;
-  if(!isOpen)setTimeout(()=>{const ta=el.querySelector('textarea');if(ta)ta.focus();},50);
-}
+function setActiveTrip(id){state.activeTripId=id;saveAll();render();}
 
-// Salva nota sem re-renderizar — atualiza só o botão 💬 no DOM
-function saveNote(dId,key,val){
-  if(!budgets[dId])budgets[dId]=getBudget(dId);
-  budgets[dId][key]=String(val||'');
-  save(K.budgets,budgets);
-  // Atualiza cor do botão diretamente sem re-render
-  const btn=document.getElementById('btn_note_'+dId+'_'+key.replace('_notes',''));
-  if(btn){
-    const has=val&&val.trim();
-    btn.style.background=has?'var(--amber50)':'transparent';
-    btn.style.borderColor=has?'var(--amber200)':'var(--border2)';
-    btn.style.color=has?'var(--amber600)':'var(--text3)';
-  }
-}
-
-// Salva nota de item custom sem re-renderizar
-function saveNoteCustom(dId,cxId,val){
-  if(!budgets[dId])return;
-  const item=budgets[dId].custom.find(x=>x.id===cxId);
-  if(!item)return;
-  item.notes=String(val||'');
-  save(K.budgets,budgets);
-  const btn=document.getElementById('btn_note_cx_'+dId+'_'+cxId);
-  if(btn){
-    const has=val&&val.trim();
-    btn.style.background=has?'var(--amber50)':'transparent';
-    btn.style.borderColor=has?'var(--amber200)':'var(--border2)';
-    btn.style.color=has?'var(--amber600)':'var(--text3)';
-  }
-}
-function scoreColor(s){return s>=7.5?'#3B6D11':s>=5?'#BA7517':'#A32D2D';}
-function scoreBg(s){return s>=7.5?'#3B6D11':s>=5?'#EF9F27':'#E24B4A';}
-
-// ================================================================
-// CURRENCY
-// ================================================================
-function fmt(n){return 'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});}
-
-// ================================================================
-// RENDER ROUTER
-// ================================================================
+// =====================================================================
+// RENDER: MAIN
+// =====================================================================
 function render(){
-  if(currentNav==='comparador')renderComparador();
-  else if(currentNav==='orcamento')renderOrcamento();
-  else if(currentNav==='roteiro')renderRoteiro();
-  else if(currentNav==='checklist')renderChecklist();
-}
+  renderTripSelector();
+  const main=document.getElementById('main');
+  const trip=activeTrip();
+  const sub=document.getElementById('brandSub');
+  if(sub)sub.textContent=trip?(trip.name+(trip.destination?' · '+trip.destination:'')):'Hub de viagens';
+  if(!trip){
+    main.innerHTML=`<div class="empty">
+      <div class="empty-big">✈️</div>
+      <div class="empty-title">Nenhuma viagem ainda</div>
+      <div class="empty-sub">Crie sua primeira viagem pra começar a registrar despesas e dividir com seus companheiros.</div>
+      <button class="empty-btn" onclick="openTrip()">+ Criar primeira viagem</button>
+    </div>`;
+    return;
+  }
 
-// ================================================================
-// COMPARADOR
-// ================================================================
-function renderComparador(){
-  const scored=dest.map(d=>({...d,score:calcScore(d.id)})).sort((a,b)=>b.score-a.score);
-  const winner=scored[0];
+  const expenses=trip.expenses||[];
+  const totalBase=expenses.reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+  const paidBase=expenses.filter(e=>e.paid).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+  const remaining=totalBase-paidBase;
+  const pct=totalBase>0?Math.round((paidBase/totalBase)*100):0;
+  const dayCount=tripDays(trip);
 
-  let statsHtml=`<div class="stats">
-    <div class="stat"><div class="stat-label">Destinos</div><div class="stat-val">${dest.length}</div><div class="stat-sub">cadastrados</div></div>
-    <div class="stat"><div class="stat-label">Critérios</div><div class="stat-val">${crit.length}</div><div class="stat-sub">avaliados</div></div>
-    <div class="stat"><div class="stat-label">Recomendado</div><div class="stat-val" style="font-size:16px">${winner?winner.name:'—'}</div><div class="stat-sub">${winner?winner.score+'/10':''}</div></div>
-    <div class="stat"><div class="stat-label">Maior pontuação</div><div class="stat-val">${winner?winner.score:'—'}</div><div class="stat-sub">${winner?'/10':''}</div></div>
+  let html='';
+
+  // HERO
+  html+=`<div class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-eyebrow">Custo total da viagem</div>
+        <div class="hero-total">${fmtMoney(totalBase,trip.baseCurrency)}</div>
+        <div class="hero-meta">${dayCount?dayCount+' dias · ':''}${trip.people.length} pessoa${trip.people.length!==1?'s':''}${trip.destination?' · '+esc(trip.destination):''}</div>
+      </div>
+      <div class="hero-kpis">
+        <div>
+          <div class="kpi-label">Já pago</div>
+          <div class="kpi-val green">${fmtMoney(paidBase,trip.baseCurrency)}</div>
+        </div>
+        <div>
+          <div class="kpi-label">Falta pagar</div>
+          <div class="kpi-val ${remaining>0?'amber':''}">${fmtMoney(remaining,trip.baseCurrency)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-info"><span>${pct}% pago</span><span>${expenses.length} despesa${expenses.length!==1?'s':''} registrada${expenses.length!==1?'s':''}</span></div>
+    </div>
   </div>`;
 
-  // Destination cards
-  let destHtml='';
-  if(scored.length===0){
-    destHtml='<div class="empty"><div class="empty-icon">✈️</div><div class="empty-title">Nenhum destino ainda</div><div>Clique em "+ Destino" para começar</div></div>';
-  } else {
-    // Calcula totais para comparação de cores
-    const allTotals=scored.map(d=>calcTotal(getBudget(d.id))).filter(t=>t>0);
-    const minTotal=allTotals.length?Math.min(...allTotals):0;
-    const maxTotal=allTotals.length?Math.max(...allTotals):0;
+  // CURRENCIES
+  html+=`<div class="curr-strip"><span class="curr-strip-label">Cotações (manuais)</span>`;
+  trip.currencies.forEach(c=>{
+    html+=`<span class="curr-chip">${esc(c.code)} <strong>${fmtMoney(c.rate,trip.baseCurrency)}</strong></span>`;
+  });
+  if(trip.currencies.length===0)html+=`<span class="curr-chip" style="color:var(--text3)">Só ${trip.baseCurrency} configurado</span>`;
+  html+=`<button class="curr-chip add" onclick="openManage()">+ Editar moedas</button></div>`;
 
-    destHtml='<div class="dest-grid">';
-    scored.forEach((d,i)=>{
-      const isWinner=i===0&&d.score>0;
-      const b=getBudget(d.id);
-      const total=calcTotal(b);
-      const perDay=b.nights>0&&total>0?Math.round(total/b.nights):0;
-
-      // Linhas fixas com valor
-      const fixedItems=[
-        {label:'✈️ Passagem',val:b.flight},
-        {label:'🏨 Hotel/noite',val:b.hotelNight},
-        {label:'🍽 Alimentação/dia',val:b.foodDay},
-        {label:'🚇 Transporte',val:b.transport},
-        {label:'🎭 Passeios',val:b.activities},
-        {label:'🛍 Compras',val:b.shopping},
-        {label:'🏥 Seguro',val:b.insurance},
-        {label:'🆘 Emergência',val:b.emergency},
-      ].filter(x=>Number(x.val)>0);
-
-      // Itens customizados com valor
-      const customItems=(b.custom||[]).filter(x=>Number(x.val)>0).map(x=>({label:`📌 ${x.name}`,val:x.val,notes:x.notes}));
-      const allBudgetItems=[...fixedItems,...customItems];
-
-      // Notas dos itens fixos
-      const fixedNotes=[
-        {key:'flight',label:'✈️ Passagem',notes:b.flight_notes},
-        {key:'hotelNight',label:'🏨 Hotel',notes:b.hotelNight_notes},
-        {key:'foodDay',label:'🍽 Alimentação',notes:b.foodDay_notes},
-        {key:'transport',label:'🚇 Transporte',notes:b.transport_notes},
-        {key:'activities',label:'🎭 Passeios',notes:b.activities_notes},
-        {key:'shopping',label:'🛍 Compras',notes:b.shopping_notes},
-        {key:'insurance',label:'🏥 Seguro',notes:b.insurance_notes},
-        {key:'emergency',label:'🆘 Emergência',notes:b.emergency_notes},
-      ].filter(x=>x.notes&&x.notes.trim());
-
-      // Notas dos itens custom com valor
-      const customNotes=(b.custom||[]).filter(x=>Number(x.val)>0&&x.notes&&x.notes.trim()).map(x=>({label:`📌 ${x.name}`,notes:x.notes}));
-      const allNotes=[...fixedNotes,...customNotes];
-
-      // Cor do total: verde=mais barato, vermelho=mais caro, neutro=único
-      const totalColor=allTotals.length>1?(total===minTotal?'var(--green600)':total===maxTotal?'var(--red600)':'var(--text1)'):'var(--text1)';
-
-      // Critérios com nota > 0
-      const critWithScore=crit.filter(c=>{
-        const isCusto=c.name.toLowerCase().includes('custo');
-        const v=(isCusto&&b.costMode==='auto'&&total>0)?calcAutoScore(d.id):(scores[d.id+'_'+c.id]||0);
-        return v>0;
-      });
-
-      destHtml+=`<div class="dest-card${isWinner?' winner':''}">
-        ${isWinner?'<div style="margin-bottom:8px"><span class="badge badge-green">🏆 Recomendado</span></div>':''}
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
-          <div>
-            <div style="font-size:15px;font-weight:600;color:var(--text1)">${d.flag||'🌍'} ${esc(d.name)}</div>
-            <div style="font-size:12px;color:var(--text2);margin-top:2px">${esc(d.country||'')}</div>
-          </div>
-          <div style="display:flex;gap:4px">
-            <button class="btn btn-sm btn-ghost" onclick="editDest(${d.id})">✏</button>
-            <button class="btn btn-sm btn-danger" onclick="delDest(${d.id})">✕</button>
-          </div>
-        </div>
-
-        <div style="font-size:22px;font-weight:600;color:${scoreColor(d.score)};margin-bottom:4px">${d.score}<span style="font-size:13px;font-weight:400;color:var(--text3)">/10</span></div>
-        <div class="score-bar" style="margin-bottom:${allBudgetItems.length||allNotes.length?12:4}px"><div class="score-fill" style="width:${d.score*10}%;background:${scoreBg(d.score)}"></div></div>
-
-        ${allBudgetItems.length?`
-        <div style="display:flex;flex-direction:column;gap:5px">
-          ${allBudgetItems.map(item=>`
-            <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
-              <span style="color:var(--text2)">${item.label}</span>
-              <span style="font-weight:500;color:var(--text1)">${fmt(item.val)}</span>
-            </div>`).join('')}
-          ${allNotes.length?`
-          <div style="margin-top:6px;padding:8px;background:var(--amber50);border:1px solid var(--amber200);border-radius:7px;display:flex;flex-direction:column;gap:5px">
-            ${allNotes.map(n=>`
-              <div>
-                <div style="font-size:10px;font-weight:600;color:var(--amber600);margin-bottom:2px">${n.label}</div>
-                <div style="font-size:11px;color:var(--text2);line-height:1.4">${esc(n.notes)}</div>
-              </div>`).join('')}
-          </div>`:''}
-          ${perDay>0?`<div style="margin-top:4px;display:flex;justify-content:space-between;font-size:12px;color:var(--text3)">
-            <span>${b.nights||7} dias · ${fmt(perDay)}/dia</span>
-          </div>`:''}
-          <div style="height:1px;background:var(--border);margin:4px 0"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:12px;font-weight:600;color:var(--text1)">Total estimado</span>
-            <span style="font-size:16px;font-weight:600;color:${totalColor}">${fmt(total)}</span>
-          </div>
-        </div>`:''}
-
-        ${critWithScore.length?`
-        <div style="margin-top:${allBudgetItems.length?10:0}px;display:flex;flex-direction:column;gap:5px${allBudgetItems.length?';padding-top:10px;border-top:1px solid var(--border)':''}">
-          ${critWithScore.map(c=>{
-            const isCusto=c.name.toLowerCase().includes('custo');
-            const v=(isCusto&&b.costMode==='auto'&&total>0)?calcAutoScore(d.id):(scores[d.id+'_'+c.id]||0);
-            const isAuto=isCusto&&b.costMode==='auto'&&total>0;
-            const bg=v>=7.5?'var(--green50)':v>=5?'var(--amber50)':'var(--red50)';
-            const col=v>=7.5?'var(--green700)':v>=5?'var(--amber600)':'var(--red600)';
-            const brd=v>=7.5?'var(--green200)':v>=5?'var(--amber200)':'var(--red200)';
-            return`<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
-              <span style="color:var(--text2)">${esc(c.name)}</span>
-              <span style="background:${bg};color:${col};border:1px solid ${brd};padding:1px 7px;border-radius:5px;font-size:11px;font-weight:500">${v}/10${isAuto?'<span style="font-size:9px;margin-left:3px;opacity:.8">auto</span>':''}</span>
-            </div>`;
-          }).join('')}
-        </div>`:''}
+  // CATEGORIES
+  if(trip.categories.length>0){
+    html+=`<div class="cats-grid">`;
+    const dailyByDay=expensesByDayMap(trip);
+    trip.categories.forEach(cat=>{
+      const catExp=expenses.filter(e=>e.categoryId===cat.id);
+      const sum=catExp.reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+      const pct=totalBase>0?Math.round((sum/totalBase)*100):0;
+      const c=COLOR_HEX[cat.color]||COLOR_HEX.blue;
+      // sparkline data (per day)
+      const days=daysOfTrip(trip);
+      const spark=days.map(d=>catExp.filter(e=>e.date===d).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0));
+      const maxS=Math.max(1,...spark);
+      const sparkHtml=spark.map(v=>`<span style="background:${c.solid};height:${Math.max(6,(v/maxS)*100)}%;opacity:${v>0?1:.2}"></span>`).join('');
+      html+=`<div class="cat-card" style="border-left-color:${c.solid}">
+        <div class="cat-name" style="color:${c.solid}">${esc(cat.name)}</div>
+        <div class="cat-val">${fmtMoney(sum,trip.baseCurrency)}</div>
+        <div class="cat-pct" style="color:${c.solid}">${pct}% · ${catExp.length} despesa${catExp.length!==1?'s':''}</div>
+        <div class="spark">${sparkHtml||'<span style="background:var(--border);height:10%;opacity:.3"></span>'.repeat(5)}</div>
       </div>`;
     });
-    destHtml+='</div>';
+    html+=`</div>`;
   }
 
-  // Score matrix
-  let matrixHtml='';
-  if(dest.length>0&&crit.length>0){
-    matrixHtml=`<div class="card" style="margin-top:16px">
-      <div class="card-hdr">
-        <div class="card-title">Matriz de pontuação</div>
-        <div style="font-size:12px;color:var(--text3)">Clique nas células para editar (1–10)</div>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="tbl">
-          <thead><tr>
-            <th>Critério</th><th>Peso</th>
-            ${dest.map(d=>`<th style="text-align:center">${d.flag||'🌍'} ${esc(d.name)}</th>`).join('')}
-          </tr></thead>
-          <tbody>
-            ${crit.map(c=>`<tr>
-              <td style="font-weight:500">${esc(c.name)}</td>
-              <td><span class="badge badge-blue">×${c.weight}</span></td>
-              ${dest.map(d=>{
-                const isCusto=c.name.toLowerCase().includes('custo');
-                const b=getBudget(d.id);
-                const isAuto=isCusto&&b.costMode==='auto';
-                const autoV=calcAutoScore(d.id);
-                const manualV=scores[d.id+'_'+c.id]||0;
-                const hasBudget=calcTotal(b)>0;
-                const notAllHaveBudget=isCusto&&!allDestsHaveBudget();
-                return`<td style="text-align:center;vertical-align:middle">
-                  ${isAuto
-                    ?`<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-                        <span style="font-weight:600;color:${scoreColor(autoV)}">${autoV}/10</span>
-                        <span style="font-size:10px;background:var(--teal50);color:var(--teal600);padding:1px 6px;border-radius:4px;border:1px solid var(--teal200)">Auto</span>
-                        ${notAllHaveBudget?`<span style="font-size:9px;color:var(--amber600);text-align:center;max-width:90px">⚠ Preencha orçamento de todos os destinos</span>`:''}
-                        <button onclick="setCostMode(${d.id},'manual')" style="font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--border2);background:transparent;cursor:pointer;color:var(--text2);font-family:'Inter',sans-serif">Manual</button>
-                      </div>`
-                    :`<div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-                        <input type="number" min="0" max="10" value="${manualV}" style="width:52px;text-align:center;padding:5px" onchange="setScore(${d.id},${c.id},this.value)"/>
-                        ${isCusto&&hasBudget?`<button onclick="setCostMode(${d.id},'auto')" style="font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--teal200);background:var(--teal50);cursor:pointer;color:var(--teal600);font-family:'Inter',sans-serif">⚡ Auto</button>`:''}
-                      </div>`
-                  }
-                </td>`;
-              }).join('')}
-            </tr>`).join('')}
-            <tr style="background:var(--bg)">
-              <td style="font-weight:600" colspan="2">Pontuação total</td>
-              ${dest.map(d=>{const s=calcScore(d.id);return`<td style="text-align:center;font-weight:600;color:${scoreColor(s)}">${s}/10</td>`;}).join('')}
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>`;
-  }
-
-  // Criteria editor
-  let critHtml=`<div class="card" style="margin-top:16px">
-    <div class="card-hdr">
-      <div class="card-title">⚙️ Critérios e pesos</div>
-      <button class="btn btn-sm btn-primary" onclick="addCritModal()">+ Critério</button>
+  // CHARTS
+  html+=`<div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Distribuição por categoria</div>
+      <div class="chart-box"><canvas id="donutChart"></canvas></div>
     </div>
-    <div style="overflow-x:auto">
-      <table class="tbl">
-        <thead><tr><th>Critério</th><th>Peso (1–5)</th><th></th></tr></thead>
-        <tbody>
-          ${crit.map(c=>`<tr>
-            <td><input type="text" value="${esc(c.name)}" style="border:none;background:transparent;font-weight:500;padding:0" onchange="updateCritName(${c.id},this.value)"/></td>
-            <td>
-              <div style="display:flex;gap:4px">
-                ${[1,2,3,4,5].map(w=>`<button onclick="setCritWeight(${c.id},${w})" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--border2);background:${c.weight>=w?'var(--blue600)':'transparent'};color:${c.weight>=w?'#fff':'var(--text3)'};cursor:pointer;font-size:12px;font-weight:500">${w}</button>`).join('')}
-              </div>
-            </td>
-            <td><button class="btn btn-sm btn-danger" onclick="delCrit(${c.id})">✕</button></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
+    <div class="chart-card">
+      <div class="chart-title">Gasto acumulado por dia</div>
+      <div class="chart-box"><canvas id="lineChart"></canvas></div>
     </div>
   </div>`;
 
-  document.getElementById('comp-content').innerHTML=
-    `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-      <div style="font-size:15px;font-weight:600;color:var(--text1)">Comparador de Destinos</div>
-      <button class="btn btn-primary" onclick="addDestModal()">+ Destino</button>
-    </div>
-    ${statsHtml}${destHtml}${matrixHtml}${critHtml}`;
-}
-
-// ================================================================
-// DEST CRUD
-// ================================================================
-function addDestModal(id){
-  const d=id?dest.find(x=>x.id===id):{};
-  const editing=!!id;
-  openModal(`<div class="modal">
-    <div class="modal-title">${editing?'Editar':'Novo'} destino</div>
-    <div class="modal-row">
-      <div class="modal-field" style="flex:0 0 60px"><div class="modal-label">Emoji</div><input id="mFlag" type="text" value="${d.flag||'🌍'}" style="text-align:center"/></div>
-      <div class="modal-field"><div class="modal-label">Nome do destino*</div><input id="mName" type="text" value="${esc(d.name||'')}" placeholder="Ex: Madri"/></div>
-    </div>
-    <div class="modal-field"><div class="modal-label">País / Região</div><input id="mCountry" type="text" value="${esc(d.country||'')}" placeholder="Ex: Espanha"/></div>
-    <div class="modal-field"><div class="modal-label">Observações</div><textarea id="mNotes" rows="2" style="resize:vertical">${esc(d.notes||'')}</textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveDest(${id||'null'})">Salvar</button>
-    </div>
-  </div>`);
-  setTimeout(()=>document.getElementById('mName').focus(),50);
-}
-function editDest(id){addDestModal(id);}
-function saveDest(id){
-  const name=document.getElementById('mName').value.trim();
-  if(!name){toast('❌ Nome é obrigatório');return;}
-  const obj={id:id||uid(),name,country:document.getElementById('mCountry').value.trim(),flag:document.getElementById('mFlag').value.trim()||'🌍',notes:document.getElementById('mNotes').value.trim()};
-  if(id){const i=dest.findIndex(x=>x.id===id);if(i>=0)dest[i]=obj;}
-  else dest.push(obj);
-  save(K.dest,dest);closeModal();renderComparador();toast(id?'✅ Destino atualizado':'✅ Destino adicionado');
-}
-function delDest(id){
-  if(!confirm('Remover este destino e todos seus dados?'))return;
-  dest=dest.filter(x=>x.id!==id);
-  Object.keys(scores).filter(k=>k.startsWith(id+'_')).forEach(k=>delete scores[k]);
-  delete budgets[id];delete itinerary[id];
-  save(K.dest,dest);save(K.scores,scores);save(K.budgets,budgets);save(K.itinerary,itinerary);
-  renderComparador();toast('🗑 Destino removido');
-}
-function setScore(dId,cId,val){
-  scores[dId+'_'+cId]=Math.max(0,Math.min(10,Number(val)||0));
-  save(K.scores,scores);renderComparador();
-}
-function addCritModal(){
-  openModal(`<div class="modal">
-    <div class="modal-title">Novo critério</div>
-    <div class="modal-field"><div class="modal-label">Nome*</div><input id="cName" type="text" placeholder="Ex: Culinária local"/></div>
-    <div class="modal-field"><div class="modal-label">Peso (1 = menor, 5 = maior importância)</div>
-      <div style="display:flex;gap:6px" id="cWeightBtns">
-        ${[1,2,3,4,5].map(w=>`<button onclick="selectCWeight(${w})" id="cw${w}" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--border2);background:${w===3?'var(--blue600)':'transparent'};color:${w===3?'#fff':'var(--text2)'};cursor:pointer;font-size:14px;font-weight:500">${w}</button>`).join('')}
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveCrit()">Adicionar</button>
-    </div>
-  </div>`);
-  setTimeout(()=>document.getElementById('cName').focus(),50);
-}
-var _cWeight=3;
-function selectCWeight(w){
-  _cWeight=w;
-  [1,2,3,4,5].forEach(x=>{const b=document.getElementById('cw'+x);if(b){b.style.background=x===w?'var(--blue600)':'transparent';b.style.color=x===w?'#fff':'var(--text2)';}});
-}
-function saveCrit(){
-  const name=document.getElementById('cName').value.trim();
-  if(!name){toast('❌ Nome é obrigatório');return;}
-  crit.push({id:uid(),name,weight:_cWeight});
-  save(K.crit,crit);closeModal();renderComparador();toast('✅ Critério adicionado');
-}
-function updateCritName(id,val){const c=crit.find(x=>x.id===id);if(c){c.name=val;save(K.crit,crit);}}
-function setCritWeight(id,w){const c=crit.find(x=>x.id===id);if(c){c.weight=w;save(K.crit,crit);renderComparador();}}
-function delCrit(id){if(!confirm('Remover critério?'))return;crit=crit.filter(x=>x.id!==id);save(K.crit,crit);renderComparador();}
-
-// ================================================================
-// ORÇAMENTO
-// ================================================================
-function getBudget(dId){
-  const s=budgets[dId]||{};
-  return{
-    flight:s.flight||0,hotelNight:s.hotelNight||0,nights:s.nights||7,
-    foodDay:s.foodDay||0,transport:s.transport||0,activities:s.activities||0,
-    shopping:s.shopping||0,insurance:s.insurance||0,emergency:s.emergency||0,
-    flight_notes:s.flight_notes||'',hotelNight_notes:s.hotelNight_notes||'',
-    foodDay_notes:s.foodDay_notes||'',transport_notes:s.transport_notes||'',
-    activities_notes:s.activities_notes||'',shopping_notes:s.shopping_notes||'',
-    insurance_notes:s.insurance_notes||'',emergency_notes:s.emergency_notes||'',
-    costMode:s.costMode||'manual',custom:s.custom||[]
-  };
-}
-function calcTotal(b){
-  const base=Number(b.flight||0)+(Number(b.hotelNight||0)*Number(b.nights||0))+(Number(b.foodDay||0)*Number(b.nights||0))+Number(b.transport||0)+Number(b.activities||0)+Number(b.shopping||0)+Number(b.insurance||0)+Number(b.emergency||0);
-  const custom=(b.custom||[]).reduce((s,x)=>s+Number(x.val||0),0);
-  return base+custom;
-}
-
-function renderOrcamento(){
-  if(dest.length===0){
-    document.getElementById('orc-content').innerHTML='<div class="empty"><div class="empty-icon">💰</div><div class="empty-title">Cadastre destinos primeiro</div><div>Vá até o Comparador e adicione destinos</div></div>';
-    return;
+  // PAYMENT METHODS
+  if(trip.paymentMethods.length>0){
+    html+=`<div class="pm-section"><div class="pm-section-title">💳 Despesas por forma de pagamento</div><div class="pm-grid">`;
+    trip.paymentMethods.forEach(pm=>{
+      const pmExp=expenses.filter(e=>e.paymentMethodId===pm.id);
+      const sum=pmExp.reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+      const pct=totalBase>0?(sum/totalBase)*100:0;
+      html+=`<div class="pm-card">
+        <div class="pm-name">${esc(pm.name)}</div>
+        <div class="pm-val">${fmtMoney(sum,trip.baseCurrency)}</div>
+        <div class="pm-bar"><div class="pm-bar-fill" style="width:${pct}%"></div></div>
+      </div>`;
+    });
+    html+=`</div></div>`;
   }
-  // Summary cards
-  const totals=dest.map(d=>({...d,total:calcTotal(getBudget(d.id))})).sort((a,b)=>a.total-b.total);
-  let html=`<div class="stats">
-    ${totals.map(d=>`<div class="stat">
-      <div class="stat-label">${d.flag||'🌍'} ${esc(d.name)}</div>
-      <div class="stat-val" style="font-size:16px">${fmt(d.total)}</div>
-      <div class="stat-sub">${getBudget(d.id).nights||7} dias</div>
-    </div>`).join('')}
-  </div>`;
 
-  // Per dest budget forms
-  dest.forEach(d=>{
-    const b=getBudget(d.id);
-    const total=calcTotal(b);
-    const perDay=b.nights>0?Math.round(total/b.nights):0;
-    const items=[
-      {key:'flight',label:'✈️ Passagem aérea',val:b.flight,notes:b.flight_notes},
-      {key:'hotelNight',label:'🏨 Hotel por noite',val:b.hotelNight,notes:b.hotelNight_notes},
-      {key:'foodDay',label:'🍽 Alimentação por dia',val:b.foodDay,notes:b.foodDay_notes},
-      {key:'transport',label:'🚇 Transporte local',val:b.transport,notes:b.transport_notes},
-      {key:'activities',label:'🎭 Passeios e atrações',val:b.activities,notes:b.activities_notes},
-      {key:'shopping',label:'🛍 Compras',val:b.shopping,notes:b.shopping_notes},
-      {key:'insurance',label:'🏥 Seguro viagem',val:b.insurance,notes:b.insurance_notes},
-      {key:'emergency',label:'🆘 Reserva emergência',val:b.emergency,notes:b.emergency_notes},
-    ];
-    const mainTotal=items.reduce((s,x)=>s+Number(x.val||0),0);
-    const grandTotal=total;
+  // SPLITWISE
+  html+=renderSplitwise(trip,expenses,totalBase);
 
-    html+=`<div class="card">
-      <div class="card-hdr">
-        <div class="card-title">${d.flag||'🌍'} ${esc(d.name)} — ${esc(d.country||'')}</div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="text-align:right">
-            <div style="font-size:18px;font-weight:600;color:var(--text1)">${fmt(total)}</div>
-            <div style="font-size:11px;color:var(--text3)">${fmt(perDay)}/dia · <input type="number" value="${b.nights||7}" min="1" max="365" style="width:36px;padding:2px 4px;font-size:11px;display:inline" onchange="updateBudget(${d.id},'nights',this.value)"/> dias</div>
-          </div>
-        </div>
+  // EXPENSES LIST
+  html+=renderExpensesList(trip,expenses);
+
+  main.innerHTML=html;
+
+  // Render charts after DOM ready
+  setTimeout(()=>renderCharts(trip),0);
+}
+
+// =====================================================================
+// SPLITWISE LOGIC
+// =====================================================================
+function calcBalances(trip,expenses){
+  // For each person: paid (what they put down) - owed (sum of their share in each expense they participated in)
+  const balances={};
+  trip.people.forEach(p=>{balances[p.id]={paid:0,owed:0};});
+  expenses.forEach(e=>{
+    if(!balances[e.paidBy])return;
+    const amtBase=toBase(e.amount,e.currency,trip);
+    balances[e.paidBy].paid+=amtBase;
+    const parts=(e.participantIds||[]).filter(pid=>balances[pid]);
+    if(parts.length===0)return;
+    const share=amtBase/parts.length;
+    parts.forEach(pid=>{balances[pid].owed+=share;});
+  });
+  // balance = paid - owed (positive = receive, negative = owe)
+  Object.keys(balances).forEach(id=>{balances[id].balance=balances[id].paid-balances[id].owed;});
+  return balances;
+}
+function simplifyDebts(balances){
+  // Greedy: match biggest creditor with biggest debtor
+  const list=Object.entries(balances).map(([id,b])=>({id,balance:b.balance}));
+  const creditors=list.filter(x=>x.balance>0.01).sort((a,b)=>b.balance-a.balance).map(x=>({...x}));
+  const debtors=list.filter(x=>x.balance<-0.01).sort((a,b)=>a.balance-b.balance).map(x=>({...x}));
+  const transfers=[];
+  let i=0,j=0;
+  while(i<debtors.length&&j<creditors.length){
+    const d=debtors[i],c=creditors[j];
+    const amt=Math.min(-d.balance,c.balance);
+    transfers.push({fromId:d.id,toId:c.id,amount:amt});
+    d.balance+=amt;c.balance-=amt;
+    if(Math.abs(d.balance)<0.01)i++;
+    if(Math.abs(c.balance)<0.01)j++;
+  }
+  return transfers;
+}
+function renderSplitwise(trip,expenses,totalBase){
+  if(trip.people.length<2){
+    return`<div class="split-card"><div class="split-head"><div><div class="split-title">Acerto de contas</div><div class="split-sub">Adicione pelo menos 2 pessoas pra ativar o cálculo de divisão.</div></div><button class="act-btn blue" onclick="openManage()">⚙️ Pessoas</button></div></div>`;
+  }
+  const balances=calcBalances(trip,expenses);
+  const transfers=simplifyDebts(balances);
+  let html=`<div class="split-card">
+    <div class="split-head">
+      <div><div class="split-title">Acerto de contas</div><div class="split-sub">${trip.people.length} pessoa${trip.people.length!==1?'s':''} · cálculo automático</div></div>
+      <button class="act-btn" onclick="openManage()">+ Pessoa</button>
+    </div>
+    <div class="people-grid">`;
+  trip.people.forEach(p=>{
+    const b=balances[p.id]||{paid:0,owed:0,balance:0};
+    const c=COLOR_HEX[p.color]||COLOR_HEX.blue;
+    let labelCls='gray',label='Quitado',valCls='gray';
+    if(b.balance>0.01){labelCls='green';label='Recebe';valCls='green';}
+    else if(b.balance<-0.01){labelCls='red';label='Deve';valCls='red';}
+    html+=`<div class="person-card">
+      <div class="avatar" style="background:${c.solid}">${initials(p.name)}</div>
+      <div class="person-info">
+        <div class="person-name">${esc(p.name)}</div>
+        <div class="person-paid">Pagou ${fmtMoney(b.paid,trip.baseCurrency)} · cota ${fmtMoney(b.owed,trip.baseCurrency)}</div>
       </div>
-      <div class="card-body">
-        <table class="tbl">
-          <thead><tr><th>Categoria</th><th style="width:160px">Valor (R$)</th><th style="width:80px;text-align:right">% do total</th></tr></thead>
-          <tbody>
-            ${items.map(item=>{
-              const pct=grandTotal>0?Math.round((Number(item.val||0)/grandTotal)*100):0;
-              const nKey=`${d.id}_${item.key}`;
-              const hasNote=!!(item.notes&&item.notes.trim());
-              const isOpen=hasNote||openNotes[nKey];
-              return`<tr>
-                <td>${item.label}</td>
-                <td><input type="number" min="0" value="${item.val||0}" placeholder="0" onchange="updateBudget(${d.id},'${item.key}',this.value)" style="width:140px"/></td>
-                <td style="text-align:right">
-                  <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px">
-                    ${pct>0?`<span class="badge badge-blue">${pct}%</span>`:'<span style="color:var(--text3);font-size:12px">—</span>'}
-                    <button id="btn_note_${nKey}" onclick="toggleComment('${nKey}')" title="Comentário" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
-                  </div>
-                </td>
-              </tr>
-              <tr id="note_${nKey}" style="display:${isOpen?'table-row':'none'}">
-                <td colspan="3" style="padding:2px 12px 8px">
-                  <textarea placeholder="Observações, links, detalhes..." oninput="saveNote(${d.id},'${item.key}_notes',this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(item.notes||'')}</textarea>
-                </td>
-              </tr>`;
-            }).join('')}
-            ${(b.custom||[]).map(cx=>{
-              const cKey=`${d.id}_cx_${cx.id}`;
-              const hasNote=!!(cx.notes&&cx.notes.trim());
-              const isOpen=hasNote||openNotes[cKey];
-              return`<tr>
-                <td><input type="text" value="${esc(cx.name)}" placeholder="Nome" style="width:140px" onchange="updateCustomItem(${d.id},${cx.id},'name',this.value)"/></td>
-                <td><input type="number" min="0" value="${cx.val||0}" onchange="updateCustomItem(${d.id},${cx.id},'val',this.value)" style="width:140px"/></td>
-                <td style="text-align:right">
-                  <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px">
-                    <button id="btn_note_cx_${d.id}_${cx.id}" onclick="toggleComment('${cKey}')" title="Comentário" style="background:${hasNote?'var(--amber50)':'transparent'};border:1px solid ${hasNote?'var(--amber200)':'var(--border2)'};border-radius:5px;cursor:pointer;padding:2px 6px;font-size:11px;color:${hasNote?'var(--amber600)':'var(--text3)'}">💬</button>
-                    <button class="btn btn-sm btn-danger" onclick="delCustomItem(${d.id},${cx.id})">✕</button>
-                  </div>
-                </td>
-              </tr>
-              <tr id="note_${cKey}" style="display:${isOpen?'table-row':'none'}">
-                <td colspan="3" style="padding:2px 12px 8px">
-                  <textarea placeholder="Observações..." oninput="saveNoteCustom(${d.id},${cx.id},this.value)" style="width:100%;resize:vertical;min-height:44px;font-size:12px;padding:6px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--bg);color:var(--text1);font-family:'Inter',sans-serif">${esc(cx.notes||'')}</textarea>
-                </td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-          <tfoot>
-            <tr style="background:var(--bg)">
-              <td style="font-weight:600">Total</td>
-              <td style="font-weight:600;color:var(--blue600)">${fmt(grandTotal)}</td>
-              <td style="text-align:right"><button class="btn btn-sm btn-ghost" onclick="addCustomItem(${d.id})">+ Categoria</button></td>
-            </tr>
-          </tfoot>
-        </table>
+      <div class="person-bal">
+        <div class="bal-label ${labelCls}">${label}</div>
+        <div class="bal-val ${valCls}">${fmtMoney(Math.abs(b.balance),trip.baseCurrency)}</div>
       </div>
     </div>`;
   });
-
-  document.getElementById('orc-content').innerHTML=html;
-}
-
-function updateBudget(dId,key,val){
-  if(!budgets[dId])budgets[dId]=getBudget(dId);
-  budgets[dId][key]=key==='nights'?Math.max(1,Number(val)||1):Math.max(0,Number(val)||0);
-  save(K.budgets,budgets);renderOrcamento();
-}
-function addCustomItem(dId){
-  if(!budgets[dId])budgets[dId]=getBudget(dId);
-  if(!budgets[dId].custom)budgets[dId].custom=[];
-  budgets[dId].custom.push({id:uid(),name:'Outros',val:0});
-  save(K.budgets,budgets);renderOrcamento();
-}
-function updateCustomItem(dId,cxId,field,val){
-  if(!budgets[dId])return;
-  const item=budgets[dId].custom.find(x=>x.id===cxId);
-  if(item){
-    item[field]=field==='val'?Math.max(0,Number(val)||0):val;
-    save(K.budgets,budgets);
-    if(field!=='notes')renderOrcamento();
-  }
-}
-function delCustomItem(dId,cxId){
-  if(!budgets[dId])return;
-  budgets[dId].custom=budgets[dId].custom.filter(x=>x.id!==cxId);
-  save(K.budgets,budgets);renderOrcamento();
-}
-
-// ================================================================
-// ROTEIRO
-// ================================================================
-const ACT_TYPES={passeio:'Passeio',restaurante:'Restaurante',hotel:'Hotel/Check-in',transporte:'Transporte',compras:'Compras',outro:'Outro'};
-
-function renderRoteiro(){
-  if(dest.length===0){
-    document.getElementById('rot-content').innerHTML='<div class="empty"><div class="empty-icon">🗺</div><div class="empty-title">Cadastre destinos primeiro</div></div>';
-    return;
-  }
-  if(!itinDest||!dest.find(d=>d.id===itinDest))itinDest=dest[0].id;
-  const d=dest.find(x=>x.id===itinDest);
-  const bNights=getBudget(itinDest).nights||7;
-  const days=itinerary[itinDest]||[];
-
-  // Group by day
-  const byDay={};
-  days.forEach(a=>{if(!byDay[a.day])byDay[a.day]=[];byDay[a.day].push(a);});
-
-  let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-    <div>
-      <div style="font-size:15px;font-weight:600;color:var(--text1)">Roteiro de Viagem</div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <select onchange="itinDest=Number(this.value);renderRoteiro()" style="width:auto">
-        ${dest.map(d=>`<option value="${d.id}"${d.id===itinDest?' selected':''}>${d.flag||'🌍'} ${esc(d.name)}</option>`).join('')}
-      </select>
-      <button class="btn btn-primary" onclick="addActivityModal()">+ Atividade</button>
-    </div>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:12px 16px;background:var(--blue50);border:1px solid var(--blue200);border-radius:10px">
-    <div style="font-size:22px">${d.flag||'🌍'}</div>
-    <div>
-      <div style="font-weight:600;color:var(--text1)">${esc(d.name)}${d.country?` · ${esc(d.country)}`:''}</div>
-      <div style="font-size:12px;color:var(--text2)">${bNights} dias planejados · ${days.length} atividades cadastradas</div>
-    </div>
-  </div>`;
-
-  if(days.length===0){
-    html+='<div class="empty"><div class="empty-icon">📅</div><div class="empty-title">Nenhuma atividade ainda</div><div>Clique em "+ Atividade" para montar o roteiro</div></div>';
+  html+=`</div>`;
+  if(transfers.length===0){
+    html+=`<div class="settle-row zero">✅ Tudo certo, ninguém deve nada.</div>`;
   } else {
-    for(let day=1;day<=Math.max(...Object.keys(byDay).map(Number),bNights);day++){
-      const acts=(byDay[day]||[]).sort((a,b)=>a.time.localeCompare(b.time));
-      html+=`<div class="day-block">
-        <div class="day-hdr">
-          <div class="day-title">Dia ${day}</div>
-          <button class="btn btn-sm btn-primary" onclick="addActivityModal(${day})">+</button>
+    html+=`<div class="settle-list">`;
+    transfers.forEach(t=>{
+      const from=findById(trip.people,t.fromId);
+      const to=findById(trip.people,t.toId);
+      if(!from||!to)return;
+      html+=`<div class="settle-row"><span style="font-weight:600">${esc(from.name)}</span><span class="settle-arrow">→</span><span style="font-weight:600">${esc(to.name)}</span><span class="settle-arrow">·</span><span style="font-weight:600">${fmtMoney(t.amount,trip.baseCurrency)}</span></div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`</div>`;
+  return html;
+}
+function initials(name){
+  if(!name)return'?';
+  const parts=name.trim().split(/\s+/);
+  if(parts.length===1)return parts[0].slice(0,2).toUpperCase();
+  return(parts[0][0]+parts[parts.length-1][0]).toUpperCase();
+}
+
+// =====================================================================
+// EXPENSES LIST
+// =====================================================================
+function renderExpensesList(trip,expenses){
+  const filters=[
+    {k:'todas',label:'Todas',f:()=>true},
+    {k:'naopagas',label:'Não pagas',f:e=>!e.paid},
+    {k:'pagas',label:'Pagas',f:e=>e.paid}
+  ];
+  const sorted=[...expenses].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const filtered=sorted.filter(filters.find(x=>x.k===expFilter).f);
+  let html=`<div class="exp-card">
+    <div class="exp-head">
+      <div><div class="exp-title">Despesas</div><div class="split-sub">${expenses.length} no total · clique pra editar</div></div>
+      <button class="add-exp-btn" onclick="openExpense()">+ Nova despesa</button>
+    </div>
+    <div class="exp-filters">`;
+  filters.forEach(f=>{
+    const cnt=sorted.filter(f.f).length;
+    html+=`<button class="exp-filter${expFilter===f.k?' on':''}" onclick="setExpFilter('${f.k}')">${f.label} (${cnt})</button>`;
+  });
+  html+=`</div><div class="exp-list">`;
+  if(filtered.length===0){
+    html+=`<div style="padding:30px 8px;text-align:center;color:var(--text3);font-size:13px">Nenhuma despesa nesse filtro.</div>`;
+  } else {
+    filtered.forEach(e=>{
+      const cat=findById(trip.categories,e.categoryId);
+      const c=cat?(COLOR_HEX[cat.color]||COLOR_HEX.blue):COLOR_HEX.blue;
+      const pm=findById(trip.paymentMethods,e.paymentMethodId);
+      const paidBy=findById(trip.people,e.paidBy);
+      const partNames=(e.participantIds||[]).map(pid=>{const p=findById(trip.people,pid);return p?p.name:'?';});
+      const partTxt=partNames.length===trip.people.length?'Todos':partNames.join(', ');
+      const baseAmt=toBase(e.amount,e.currency,trip);
+      const showSubAmt=e.currency!==trip.baseCurrency;
+      html+=`<div class="exp-row">
+        <div class="exp-bar" style="background:${c.solid}"></div>
+        <div class="exp-body">
+          <div class="exp-desc">${esc(e.description)} ${e.paid?'<span class="tag tag-paid">pago</span>':'<span class="tag tag-unpaid">a pagar</span>'}</div>
+          <div class="exp-meta">
+            ${fmtDateShort(e.date)} ·
+            ${cat?esc(cat.name):'Sem categoria'} ·
+            ${paidBy?esc(paidBy.name)+' pagou':'?'} ·
+            ${pm?esc(pm.name):'Sem forma'} ·
+            ${partTxt}
+          </div>
         </div>
-        ${acts.length?acts.map(a=>{
-          const typeClass='type-'+(a.type||'outro');
-          const typeLabel=ACT_TYPES[a.type]||'Outro';
-          return`<div class="activity">
-            <div class="act-time">${a.time||'—'}</div>
-            <div class="act-body">
-              <div class="act-title">${esc(a.title)}</div>
-              ${a.notes?`<div class="act-notes">${esc(a.notes)}</div>`:''}
-            </div>
-            <span class="badge ${typeClass==='type-passeio'?'badge-blue':typeClass==='type-restaurante'?'badge-amber':typeClass==='type-hotel'?'badge-purple':'badge-green'}">${typeLabel}</span>
-            <div style="display:flex;gap:3px;margin-left:4px">
-              <button class="btn btn-sm btn-ghost" onclick="editActivity(${a.id})">✏</button>
-              <button class="btn btn-sm btn-danger" onclick="delActivity(${a.id})">✕</button>
-            </div>
-          </div>`;
-        }).join(''):'<div style="padding:8px 12px;font-size:12px;color:var(--text3)">Nenhuma atividade neste dia</div>'}
+        <div class="exp-amt">
+          <div class="exp-amt-main">${fmtMoney(baseAmt,trip.baseCurrency)}</div>
+          ${showSubAmt?`<div class="exp-amt-sub">${fmtMoney(e.amount,e.currency)}</div>`:''}
+        </div>
+        <div class="exp-actions">
+          <button class="exp-act-btn edit" onclick="openExpense('${e.id}')" title="Editar">✏</button>
+          <button class="exp-act-btn del" onclick="deleteExpenseDirect('${e.id}')" title="Remover">✕</button>
+        </div>
       </div>`;
+    });
+  }
+  html+=`</div></div>`;
+  return html;
+}
+function setExpFilter(k){expFilter=k;render();}
+
+// =====================================================================
+// CHARTS
+// =====================================================================
+function destroyCharts(){Object.keys(charts).forEach(k=>{try{charts[k].destroy();}catch(e){}});charts={};}
+function renderCharts(trip){
+  if(typeof Chart==='undefined')return;
+  destroyCharts();
+  const expenses=trip.expenses||[];
+  const text=isDark?'#94A3B8':'#475467';
+  const grid=isDark?'rgba(148,163,184,0.15)':'rgba(71,84,103,0.1)';
+
+  // Donut: by category
+  const donutEl=document.getElementById('donutChart');
+  if(donutEl&&trip.categories.length){
+    const labels=[],data=[],colors=[];
+    trip.categories.forEach(cat=>{
+      const sum=expenses.filter(e=>e.categoryId===cat.id).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);
+      if(sum>0){labels.push(cat.name);data.push(Math.round(sum*100)/100);colors.push((COLOR_HEX[cat.color]||COLOR_HEX.blue).solid);}
+    });
+    if(data.length){
+      charts.donut=new Chart(donutEl,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom',labels:{color:text,font:{family:'Inter',size:11},padding:8,boxWidth:10,boxHeight:10,usePointStyle:true,pointStyle:'rectRounded'}},tooltip:{callbacks:{label:c=>c.label+': '+fmtMoney(c.parsed,trip.baseCurrency)}}}}});
+    } else {
+      donutEl.parentElement.innerHTML='<div style="text-align:center;padding:60px 8px;font-size:12px;color:var(--text3)">Sem despesas ainda</div>';
     }
   }
 
-  document.getElementById('rot-content').innerHTML=html;
+  // Line: cumulative by day
+  const lineEl=document.getElementById('lineChart');
+  if(lineEl){
+    const days=daysOfTrip(trip);
+    if(days.length){
+      const dayLabels=days.map(fmtDateShort);
+      let cum=0;const cumData=days.map(d=>{cum+=expenses.filter(e=>e.date===d).reduce((s,e)=>s+toBase(e.amount,e.currency,trip),0);return Math.round(cum*100)/100;});
+      charts.line=new Chart(lineEl,{type:'line',data:{labels:dayLabels,datasets:[{label:'Acumulado',data:cumData,borderColor:'#1570EF',backgroundColor:'rgba(21,112,239,0.12)',fill:true,tension:0.35,pointRadius:3,pointBackgroundColor:'#1570EF',borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>fmtMoney(c.parsed.y,trip.baseCurrency)}}},scales:{y:{ticks:{color:text,font:{size:10},callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v.toFixed(0)},grid:{color:grid}},x:{ticks:{color:text,font:{size:10}},grid:{display:false}}}}});
+    } else {
+      lineEl.parentElement.innerHTML='<div style="text-align:center;padding:60px 8px;font-size:12px;color:var(--text3)">Defina datas da viagem</div>';
+    }
+  }
 }
 
-function addActivityModal(preDay,id){
-  const a=id?(itinerary[itinDest]||[]).find(x=>x.id===id):{};
-  const editing=!!id;
-  const b=getBudget(itinDest);
-  const maxDay=b.nights||7;
-  openModal(`<div class="modal">
-    <div class="modal-title">${editing?'Editar':'Nova'} atividade</div>
-    <div class="modal-row">
-      <div class="modal-field"><div class="modal-label">Dia*</div>
-        <select id="aDay">
-          ${Array.from({length:maxDay},(_,i)=>`<option value="${i+1}"${(a.day||preDay||1)===i+1?' selected':''}>${i+1}</option>`).join('')}
-        </select>
-      </div>
-      <div class="modal-field"><div class="modal-label">Horário</div><input id="aTime" type="time" value="${a.time||''}"/></div>
-    </div>
-    <div class="modal-field"><div class="modal-label">Título*</div><input id="aTitle" type="text" value="${esc(a.title||'')}" placeholder="Ex: Visita ao Museu do Prado"/></div>
-    <div class="modal-field"><div class="modal-label">Tipo</div>
-      <select id="aType">
-        ${Object.entries(ACT_TYPES).map(([k,v])=>`<option value="${k}"${a.type===k?' selected':''}>${v}</option>`).join('')}
-      </select>
-    </div>
-    <div class="modal-field"><div class="modal-label">Observações / Endereço</div><textarea id="aNotes" rows="2" style="resize:vertical">${esc(a.notes||'')}</textarea></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveActivity(${id||'null'})">Salvar</button>
-    </div>
-  </div>`);
-  setTimeout(()=>document.getElementById('aTitle').focus(),50);
+// =====================================================================
+// DATE HELPERS
+// =====================================================================
+function tripDays(trip){
+  if(!trip.startDate||!trip.endDate)return 0;
+  return Math.round((new Date(trip.endDate)-new Date(trip.startDate))/86400000)+1;
 }
-function editActivity(id){addActivityModal(null,id);}
-function saveActivity(id){
-  const title=document.getElementById('aTitle').value.trim();
-  if(!title){toast('❌ Título é obrigatório');return;}
-  const obj={id:id||uid(),day:Number(document.getElementById('aDay').value),time:document.getElementById('aTime').value,title,type:document.getElementById('aType').value,notes:document.getElementById('aNotes').value.trim()};
-  if(!itinerary[itinDest])itinerary[itinDest]=[];
-  if(id){const i=itinerary[itinDest].findIndex(x=>x.id===id);if(i>=0)itinerary[itinDest][i]=obj;}
-  else itinerary[itinDest].push(obj);
-  save(K.itinerary,itinerary);closeModal();renderRoteiro();toast(id?'✅ Atividade atualizada':'✅ Atividade adicionada');
+function daysOfTrip(trip){
+  if(!trip.startDate||!trip.endDate)return[];
+  const out=[];const d=new Date(trip.startDate);const end=new Date(trip.endDate);
+  while(d<=end){out.push(d.toISOString().slice(0,10));d.setDate(d.getDate()+1);}
+  return out;
 }
-function delActivity(id){
-  if(!confirm('Remover atividade?'))return;
-  itinerary[itinDest]=(itinerary[itinDest]||[]).filter(x=>x.id!==id);
-  save(K.itinerary,itinerary);renderRoteiro();toast('🗑 Atividade removida');
+function expensesByDayMap(trip){
+  const map={};(trip.expenses||[]).forEach(e=>{map[e.date]=(map[e.date]||0)+toBase(e.amount,e.currency,trip);});
+  return map;
 }
 
-// ================================================================
-// CHECKLIST
-// ================================================================
-function renderChecklist(){
-  const totalItems=checklist.reduce((s,c)=>s+c.items.length,0);
-  const doneItems=checklist.reduce((s,c)=>s+c.items.filter(i=>i.done).length,0);
-  const pct=totalItems>0?Math.round((doneItems/totalItems)*100):0;
+// =====================================================================
+// MODAL: TRIP
+// =====================================================================
+function openTrip(id){
+  editingTripId=id||null;
+  document.getElementById('tripModalTitle').textContent=id?'Editar viagem':'Nova viagem';
+  document.getElementById('tDelBtn').style.display=id?'inline-block':'none';
+  if(id){
+    const t=findById(state.trips,id);
+    if(!t)return;
+    document.getElementById('tName').value=t.name||'';
+    document.getElementById('tDest').value=t.destination||'';
+    document.getElementById('tStart').value=t.startDate||'';
+    document.getElementById('tEnd').value=t.endDate||'';
+    document.getElementById('tBase').value=t.baseCurrency||'BRL';
+  } else {
+    document.getElementById('tName').value='';
+    document.getElementById('tDest').value='';
+    document.getElementById('tStart').value='';
+    document.getElementById('tEnd').value='';
+    document.getElementById('tBase').value='BRL';
+  }
+  document.getElementById('modalTrip').style.display='flex';
+  setTimeout(()=>document.getElementById('tName').focus(),50);
+}
+function saveTrip(){
+  const name=document.getElementById('tName').value.trim();
+  if(!name){showToast('⚠ Dê um nome à viagem');return;}
+  const dest=document.getElementById('tDest').value.trim();
+  const start=document.getElementById('tStart').value;
+  const end=document.getElementById('tEnd').value;
+  const base=document.getElementById('tBase').value;
+  if(start&&end&&end<start){showToast('⚠ Data fim antes da data início');return;}
+  if(editingTripId){
+    const t=findById(state.trips,editingTripId);
+    if(!t)return;
+    t.name=name;t.destination=dest;t.startDate=start;t.endDate=end;t.baseCurrency=base;
+    showToast('✅ Viagem atualizada');
+  } else {
+    const newTrip={
+      id:uid('trip'),name,destination:dest,startDate:start,endDate:end,baseCurrency:base,
+      currencies:[],
+      people:[{id:uid('p'),name:'André',color:'blue'}],
+      categories:[
+        {id:uid('c'),name:'Hospedagem',color:'blue'},
+        {id:uid('c'),name:'Transporte',color:'green'},
+        {id:uid('c'),name:'Atividades',color:'amber'},
+        {id:uid('c'),name:'Alimentação',color:'purple'},
+        {id:uid('c'),name:'Outros',color:'red'}
+      ],
+      paymentMethods:[
+        {id:uid('pm'),name:'Dinheiro'},
+        {id:uid('pm'),name:'Cartão crédito'},
+        {id:uid('pm'),name:'Cartão pré-pago'}
+      ],
+      expenses:[]
+    };
+    state.trips.push(newTrip);
+    state.activeTripId=newTrip.id;
+    showToast('✅ Viagem criada');
+  }
+  saveAll();closeModal('modalTrip');render();
+}
+function deleteTrip(){
+  if(!editingTripId)return;
+  if(!confirm('Excluir esta viagem e TODAS as suas despesas? Não dá pra desfazer.'))return;
+  state.trips=state.trips.filter(t=>t.id!==editingTripId);
+  if(state.activeTripId===editingTripId){
+    state.activeTripId=state.trips[0]?state.trips[0].id:null;
+  }
+  saveAll();closeModal('modalTrip');render();
+  showToast('🗑️ Viagem removida');
+}
 
-  let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-    <div style="font-size:15px;font-weight:600;color:var(--text1)">Checklist da Viagem</div>
-    <button class="btn btn-primary" onclick="addCatModal()">+ Categoria</button>
-  </div>
-  <div class="stats">
-    <div class="stat"><div class="stat-label">Total</div><div class="stat-val">${totalItems}</div><div class="stat-sub">itens</div></div>
-    <div class="stat"><div class="stat-label">Concluídos</div><div class="stat-val">${doneItems}</div><div class="stat-sub">${pct}% pronto</div></div>
-    <div class="stat"><div class="stat-label">Pendentes</div><div class="stat-val">${totalItems-doneItems}</div><div class="stat-sub">restantes</div></div>
-  </div>
-  <div class="prog-row">
-    <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${pct===100?'var(--green600)':'var(--blue600)'}"></div></div>
-    <div class="prog-label">${pct}% completo</div>
-  </div>`;
+// =====================================================================
+// MODAL: EXPENSE
+// =====================================================================
+function openExpense(id){
+  const trip=activeTrip();
+  if(!trip){showToast('⚠ Crie uma viagem primeiro');return;}
+  if(trip.categories.length===0){showToast('⚠ Adicione pelo menos uma categoria');return;}
+  if(trip.paymentMethods.length===0){showToast('⚠ Adicione pelo menos uma forma de pagamento');return;}
+  if(trip.people.length===0){showToast('⚠ Adicione pelo menos uma pessoa');return;}
+  editingExpenseId=id||null;
+  document.getElementById('expModalTitle').textContent=id?'Editar despesa':'Nova despesa';
+  document.getElementById('eDelBtn').style.display=id?'inline-block':'none';
 
-  checklist.forEach(cat=>{
-    const catDone=cat.items.filter(i=>i.done).length;
-    const catPct=cat.items.length>0?Math.round((catDone/cat.items.length)*100):0;
-    html+=`<div class="card">
-      <div class="card-hdr">
-        <div style="display:flex;align-items:center;gap:10px;flex:1">
-          <div class="card-title">${esc(cat.name)}</div>
-          <span class="badge ${catPct===100?'badge-green':catPct>0?'badge-amber':'badge-red'}">${catDone}/${cat.items.length}</span>
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-sm btn-ghost" onclick="addItemModal(${cat.id})">+ Item</button>
-          <button class="btn btn-sm btn-danger" onclick="delCat(${cat.id})">✕ Cat.</button>
-        </div>
-      </div>
-      <div>
-        ${cat.items.map(item=>`<div class="check-item">
-          <div class="check-box${item.done?' done':''}" onclick="toggleItem(${cat.id},${item.id})">${item.done?'✓':''}</div>
-          <div class="check-text${item.done?' done':''}">${esc(item.text)}</div>
-          <button class="btn btn-sm btn-danger" onclick="delItem(${cat.id},${item.id})" style="padding:2px 7px">✕</button>
-        </div>`).join('')}
-        ${cat.items.length===0?'<div style="padding:12px 16px;font-size:12px;color:var(--text3)">Nenhum item. Clique em "+ Item"</div>':''}
-      </div>
+  // Populate selects
+  const eCurr=document.getElementById('eCurr');
+  eCurr.innerHTML=tripCurrencies(trip).map(c=>`<option value="${c}">${c}</option>`).join('');
+  const eCat=document.getElementById('eCat');
+  eCat.innerHTML=trip.categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  const ePm=document.getElementById('ePm');
+  ePm.innerHTML=trip.paymentMethods.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  const ePaidBy=document.getElementById('ePaidBy');
+  ePaidBy.innerHTML=trip.people.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+
+  let initial;
+  if(id){
+    initial=findById(trip.expenses,id);
+    if(!initial)return;
+  } else {
+    initial={date:new Date().toISOString().slice(0,10),description:'',amount:'',currency:trip.baseCurrency,categoryId:trip.categories[0].id,paymentMethodId:trip.paymentMethods[0].id,paidBy:trip.people[0].id,participantIds:trip.people.map(p=>p.id),paid:true};
+  }
+  document.getElementById('eDesc').value=initial.description||'';
+  document.getElementById('eAmt').value=initial.amount||'';
+  document.getElementById('eCurr').value=initial.currency||trip.baseCurrency;
+  document.getElementById('eDate').value=initial.date||new Date().toISOString().slice(0,10);
+  document.getElementById('eCat').value=initial.categoryId||trip.categories[0].id;
+  document.getElementById('ePm').value=initial.paymentMethodId||trip.paymentMethods[0].id;
+  document.getElementById('ePaidBy').value=initial.paidBy||trip.people[0].id;
+  document.getElementById('ePaid').checked=initial.paid!==false;
+
+  // Render people picker
+  const ePart=document.getElementById('ePart');
+  const partSet=new Set(initial.participantIds||trip.people.map(p=>p.id));
+  ePart.innerHTML=trip.people.map(p=>{
+    const c=COLOR_HEX[p.color]||COLOR_HEX.blue;
+    const on=partSet.has(p.id);
+    return`<button class="pp-chip${on?' on':''}" data-pid="${p.id}" onclick="togglePart(this)"><span class="mini-avatar" style="background:${c.solid}">${initials(p.name)}</span>${esc(p.name)}</button>`;
+  }).join('');
+
+  document.getElementById('modalExp').style.display='flex';
+  setTimeout(()=>document.getElementById('eDesc').focus(),50);
+}
+function togglePart(btn){btn.classList.toggle('on');}
+function saveExpense(){
+  const trip=activeTrip();if(!trip)return;
+  const desc=document.getElementById('eDesc').value.trim();
+  if(!desc){showToast('⚠ Descreva a despesa');return;}
+  const amt=parseFloat(document.getElementById('eAmt').value);
+  if(isNaN(amt)||amt<=0){showToast('⚠ Valor inválido');return;}
+  const part=Array.from(document.querySelectorAll('#ePart .pp-chip.on')).map(b=>b.dataset.pid);
+  if(part.length===0){showToast('⚠ Marque pelo menos um participante');return;}
+  const obj={
+    id:editingExpenseId||uid('e'),
+    date:document.getElementById('eDate').value||new Date().toISOString().slice(0,10),
+    description:desc,
+    amount:amt,
+    currency:document.getElementById('eCurr').value,
+    categoryId:document.getElementById('eCat').value,
+    paymentMethodId:document.getElementById('ePm').value,
+    paidBy:document.getElementById('ePaidBy').value,
+    participantIds:part,
+    paid:document.getElementById('ePaid').checked
+  };
+  if(editingExpenseId){
+    const idx=trip.expenses.findIndex(e=>e.id===editingExpenseId);
+    if(idx>=0)trip.expenses[idx]=obj;
+    showToast('✅ Despesa atualizada');
+  } else {
+    trip.expenses.push(obj);
+    showToast('✅ Despesa adicionada');
+  }
+  saveAll();closeModal('modalExp');render();
+}
+function deleteExpense(){
+  const trip=activeTrip();if(!trip||!editingExpenseId)return;
+  if(!confirm('Excluir esta despesa?'))return;
+  trip.expenses=trip.expenses.filter(e=>e.id!==editingExpenseId);
+  saveAll();closeModal('modalExp');render();
+  showToast('🗑️ Despesa removida');
+}
+function deleteExpenseDirect(id){
+  const trip=activeTrip();if(!trip)return;
+  if(!confirm('Excluir esta despesa?'))return;
+  trip.expenses=trip.expenses.filter(e=>e.id!==id);
+  saveAll();render();showToast('🗑️ Despesa removida');
+}
+
+// =====================================================================
+// MODAL: MANAGE
+// =====================================================================
+function openManage(){
+  const trip=activeTrip();
+  if(!trip){showToast('⚠ Crie uma viagem primeiro');return;}
+  renderManage();
+  document.getElementById('modalManage').style.display='flex';
+}
+function renderManage(){
+  const trip=activeTrip();if(!trip)return;
+  // People
+  document.getElementById('mgPeople').innerHTML=trip.people.map(p=>{
+    const c=COLOR_HEX[p.color]||COLOR_HEX.blue;
+    return`<div class="manage-row">
+      <div class="swatch" style="background:${c.solid}" onclick="cyclePersonColor('${p.id}')" title="Mudar cor"></div>
+      <input type="text" value="${esc(p.name)}" onchange="renamePerson('${p.id}',this.value)"/>
+      <button class="del-x" onclick="delPerson('${p.id}')" title="Remover">✕</button>
     </div>`;
-  });
-
-  document.getElementById('chk-content').innerHTML=html;
+  }).join('');
+  // Categories
+  document.getElementById('mgCats').innerHTML=trip.categories.map(c=>{
+    const col=COLOR_HEX[c.color]||COLOR_HEX.blue;
+    return`<div class="manage-row">
+      <div class="swatch" style="background:${col.solid}" onclick="cycleCatColor('${c.id}')" title="Mudar cor"></div>
+      <input type="text" value="${esc(c.name)}" onchange="renameCat('${c.id}',this.value)"/>
+      <button class="del-x" onclick="delCat('${c.id}')" title="Remover">✕</button>
+    </div>`;
+  }).join('');
+  // Payment methods
+  document.getElementById('mgPms').innerHTML=trip.paymentMethods.map(p=>`<div class="manage-row">
+    <input type="text" value="${esc(p.name)}" onchange="renamePm('${p.id}',this.value)"/>
+    <button class="del-x" onclick="delPm('${p.id}')" title="Remover">✕</button>
+  </div>`).join('');
+  // Currencies
+  document.getElementById('mgCurrs').innerHTML=trip.currencies.map(c=>`<div class="manage-row">
+    <input type="text" value="${esc(c.code)}" maxlength="6" style="max-width:80px;text-transform:uppercase" onchange="renameCurr('${c.code}',this.value)"/>
+    <input type="number" step="0.0001" value="${c.rate}" onchange="updateCurrRate('${c.code}',this.value)" style="max-width:120px"/>
+    <span style="font-size:11px;color:var(--text3);flex:1">→ ${trip.baseCurrency}</span>
+    <button class="del-x" onclick="delCurr('${c.code}')" title="Remover">✕</button>
+  </div>`).join('');
 }
-
-function toggleItem(catId,itemId){
-  const cat=checklist.find(c=>c.id===catId);if(!cat)return;
-  const item=cat.items.find(i=>i.id===itemId);if(!item)return;
-  item.done=!item.done;
-  save(K.checklist,checklist);renderChecklist();
+function addPerson(){
+  const trip=activeTrip();if(!trip)return;
+  const used=trip.people.map(p=>p.color);
+  const color=COLORS.find(c=>!used.includes(c))||COLORS[trip.people.length%COLORS.length];
+  trip.people.push({id:uid('p'),name:'Pessoa '+(trip.people.length+1),color});
+  saveAll();renderManage();
 }
-function addItemModal(catId){
-  openModal(`<div class="modal">
-    <div class="modal-title">Novo item</div>
-    <div class="modal-field"><div class="modal-label">Descrição*</div><input id="iText" type="text" placeholder="Ex: Passaporte válido"/></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveItem(${catId})">Adicionar</button>
-    </div>
-  </div>`);
-  setTimeout(()=>document.getElementById('iText').focus(),50);
+function renamePerson(id,name){const t=activeTrip();const p=findById(t.people,id);if(p)p.name=name.trim()||p.name;saveAll();renderManage();}
+function delPerson(id){
+  const t=activeTrip();
+  if(t.people.length<=1){showToast('⚠ Mantenha ao menos 1 pessoa');return;}
+  if(!confirm('Remover esta pessoa? Despesas onde ela pagou ou participou ficarão "órfãs".'))return;
+  t.people=t.people.filter(p=>p.id!==id);
+  // Clean expenses
+  t.expenses.forEach(e=>{e.participantIds=(e.participantIds||[]).filter(pid=>pid!==id);});
+  saveAll();renderManage();
 }
-function saveItem(catId){
-  const text=document.getElementById('iText').value.trim();
-  if(!text){toast('❌ Descrição é obrigatória');return;}
-  const cat=checklist.find(c=>c.id===catId);if(!cat)return;
-  cat.items.push({id:uid(),text,done:false});
-  save(K.checklist,checklist);closeModal();renderChecklist();
+function cyclePersonColor(id){
+  const t=activeTrip();const p=findById(t.people,id);if(!p)return;
+  const idx=COLORS.indexOf(p.color);p.color=COLORS[(idx+1)%COLORS.length];
+  saveAll();renderManage();
 }
-function delItem(catId,itemId){
-  const cat=checklist.find(c=>c.id===catId);if(!cat)return;
-  cat.items=cat.items.filter(i=>i.id!==itemId);
-  save(K.checklist,checklist);renderChecklist();
+function addCategory(){
+  const t=activeTrip();if(!t)return;
+  const used=t.categories.map(c=>c.color);
+  const color=COLORS.find(c=>!used.includes(c))||COLORS[t.categories.length%COLORS.length];
+  t.categories.push({id:uid('c'),name:'Nova categoria',color});
+  saveAll();renderManage();
 }
-function addCatModal(){
-  openModal(`<div class="modal">
-    <div class="modal-title">Nova categoria</div>
-    <div class="modal-field"><div class="modal-label">Nome*</div><input id="catName" type="text" placeholder="Ex: Entretenimento"/></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveCat()">Criar</button>
-    </div>
-  </div>`);
-  setTimeout(()=>document.getElementById('catName').focus(),50);
-}
-function saveCat(){
-  const name=document.getElementById('catName').value.trim();
-  if(!name){toast('❌ Nome é obrigatório');return;}
-  checklist.push({id:uid(),name,items:[]});
-  save(K.checklist,checklist);closeModal();renderChecklist();
-}
+function renameCat(id,name){const t=activeTrip();const c=findById(t.categories,id);if(c)c.name=name.trim()||c.name;saveAll();renderManage();}
 function delCat(id){
-  if(!confirm('Remover categoria e todos os itens?'))return;
-  checklist=checklist.filter(c=>c.id!==id);
-  save(K.checklist,checklist);renderChecklist();
+  const t=activeTrip();
+  if(t.categories.length<=1){showToast('⚠ Mantenha ao menos 1 categoria');return;}
+  if(t.expenses.some(e=>e.categoryId===id)){if(!confirm('Há despesas nesta categoria. Continuar mesmo assim?'))return;}
+  t.categories=t.categories.filter(c=>c.id!==id);
+  saveAll();renderManage();
+}
+function cycleCatColor(id){
+  const t=activeTrip();const c=findById(t.categories,id);if(!c)return;
+  const idx=COLORS.indexOf(c.color);c.color=COLORS[(idx+1)%COLORS.length];
+  saveAll();renderManage();
+}
+function addPm(){const t=activeTrip();if(!t)return;t.paymentMethods.push({id:uid('pm'),name:'Nova forma'});saveAll();renderManage();}
+function renamePm(id,name){const t=activeTrip();const p=findById(t.paymentMethods,id);if(p)p.name=name.trim()||p.name;saveAll();renderManage();}
+function delPm(id){
+  const t=activeTrip();
+  if(t.paymentMethods.length<=1){showToast('⚠ Mantenha ao menos 1 forma de pagamento');return;}
+  if(t.expenses.some(e=>e.paymentMethodId===id)){if(!confirm('Há despesas nesta forma. Continuar?'))return;}
+  t.paymentMethods=t.paymentMethods.filter(p=>p.id!==id);
+  saveAll();renderManage();
+}
+function addCurrency(){
+  const t=activeTrip();if(!t)return;
+  const code=prompt('Código da moeda (3 letras, ex: USD, EUR, GBP):','USD');
+  if(!code)return;
+  const cleanCode=code.toUpperCase().trim().slice(0,6);
+  if(cleanCode===t.baseCurrency){showToast('⚠ Essa já é a moeda base');return;}
+  if(t.currencies.find(c=>c.code===cleanCode)){showToast('⚠ Moeda já existe');return;}
+  const rate=parseFloat(prompt(`Quanto vale 1 ${cleanCode} em ${t.baseCurrency}?`,'5.20'));
+  if(isNaN(rate)||rate<=0){showToast('⚠ Cotação inválida');return;}
+  t.currencies.push({code:cleanCode,rate});
+  saveAll();renderManage();
+}
+function renameCurr(oldCode,newCode){
+  const t=activeTrip();
+  const cleanCode=newCode.toUpperCase().trim().slice(0,6);
+  if(!cleanCode){renderManage();return;}
+  if(cleanCode===oldCode)return;
+  if(cleanCode===t.baseCurrency||t.currencies.find(c=>c.code===cleanCode)){showToast('⚠ Código já existe');renderManage();return;}
+  const c=t.currencies.find(c=>c.code===oldCode);if(c)c.code=cleanCode;
+  // Update expenses using this currency
+  t.expenses.forEach(e=>{if(e.currency===oldCode)e.currency=cleanCode;});
+  saveAll();renderManage();
+}
+function updateCurrRate(code,val){
+  const t=activeTrip();const c=t.currencies.find(c=>c.code===code);
+  const r=parseFloat(val);if(c&&!isNaN(r)&&r>0)c.rate=r;
+  saveAll();renderManage();
+}
+function delCurr(code){
+  const t=activeTrip();
+  if(t.expenses.some(e=>e.currency===code)){if(!confirm('Há despesas nesta moeda. Elas continuarão registradas mas a conversão será 1:1. Continuar?'))return;}
+  t.currencies=t.currencies.filter(c=>c.code!==code);
+  saveAll();renderManage();
 }
 
-// ================================================================
-// UTILS
-// ================================================================
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// =====================================================================
+// MODAL UTILS
+// =====================================================================
+function closeModal(id){document.getElementById(id).style.display='none';}
 
-// ================================================================
+// =====================================================================
+// BACKUP
+// =====================================================================
+function exportBackup(){
+  const blob=new Blob([JSON.stringify({_beza_viagens:true,exportado:new Date().toISOString(),...state},null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`beza-viagens-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();URL.revokeObjectURL(url);
+  showToast(`✅ Backup exportado · ${state.trips.length} viagem${state.trips.length!==1?'ns':''}`);
+}
+function importBackup(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result.replace(/^﻿/,'').trim());
+      if(!data.trips||!Array.isArray(data.trips))throw new Error('Formato não reconhecido');
+      if(!confirm(`Importar ${data.trips.length} viagem(ns)? Os dados atuais serão substituídos.`))return;
+      state={v:'v1',trips:data.trips,activeTripId:data.activeTripId||(data.trips[0]?data.trips[0].id:null)};
+      saveAll();render();
+      showToast(`✅ ${data.trips.length} viagem(ns) restaurada(s)`);
+    }catch(err){showToast(`❌ ${err.message}`,5000);}
+    input.value='';
+  };
+  reader.onerror=()=>{showToast('❌ Erro ao ler o arquivo',5000);input.value='';};
+  reader.readAsText(file,'UTF-8');
+}
+
+// =====================================================================
 // INIT
-// ================================================================
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-load();
+// =====================================================================
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    ['modalTrip','modalExp','modalManage'].forEach(id=>closeModal(id));
+  }
+});
+
+loadAll();
+applyDark();
 render();
-console.info('[Beza Viagens v1] ✅ Pronto');
+
+console.info(`[Beza Viagens v1] ✅ ${state.trips.length} viagem(ns) carregada(s)`);
 </script>
 </body>
 </html>
